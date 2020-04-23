@@ -11,6 +11,7 @@
 #include "deck.h"
 #include "card.h"
 #include "foundation.h"
+#include "stock.h"
 #include "run.h"
 
 
