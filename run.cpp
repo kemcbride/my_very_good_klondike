@@ -20,6 +20,12 @@ Run::Run(std::vector<Card> cards) {
   this->cards = cards;
 }
 
+Run::Run(Run r, unsigned int i) {
+  Run tmp = r.take(i);
+  this->cards = tmp.cards;
+  this->revealed = tmp.isRevealed();
+}
+
 bool Run::isRevealed() {
   return this->revealed;
 }

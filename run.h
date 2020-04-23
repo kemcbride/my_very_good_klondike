@@ -19,6 +19,7 @@ class Run {
 
     Run(Card);
     Run(std::vector<Card>);
+    Run(Run, unsigned int); // same energy as Run take(int)
     std::vector<Card> view();
     Run take(unsigned int); // you can create a run from another run
     void put(Run); // you can add another run to a run
