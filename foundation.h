@@ -18,6 +18,9 @@ class Foundation {
     std::optional<Card> peek();
     std::optional<Card> pop();
     void push(Card);
+
+    bool hasSuit();
+    Suit getSuit();
 };
 
 #endif // FOUNDATION_H

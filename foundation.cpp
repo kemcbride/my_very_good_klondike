@@ -26,7 +26,31 @@ optional<Card> Foundation::pop() {
   return c;
 }
 
+bool Foundation::hasSuit() {
+  return this->suit.has_value();
+}
+
+Suit Foundation::getSuit() {
+  if (!this->hasSuit())
+    throw runtime_error("This foundation doesn't have a suit, can't getSuit()");
+}
+
 void Foundation::push(Card c) {
-  //TODO: make this only accept ALLOWED pushes
-  this->cards.push_back(c);
+  if (!this->hasSuit()) {
+    // If it's empty, we can add it and set the suit to this.
+    this->cards.push_back(c);
+    this->suit = c.getSuit();
+
+  } else if (this->hasSuit() && c.getSuit() == this->getSuit()) {
+    // If it's not empty, let's check suit first.
+    Card top = this->peek().value();
+    if (c.getRank() == top.getRank() + 1) {
+      // Right suit, is it the right value? If so, we can add it.
+      this->cards.push_back(c);
+      return;
+    }
+  }
+  throw runtime_error(
+    "Cannot push " + c.toString() + " onto " + this->getSuit().toString() + "foundation"
+  );
 }
