@@ -1,5 +1,5 @@
 CC=g++
-CC_FLAGS=-Wall -g -I.
+CC_FLAGS=-Wall -g -I. --std=c++17
 
 solitaire: solitaire.cpp card.o deck.o board.o
 	$(CC) -o solitaire  solitaire.cpp card.o deck.o board.o $(CC_FLAGS)

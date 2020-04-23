@@ -55,6 +55,7 @@ class Card {
     Card(int, int);
     Suit getSuit();
     Rank getRank();
+    colors getColor();
     friend std::ostream& operator<<(std::ostream& os, Card& obj);
 };
 std::ostream& operator<<(std::ostream& os, Card& obj);

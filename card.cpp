@@ -99,6 +99,10 @@ Rank Card::getRank() {
   return this->rank;
 }
 
+colors Card::getColor() {
+  return this->suit.color;
+}
+
 ostream& operator<<(ostream& os, Card& obj) {
   Suit s = obj.getSuit();
   Rank r = obj.getRank();
