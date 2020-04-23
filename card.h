@@ -39,7 +39,7 @@ class Rank {
     Rank();
     Rank(int);
     int getValue();
-    friend std::ostream& operator<<(std::ostream& os, Rank& obj);
+    operator int();
 };
 std::ostream& operator<<(std::ostream& os, Rank& obj);
 

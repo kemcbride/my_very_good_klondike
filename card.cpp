@@ -83,6 +83,10 @@ ostream& operator<<(ostream& os, Rank& obj) {
   return os << val;
 };
 
+Rank::operator int() {
+  return this->getValue();
+}
+
 Card::Card() : rank(1), suit(spades) {};
 Card::Card(Rank r, Suit s) : rank(r), suit(s) {};
 Card::Card(int r, int s) {
@@ -100,7 +104,7 @@ Rank Card::getRank() {
 }
 
 colors Card::getColor() {
-  return this->suit.color;
+  return this->suit.getColor();
 }
 
 ostream& operator<<(ostream& os, Card& obj) {
