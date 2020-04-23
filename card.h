@@ -7,6 +7,7 @@
 #define CARD_H
 
 #include <iostream>
+#include <string>
 
 enum suits {
 	clubs,
@@ -28,6 +29,7 @@ class Suit {
     Suit(suits);
     colors getColor();
     suits getSuit();
+    std::string toString();
 };
 std::ostream& operator<<(std::ostream& os, Suit& obj);
 bool operator==(Suit a, Suit b);
@@ -39,6 +41,7 @@ class Rank {
     Rank();
     Rank(int);
     int getValue();
+    std::string toString();
     operator int();
 };
 std::ostream& operator<<(std::ostream& os, Rank& obj);
@@ -56,7 +59,7 @@ class Card {
     Suit getSuit();
     Rank getRank();
     colors getColor();
-    friend std::ostream& operator<<(std::ostream& os, Card& obj);
+    std::string toString();
 };
 std::ostream& operator<<(std::ostream& os, Card& obj);
 

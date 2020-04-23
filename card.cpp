@@ -24,6 +24,10 @@ std::ostream& operator<<(std::ostream& os, suits s)
     }
     return os;
 };
+static const char * EnumStrings[] = { "♣", "♠", "♥", "♦" };
+const char * suitStr( int enumVal ) {
+  return EnumStrings[enumVal];
+}
 
 
 // Suit
@@ -44,11 +48,16 @@ suits Suit::getSuit() {
 };
 
 ostream& operator<<(ostream& os, Suit& obj) {
-  if (obj.getColor() == red) {
-    return os << REDSTR << obj.getSuit() << RESETSTR;
-  }
-  return os << obj.getSuit();
+  return os << obj.toString();
 };
+
+string Suit::toString() {
+  if (this->getColor() == red) {
+    return string(string(REDSTR) + suitStr(this->getSuit()) + string(RESETSTR));
+  }
+  return suitStr(this->getSuit());
+
+}
 
 bool operator==(Suit a, Suit b) {
   return a.getSuit() == b.getSuit();
@@ -67,25 +76,31 @@ int Rank::getValue() {
 }
 
 ostream& operator<<(ostream& os, Rank& obj) {
-  int val = obj.getValue();
+  return os << obj.toString();
+};
+
+string Rank::toString() {
+  int val = this->getValue();
+  string str;
   switch (val) {
     case 1:
-      return os << "A";
+      str = "A";
       break;
     case 11:
-      return os << "J";
+      str = "J";
       break;
     case 12:
-      return os << "Q";
+      str = "Q";
       break;
     case 13:
-      return os << "K";
+      str = "K";
       break;
     default:
+      str = to_string(val);
       break;
   }
-  return os << val;
-};
+  return str;
+}
 
 Rank::operator int() {
   return this->getValue();
@@ -111,6 +126,10 @@ Rank Card::getRank() {
 colors Card::getColor() {
   return this->suit.getColor();
 }
+
+string Card::toString() {
+  return this->getSuit().toString() + this->getRank().toString();
+};
 
 ostream& operator<<(ostream& os, Card& obj) {
   Suit s = obj.getSuit();
