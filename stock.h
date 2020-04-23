@@ -14,6 +14,7 @@ class Stock {
     void update_index();
 
   public:
+    Stock() = delete;
     std::vector<Card> cards;
 
     Stock(Deck);
