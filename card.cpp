@@ -49,6 +49,10 @@ ostream& operator<<(ostream& os, Suit& obj) {
   return os << obj.getSuit();
 };
 
+bool operator==(Suit& a, Suit& b) {
+  return a.getSuit() == b.getSuit();
+};
+
 Rank::Rank() { this->value = 1;};
 Rank::Rank(int val) {
   if (val < 1 || val > 13) {

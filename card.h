@@ -31,6 +31,7 @@ class Suit {
     friend std::ostream& operator<<(std::ostream& os, Suit& obj);
 };
 std::ostream& operator<<(std::ostream& os, Suit& obj);
+bool operator==(Suit& a, Suit& b);
 
 class Rank {
   protected:
