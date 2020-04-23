@@ -1,0 +1,4 @@
+# don't include the binary :p
+solitaire
+*.d
+*.o
