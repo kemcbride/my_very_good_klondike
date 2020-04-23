@@ -7,6 +7,7 @@
 
 #include "card.h"
 #include "deck.h"
+#include "board.h"
 
 using namespace std;
 
@@ -28,5 +29,11 @@ int main(int argc, char** argv) {
     cout << endl;
   }
 
+  //Now let's just try declaring & instantiating some of these guys
+  Foundation f;
+  Pile p(deck, 7);
+  Stock s(deck);
+
+  Board b(Deck());
 	return 0;
 }
