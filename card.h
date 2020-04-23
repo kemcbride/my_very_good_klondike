@@ -28,10 +28,9 @@ class Suit {
     Suit(suits);
     colors getColor();
     suits getSuit();
-    friend std::ostream& operator<<(std::ostream& os, Suit& obj);
 };
 std::ostream& operator<<(std::ostream& os, Suit& obj);
-bool operator==(Suit& a, Suit& b);
+bool operator==(Suit a, Suit b);
 
 class Rank {
   protected:

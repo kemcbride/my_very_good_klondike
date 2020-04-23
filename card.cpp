@@ -26,6 +26,7 @@ std::ostream& operator<<(std::ostream& os, suits s)
 };
 
 
+// Suit
 Suit::Suit() {
   this->s = spades;
 };
@@ -49,10 +50,11 @@ ostream& operator<<(ostream& os, Suit& obj) {
   return os << obj.getSuit();
 };
 
-bool operator==(Suit& a, Suit& b) {
+bool operator==(Suit a, Suit b) {
   return a.getSuit() == b.getSuit();
 };
 
+// Rank
 Rank::Rank() { this->value = 1;};
 Rank::Rank(int val) {
   if (val < 1 || val > 13) {
@@ -89,6 +91,7 @@ Rank::operator int() {
   return this->getValue();
 }
 
+// Card
 Card::Card() : rank(1), suit(spades) {};
 Card::Card(Rank r, Suit s) : rank(r), suit(s) {};
 Card::Card(int r, int s) {
