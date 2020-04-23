@@ -8,7 +8,12 @@
 
 using namespace std;
 
-Foundation::Foundation() {}; // default - nothing needs to be set
+
+Foundation::Foundation() {
+  this->suit = nullopt;
+  vector<Card> cards;
+  this->cards = cards;
+}
 
 optional<Card> Foundation::peek() {
   if (this->cards.size() == 0) {
@@ -33,6 +38,7 @@ bool Foundation::hasSuit() {
 Suit Foundation::getSuit() {
   if (!this->hasSuit())
     throw runtime_error("This foundation doesn't have a suit, can't getSuit()");
+  return this->suit.value();
 }
 
 void Foundation::push(Card c) {
