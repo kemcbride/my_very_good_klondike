@@ -5,14 +5,12 @@
  */
 #include "card.h"
 
-#define REDSTR "\033[1;31m"
+#define REDSTR "\033[31m"
 #define RESETSTR "\033[0m"
 
 using namespace std;
 
 
-
-//enumeration types (both scoped and unscoped) can have overloaded operators
 std::ostream& operator<<(std::ostream& os, suits s)
 {
     switch(s)
