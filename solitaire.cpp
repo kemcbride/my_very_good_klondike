@@ -4,8 +4,6 @@
  * @kemcbride/@ke2mcbri 2020
  */
 #include <iostream>
-#include <string>
-#include <exception>
 
 #include "card.h"
 #include "deck.h"
