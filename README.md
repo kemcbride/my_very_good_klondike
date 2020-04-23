@@ -9,3 +9,27 @@ varying difficulty...
 
 Anyways, not getting ahead of myself. All it does now is shuffle decks
 and print cards.
+
+
+------
+
+Unfortunately terminal colors not preserved... but if you can imagine, red cards are printed in bold red font!
+
+```
+ke2mcbri:solitaire./solitaire
+Shuffling and drawing top card a few times...
+5♣
+7♣
+4♠
+7♥
+9♦
+6♠
+7♦
+2♠
+6♥
+2♥
+Now let's draw a few hands.
+2♥ 5♦ 3♠ K♥ 9♥
+10♣ 6♥ 8♣ Q♣ 6♣
+8♦ A♣ 10♦ 6♦ 2♠
+```
