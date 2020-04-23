@@ -35,3 +35,9 @@ Pile::Pile(Deck d, int n) {
   this->runs = myruns;
   this->runs.back().reveal();
 }
+
+optional<Card> Pile::peek() {
+  if (this->runs.size() == 0)
+    return nullopt;
+  return this->runs.back().peek();
+}

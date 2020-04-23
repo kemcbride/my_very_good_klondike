@@ -38,6 +38,12 @@ vector<Card> Run::view() {
   return empty_none_revealed;
 }
 
+optional<Card> Run::peek() {
+  if (this->cards.size() == 0)
+    return nullopt;
+  return this->cards.back();
+}
+
 Run Run::take(unsigned int n) {
   if (n > this->cards.size())
     n = this->cards.size(); // I'll only give you up to what I can
