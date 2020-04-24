@@ -25,6 +25,8 @@ class Pile {
     std::optional<Card> pop(); // remove the top card
     Run take(unsigned int); // take the top N visible cards (if they are movable)
     void put(std::vector<Card>); // add a stack of viable cards to the top of the pile
+
+    std::string toString();
 };
 
 #endif // PILE_H

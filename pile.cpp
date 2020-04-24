@@ -41,3 +41,11 @@ optional<Card> Pile::peek() {
     return nullopt;
   return this->runs.back().peek();
 }
+
+string Pile::toString() {
+  string runs_str;
+  for (auto r : this->runs) {
+    runs_str += r.toString();
+  }
+  return runs_str;
+}
