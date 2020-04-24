@@ -4,6 +4,7 @@
 #include <exception>
 #include <vector>
 #include <optional>
+#include <string>
 
 #include "card.h"
 
@@ -30,6 +31,8 @@ class Run {
 
     void reveal();
     void hide();
+
+    std::string toString();
 };
 
 #endif

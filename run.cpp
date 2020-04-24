@@ -102,3 +102,17 @@ bool Run::canAdd(Run r) {
   Card your_first_card = r.cards.front();
   return this->canAdd(your_first_card);
 }
+
+string Run::toString() {
+  string card_str;
+  cout << "Am I revelaed? " << this->isRevealed() << endl;
+  if (this->isRevealed()) {
+    for (unsigned int i = 0; i < this->cards.size(); ++i) {
+      card_str += cards.at(i).toString();
+      if (!(i == this->cards.size() - 1)) card_str += ",";
+    }
+  } else {
+    card_str = "X";
+  }
+  return "[" + card_str + "]";
+}
