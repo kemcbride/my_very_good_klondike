@@ -41,3 +41,7 @@ vector<Card> Deck::draw(int n) {
   this->current_idx += deal_size;
   return your_draw;
 }
+
+void Deck::reset_index() {
+  this->current_idx = 0;
+}

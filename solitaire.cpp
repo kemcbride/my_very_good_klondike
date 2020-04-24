@@ -29,11 +29,11 @@ int main(int argc, char** argv) {
     cout << endl;
   }
 
-  //Now let's just try declaring & instantiating some of these guys
-  Foundation f;
-  Pile p(deck, 7);
-  Stock s(deck);
+  deck.reset_index();
+  deck.shuffle();
 
-  Board b(Deck());
+  //Now let's just try declaring & instantiating some of these guys
+  Board b(deck);
+  cout << b.tableau.piles.front().runs.front().toString() << endl;
 	return 0;
 }
