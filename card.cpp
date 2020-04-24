@@ -128,14 +128,13 @@ colors Card::getColor() {
 }
 
 string Card::toString() {
-  return this->getSuit().toString() + this->getRank().toString();
+  string base_str = this->getRank().toString() + this->getSuit().toString();
+  if (this->getSuit().getColor() == red) {
+    return REDSTR + base_str + RESETSTR;
+  }
+  return base_str;
 };
 
 ostream& operator<<(ostream& os, Card& obj) {
-  Suit s = obj.getSuit();
-  Rank r = obj.getRank();
-  if (s.getColor() == red) {
-    return os << REDSTR << r << s << RESETSTR;
-  }
-  return os << r << s;
+  return os << obj.toString();
 };
