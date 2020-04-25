@@ -27,7 +27,7 @@ string game_help() {
   helpstr += "* x, exit: quit the game\n";
   helpstr += "* h, help: print this help\n";
   helpstr += "* t, toggle: toggle board labels\n";
-  helpstr += "* m, move: move <s><#> <d> - attemp to move # cards from s to d\n";
+  helpstr += "* m, move: move <s><#> <d> - attempt to move # cards from s to d";
   return helpstr;
 }
 
