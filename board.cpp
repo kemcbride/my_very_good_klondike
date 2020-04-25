@@ -86,7 +86,13 @@ void Board::move(Move m) {
         return;
       }
     } else { // stock -> pile
-      cerr << "stock -> pile not implementd" << endl;
+      Pile &target_pile = this->tableau.piles.at(m.getDest().idx-1);
+      optional<Card> c = this->stock.peek();
+      if (c.has_value()) {
+        target_pile.put(c.value());
+        this->stock.pop();
+      }
+
       return;
     }
   } else { // source: pile

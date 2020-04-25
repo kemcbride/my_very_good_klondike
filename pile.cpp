@@ -75,6 +75,10 @@ void Pile::put(std::vector<Card> cards) {
   this->runs.back().put(cards);
 }
 
+void Pile::put(Card c) {
+  this->runs.back().put(c);
+}
+
 void Pile::put(Run run) {
   this->runs.back().put(run);
 }

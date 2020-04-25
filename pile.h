@@ -29,6 +29,7 @@ class Pile {
     std::optional<Run> take(unsigned int); // take the top N visible cards (if they are movable)
     void put(std::vector<Card>); // add a stack of viable cards to the top of the pile
     void put(Run); // add a stack of viable cards to the top of the pile
+    void put(Card); // add just one card (like, from stock or fdn)
 
     std::string toString();
 };
