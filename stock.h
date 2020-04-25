@@ -22,6 +22,8 @@ class Stock {
     std::optional<Card> peek();
     std::optional<Card> pop();
     void next();
+
+    std::string toString();
 };
 
 #endif

@@ -48,3 +48,13 @@ void Stock::next() {
   ++(this->index);
   this->update_index(); // reset it to 0 if necessary
 }
+
+string Stock::toString() {
+  string card_str;
+  if (this->peek().has_value()) {
+    card_str = this->peek().value().toString();
+  } else {
+    card_str = ' ';
+  }
+  return "<" + card_str + ">";
+}
