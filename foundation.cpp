@@ -74,9 +74,9 @@ string Foundation::toString() {
   if (card_str.size() == 1) {
     return "( " + card_str + " )";
 
-  } else if (card_str.size() == 2) {
-    return "( " + card_str + ")";
+  } else if (card_str.size() == 3) {
+    // size == 3 (10H)
+    return "(" + card_str + ")";
   }
-  // size == 3 (10H)
-  return "(" + card_str + ")";
+  return "( " + card_str + ")";
 }
