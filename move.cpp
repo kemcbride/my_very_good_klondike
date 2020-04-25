@@ -52,7 +52,7 @@ Source Move::parseSource(string str) {
       throw runtime_error("Invalid source: " + source);
     }
     src.type = 'p';
-    src.idx = int(source[1]);
+    src.idx = int(source[1] - '0');
   } else if (source[0] == 's') {
     // stock
     src.type = 's';
@@ -62,7 +62,7 @@ Source Move::parseSource(string str) {
       throw runtime_error("Invalid source: " + source);
     }
     src.type = 'f';
-    src.idx = int(source[1]);
+    src.idx = int(source[1] - '0');
   }
   return src;
 }
