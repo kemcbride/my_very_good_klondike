@@ -8,6 +8,9 @@
 
 using namespace std;
 
+#define GREENSTR string("\033[32m")
+#define RESETSTR string("\033[0m")
+
 Run::Run(Card c) {
   vector<Card> my_cards;
   my_cards.push_back(c);
@@ -111,7 +114,7 @@ string Run::toString() {
       if (!(i == this->cards.size() - 1)) card_str += ",";
     }
   } else {
-    card_str = "X";
+    card_str = GREENSTR + "X" + RESETSTR;
   }
   return "[" + card_str + "]";
 }
