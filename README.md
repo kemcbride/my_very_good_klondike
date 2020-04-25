@@ -33,3 +33,53 @@ Now let's draw a few hands.
 10♣ 6♥ 8♣ Q♣ 6♣
 8♦ A♣ 10♦ 6♦ 2♠
 ```
+
+
+-----
+
+Update: You can now move cards from the stock to a foundation!
+
+```
+cmd: n
+ f1    f2    f3    f4      s
+( - ) ( - ) ( A♠) ( - )   <6♥>
+p1 [5♣]
+p2 [X][Q♣]
+p3 [X][X][10♥]
+p4 [X][X][X][Q♦]
+p5 [X][X][X][X][9♦]
+p6 [X][X][X][X][X][6♣]
+p7 [X][X][X][X][X][X][7♣]
+cmd: n
+ f1    f2    f3    f4      s
+( - ) ( - ) ( A♠) ( - )   <A♣>
+p1 [5♣]
+p2 [X][Q♣]
+p3 [X][X][10♥]
+p4 [X][X][X][Q♦]
+p5 [X][X][X][X][9♦]
+p6 [X][X][X][X][X][6♣]
+p7 [X][X][X][X][X][X][7♣]
+cmd: m s f3
+Invalid move: Cannot push A♣ onto ♠foundation
+ f1    f2    f3    f4      s
+( - ) ( - ) ( A♠) ( - )   <A♣>
+p1 [5♣]
+p2 [X][Q♣]
+p3 [X][X][10♥]
+p4 [X][X][X][Q♦]
+p5 [X][X][X][X][9♦]
+p6 [X][X][X][X][X][6♣]
+p7 [X][X][X][X][X][X][7♣]
+cmd: m s f4
+ f1    f2    f3    f4      s
+( - ) ( - ) ( A♠) ( A♣)   <8♦>
+p1 [5♣]
+p2 [X][Q♣]
+p3 [X][X][10♥]
+p4 [X][X][X][Q♦]
+p5 [X][X][X][X][9♦]
+p6 [X][X][X][X][X][6♣]
+p7 [X][X][X][X][X][X][7♣]
+cmd:
+```
