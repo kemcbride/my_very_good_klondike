@@ -101,7 +101,6 @@ bool Run::canAdd(Card c) {
 }
 
 bool Run::canAdd(Run r) {
-  // TODO: we need ordering for cards? and we need to easily check suit difference
   Card your_first_card = r.cards.front();
   return this->canAdd(your_first_card);
 }

@@ -62,10 +62,11 @@ optional<Run> Pile::pop() {
 }
 
 optional<Run> Pile::take(unsigned int i) {
-  optional<Run> result_run = this->runs.back().take(1);
+  optional<Run> result_run = this->runs.back().take(i);
   if (!result_run.has_value()) {
     return nullopt;
   }
+  result_run.value().reveal();
   this->clear_empty_run();
   return result_run.value();
 }
