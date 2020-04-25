@@ -47,3 +47,7 @@ void Board::toggle_labels() {
   this->show_labels = !(this->show_labels);
   this->tableau.toggle_labels();
 }
+
+void Board::next() {
+  this->stock.next();
+}

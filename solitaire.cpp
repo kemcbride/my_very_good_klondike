@@ -49,11 +49,16 @@ bool is_toggle(string str) {
   return (str == "toggle" || str == "t");
 }
 
+bool is_next(string str) {
+  return (str == "next" || str == "n");
+}
+
 int play() {
   cout << "Welcome to the game! (h=help, x=exit)" << endl;
 
   int score = 0;
   Deck d;
+  d.shuffle();
   Board b(d);
 
   string cmd = get_cmd();
@@ -62,6 +67,9 @@ int play() {
       cout << game_help() << endl;
     } else if (is_toggle(cmd)) {
       b.toggle_labels();
+    } else if (is_next(cmd)) {
+      b.next();
+      cout << b.toString() << endl;
     } else {
       cout << b.toString() << endl;
     }

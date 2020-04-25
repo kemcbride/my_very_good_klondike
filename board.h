@@ -24,6 +24,7 @@ class Board {
     std::string toString();
 
     void toggle_labels();
+    void next();
 };
 
 #endif // BOARD_H
