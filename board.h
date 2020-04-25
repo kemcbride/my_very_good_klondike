@@ -20,7 +20,6 @@ class Board {
     std::vector<Foundation> foundations;
 
     Board(Deck&);
-    Board(Tableau, Stock);
     std::string toString();
 };
 

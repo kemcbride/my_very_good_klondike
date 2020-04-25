@@ -11,9 +11,7 @@ using namespace std;
 Board::Board(Deck &d) : tableau(d), stock(d) {
   // Assuming you start with a full deck!
   // First we fill the tableau.
-  /* Tableau t(d); */
-  /* // Then, using the same deck, we fill the stock. */
-  /* Stock s(d); */
+  // Then, using the same deck, we fill the stock.
   // Then we create the foundations.
   vector<Foundation> my_fdns;
   for (int i =0; i < 4; ++i) {
@@ -21,17 +19,6 @@ Board::Board(Deck &d) : tableau(d), stock(d) {
   }
   this->foundations = my_fdns;
 }
-
-/* Board::Board(Tableau t, Stock s) { */
-/*   this->tableau = t; */
-/*   this->stock = s; */
-
-/*   vector<Foundation> my_fdns; */
-/*   for (int i =0; i < 4; ++i) { */
-/*     my_fdns.push_back(Foundation()); */
-/*   } */
-/*   this->foundations = my_fdns; */
-/* } */
 
 string Board::toString() {
   string fdns_str;
