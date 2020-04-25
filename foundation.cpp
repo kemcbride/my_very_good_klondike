@@ -42,10 +42,11 @@ Suit Foundation::getSuit() {
 }
 
 void Foundation::push(Card c) {
-  if (!this->hasSuit()) {
+  if ( !(this->hasSuit()) ) {
     // If it's empty, we can add it and set the suit to this.
     this->cards.push_back(c);
     this->suit = c.getSuit();
+    return;
 
   } else if (this->hasSuit() && c.getSuit() == this->getSuit()) {
     // If it's not empty, let's check suit first.
@@ -68,5 +69,11 @@ string Foundation::toString() {
   } else {
     card_str = "-";
   }
-  return "( " + card_str + " )";
+
+  if (card_str.size() == 1) {
+    return "( " + card_str + " )";
+
+  } else { // len = 2
+    return "( " + card_str + ")";
+  }
 }

@@ -88,10 +88,10 @@ int play() {
       try {
         Move m(ignore_first_bit(cmd));
         b.move(m);
-        cout << b.toString() << endl;
       } catch (runtime_error &e) {
-        cerr << "Invalid move - " << e.what() << endl;
+        cerr << e.what() << endl;
       }
+      cout << b.toString() << endl;
     } else {
       cout << b.toString() << endl;
     }

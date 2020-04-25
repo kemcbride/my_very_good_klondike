@@ -53,22 +53,50 @@ void Board::next() {
 }
 
 bool Board::isSolved() {
-  if (this->stock.cards.size() == 0) {
-    for (auto p : this->tableau.piles) {
-      for (auto r : p.runs) {
-        if ( !(r.isRevealed()) ) {
-          return false;
-        }
+  if (!(this->stock.cards.size() == 0)) {
+    return false;
+  }
+
+  for (auto p : this->tableau.piles) {
+    for (auto r : p.runs) {
+      if ( !(r.isRevealed()) ) {
+        return false;
       }
     }
-    return true;
   }
-  return false;
+  return true;
 }
 
 void Board::move(Move m) {
-  cerr << "hehe not implemented" << endl;
+  if (m.getSource().type == 's') {
+    optional<Card> stock_card = this->stock.peek();
+    if (!stock_card.has_value()) {
+      cerr << "Invalid move: No cards remaining in stock" << endl;
+      return;
+    }
+    Card c = stock_card.value();
 
+    if (m.getDest().type == 'f') {
+      // move from source to foundation.
+      Foundation &f = this->foundations.at(m.getDest().idx-1);
+      try {
+        f.push(c);
+        Card c = this->stock.pop().value();
+      } catch (runtime_error &e) {
+        cerr << "Invalid move: " << e.what() << endl;
+        return;
+      }
+    } else {
+      // source -> pile
+      cerr << "source -> pile not implementd" << endl;
+      return;
+    }
+  } else {
+    cerr << "moves from pile, fdn not supported yet" << endl;
+    return;
+  }
+
+  // Update isSolved() state
   this->is_solved = this->isSolved();
   if (this->is_solved) {
     cerr << "Game has been won! Good job, good job." << endl;

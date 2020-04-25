@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include <vector>
+#include <optional>
 
 #include "deck.h"
 #include "foundation.h"

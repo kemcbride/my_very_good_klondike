@@ -68,7 +68,7 @@ Source Move::parseSource(string str) {
 }
 
 Dest Move::parseDest(string str) {
-  string dest = string(str, str.rfind(" "), str.size());
+  string dest = string(str, str.rfind(" ")+1, str.size());
   Dest dst;
 
   if(dest[0] == 'p') {
@@ -77,7 +77,7 @@ Dest Move::parseDest(string str) {
       throw runtime_error("Invalid dest: " + dest);
     }
     dst.type = 'p';
-    dst.idx = int(dest[1]);
+    dst.idx = int(dest[1] - '0');
   } else if (dest[0] == 's') {
     // stock
     dst.type = 's';
@@ -87,7 +87,7 @@ Dest Move::parseDest(string str) {
       throw runtime_error("Invalid dest: " + dest);
     }
     dst.type = 'f';
-    dst.idx = int(dest[1]);
+    dst.idx = int(dest[1] - '0');
   }
   return dst;
 }
