@@ -6,9 +6,9 @@
 #include <iostream>
 #include <string>
 
-#include "card.h"
 #include "deck.h"
 #include "board.h"
+#include "move.h"
 
 using namespace std;
 
@@ -27,7 +27,11 @@ string game_help() {
   helpstr += "* x, exit: quit the game\n";
   helpstr += "* h, help: print this help\n";
   helpstr += "* t, toggle: toggle board labels\n";
-  helpstr += "* m, move: move <s><#> <d> - attempt to move # cards from s to d";
+  helpstr += "* b, board: print the board\n";
+  helpstr += "* n, next: go to next card in stock\n";
+  helpstr += "* m, move: move <s><#> <d> - attempt to move # cards from s to d\n";
+  helpstr += "  from stock or fdn, do not provide a count. from pile, please do.\n";
+  helpstr += "  eg. m p2 3 p1; m s f3; m f1 p4; m s p7";
   return helpstr;
 }
 
@@ -59,6 +63,10 @@ bool is_move(string str) {
   return (first_bit == "move" || first_bit == "m");
 }
 
+string ignore_first_bit(string str) {
+  return string(str, str.find(" ")+1, str.size());
+}
+
 int play() {
   cout << "Welcome to the game! (h=help, x=exit)" << endl;
 
@@ -77,7 +85,13 @@ int play() {
       b.next();
       cout << b.toString() << endl;
     } else if (is_move(cmd)) {
-      cout << "OMG A MVOE MOVE MOVE!!!" << endl;
+      try {
+        Move m(ignore_first_bit(cmd));
+        b.move(m);
+        cout << b.toString() << endl;
+      } catch (runtime_error &e) {
+        cerr << "Invalid move - " << e.what() << endl;
+      }
     } else {
       cout << b.toString() << endl;
     }
