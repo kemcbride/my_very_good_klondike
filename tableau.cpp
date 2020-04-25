@@ -16,3 +16,13 @@ Tableau::Tableau(Deck d) {
   this->piles = my_piles;
 }
 
+string Tableau::toString() {
+  string tableau_str;
+  for (unsigned int i = 0; i < this->piles.size(); ++i) {
+    tableau_str += this->piles.at(i).toString();
+    if (i != this->piles.size() -1) {
+      tableau_str += '\n';
+    }
+  }
+  return tableau_str;
+}

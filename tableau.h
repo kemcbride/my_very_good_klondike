@@ -16,6 +16,8 @@ class Tableau {
     std::vector<Pile> piles;
 
     Tableau(Deck);
+
+    std::string toString();
 };
 
 #endif // TABLEAU_H
