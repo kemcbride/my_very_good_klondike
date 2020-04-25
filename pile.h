@@ -13,6 +13,9 @@
 // The pile is probably where the business logic of what moves
 // are viable lives.
 class Pile {
+  private:
+    void clear_empty_run();
+    
   public:
     std::vector<Run> runs;
 
@@ -22,9 +25,10 @@ class Pile {
     Pile(Deck&, int);
 
     std::optional<Card> peek();
-    std::optional<Card> pop(); // remove the top card
-    Run take(unsigned int); // take the top N visible cards (if they are movable)
+    std::optional<Run> pop(); // remove the top card from the top run
+    std::optional<Run> take(unsigned int); // take the top N visible cards (if they are movable)
     void put(std::vector<Card>); // add a stack of viable cards to the top of the pile
+    void put(Run); // add a stack of viable cards to the top of the pile
 
     std::string toString();
 };

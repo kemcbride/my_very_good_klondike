@@ -42,6 +42,43 @@ optional<Card> Pile::peek() {
   return this->runs.back().peek();
 }
 
+void Pile::clear_empty_run() {
+  if (this->runs.back().cards.size() == 0) {
+    this->runs.pop_back(); // remove empty run
+
+    if (this->runs.size() > 0) {
+      this->runs.back().reveal(); // reveal new front
+    }
+  }
+}
+
+optional<Run> Pile::pop() {
+  if (this->runs.size() == 0)
+    return nullopt;
+
+  optional<Run> result_run = this->runs.back().take(1);
+  this->clear_empty_run();
+  return result_run;
+}
+
+optional<Run> Pile::take(unsigned int i) {
+  optional<Run> result_run = this->runs.back().take(1);
+  if (!result_run.has_value()) {
+    return nullopt;
+  }
+  this->clear_empty_run();
+  return result_run.value();
+}
+
+void Pile::put(std::vector<Card> cards) {
+  this->runs.back().put(cards);
+}
+
+void Pile::put(Run run) {
+  this->runs.back().put(run);
+}
+
+
 string Pile::toString() {
   string runs_str;
   for (auto r : this->runs) {
