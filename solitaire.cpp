@@ -27,13 +27,14 @@ string game_help() {
   helpstr += "* x, exit: quit the game\n";
   helpstr += "* h, help: print this help\n";
   helpstr += "* t, toggle: toggle board labels\n";
+  helpstr += "* m, move: move <s><#> <d> - attemp to move # cards from s to d\n";
   return helpstr;
 }
 
 string get_cmd() {
   cout << "cmd: ";
   string cmd;
-  cin >> cmd;
+  getline(cin, cmd);
   return cmd;
 }
 
@@ -53,6 +54,11 @@ bool is_next(string str) {
   return (str == "next" || str == "n");
 }
 
+bool is_move(string str) {
+  string first_bit = string(str, 0, str.find(" "));
+  return (first_bit == "move" || first_bit == "m");
+}
+
 int play() {
   cout << "Welcome to the game! (h=help, x=exit)" << endl;
 
@@ -70,6 +76,8 @@ int play() {
     } else if (is_next(cmd)) {
       b.next();
       cout << b.toString() << endl;
+    } else if (is_move(cmd)) {
+      cout << "OMG A MVOE MOVE MOVE!!!" << endl;
     } else {
       cout << b.toString() << endl;
     }
