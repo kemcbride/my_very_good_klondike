@@ -70,10 +70,13 @@ string Foundation::toString() {
     card_str = "-";
   }
 
+  // handle different str lengths (1-3)
   if (card_str.size() == 1) {
     return "( " + card_str + " )";
 
-  } else { // len = 2
+  } else if (card_str.size() == 2) {
     return "( " + card_str + ")";
   }
+  // size == 3 (10H)
+  return "(" + card_str + ")";
 }
