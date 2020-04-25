@@ -68,7 +68,7 @@ bool Board::isSolved() {
 }
 
 void Board::move(Move m) {
-  if (m.getSource().type == 's') {
+  if (m.getSource().type == 's') { // source: stock
     optional<Card> stock_card = this->stock.peek();
     if (!stock_card.has_value()) {
       cerr << "Invalid move: No cards remaining in stock" << endl;
@@ -76,8 +76,7 @@ void Board::move(Move m) {
     }
     Card c = stock_card.value();
 
-    if (m.getDest().type == 'f') {
-      // move from source to foundation.
+    if (m.getDest().type == 'f') { // stock -> foundation
       Foundation &f = this->foundations.at(m.getDest().idx-1);
       try {
         f.push(c);
@@ -86,14 +85,35 @@ void Board::move(Move m) {
         cerr << "Invalid move: " << e.what() << endl;
         return;
       }
-    } else {
-      // source -> pile
-      cerr << "source -> pile not implementd" << endl;
+    } else { // stock -> pile
+      cerr << "stock -> pile not implementd" << endl;
       return;
     }
-  } else {
-    cerr << "moves from pile, fdn not supported yet" << endl;
-    return;
+  } else { // source: pile
+    if (m.getDest().type == 'f') { // pile -> foundation
+      // move from pile to fdn
+      Pile &target_pile = this->tableau.piles.at(m.getSource().idx-1);
+      optional<Card> c = target_pile.peek();
+      if (c.has_value()) {
+        Foundation &fdn = this->foundations.at(m.getDest().idx-1);
+        fdn.push(c.value());
+        optional<Run> _ = target_pile.pop();
+      }
+    } else { // pile -> pile
+      Pile &src_pile = this->tableau.piles.at(m.getSource().idx-1);
+      Pile &dst_pile = this->tableau.piles.at(m.getDest().idx-1);
+      optional<Run> maybe_run = src_pile.take(m.getCount());
+      if (maybe_run.has_value()) {
+        Run r = maybe_run.value();
+        try {
+          dst_pile.put(r);
+        } catch (runtime_error &e) {
+          src_pile.put(r);
+          cerr << "Invalid move; try something else." << endl;
+        }
+      }
+      return;
+    }
   }
 
   // Update isSolved() state
