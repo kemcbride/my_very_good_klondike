@@ -1,8 +1,8 @@
 CC=g++
 CC_FLAGS=-Wall -g -I. --std=c++17
 
-solitaire: solitaire.cpp card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o
-	$(CC) -o solitaire  solitaire.cpp card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o $(CC_FLAGS)
+solitaire: solitaire.cpp card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o move.o
+	$(CC) -o solitaire  solitaire.cpp card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o move.o $(CC_FLAGS)
 
 card.o: card.cpp card.h
 	$(CC) -c -o card.o card.cpp $(CC_FLAGS)
@@ -27,3 +27,6 @@ tableau.o: tableau.cpp tableau.h
 
 board.o: board.cpp board.h
 	$(CC) -c -o board.o board.cpp $(CC_FLAGS)
+
+move.o: move.cpp move.h
+	$(CC) -c -o move.o move.cpp $(CC_FLAGS)
