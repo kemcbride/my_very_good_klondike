@@ -26,6 +26,7 @@ string game_help() {
   helpstr += "game help for solitaire:\n";
   helpstr += "* x, exit: quit the game\n";
   helpstr += "* h, help: print this help\n";
+  helpstr += "* t, toggle: toggle board labels\n";
   return helpstr;
 }
 
@@ -44,6 +45,10 @@ bool is_help(string str) {
   return (str == "help" || str == "h");
 }
 
+bool is_toggle(string str) {
+  return (str == "toggle" || str == "t");
+}
+
 int play() {
   cout << "Welcome to the game! (h=help, x=exit)" << endl;
 
@@ -55,6 +60,8 @@ int play() {
   while (is_not_exit(cmd)) {
     if (is_help(cmd)) {
       cout << game_help() << endl;
+    } else if (is_toggle(cmd)) {
+      b.toggle_labels();
     } else {
       cout << b.toString() << endl;
     }

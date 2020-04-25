@@ -34,16 +34,16 @@ string Board::toString() {
   string stock_str = this->stock.toString();
   string tbl_str = this->tableau.toString();
 
-  if (this->show_labels) {
-    string extra_help = " f1  f2  f3  f4    s";
+  if (this->show_labels == true) {
+    string extra_help = " f1    f2    f3    f4      s\n";
     board_str += extra_help;
   }
 
-  board_str = fdns_str + "   " + stock_str + '\n' + tbl_str;
+  board_str += fdns_str + "   " + stock_str + '\n' + tbl_str;
   return board_str;
 }
 
 void Board::toggle_labels() {
-  this->show_labels = !this->show_labels;
+  this->show_labels = !(this->show_labels);
   this->tableau.toggle_labels();
 }
