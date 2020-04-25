@@ -21,6 +21,8 @@ class Foundation {
 
     bool hasSuit();
     Suit getSuit();
+
+    std::string toString();
 };
 
 #endif // FOUNDATION_H

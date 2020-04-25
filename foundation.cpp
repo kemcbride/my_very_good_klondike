@@ -60,3 +60,13 @@ void Foundation::push(Card c) {
     "Cannot push " + c.toString() + " onto " + this->getSuit().toString() + "foundation"
   );
 }
+
+string Foundation::toString() {
+  string card_str;
+  if (this->peek().has_value()) {
+    card_str = this->peek().value().toString();
+  } else {
+    card_str = "-";
+  }
+  return "( " + card_str + " )";
+}
