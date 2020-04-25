@@ -10,14 +10,16 @@
 // The Tableau consists of 7 piles
 class Tableau {
   private:
+    bool show_labels = false;
 
   public:
     Tableau() = delete;
     std::vector<Pile> piles;
 
     Tableau(Deck&);
-
     std::string toString();
+
+    void toggle_labels();
 };
 
 #endif // TABLEAU_H

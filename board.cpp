@@ -21,6 +21,8 @@ Board::Board(Deck &d) : tableau(d), stock(d) {
 }
 
 string Board::toString() {
+  string board_str;
+
   string fdns_str;
   for (unsigned int i = 0; i < this->foundations.size(); ++i) {
     fdns_str += this->foundations.at(i).toString();
@@ -30,10 +32,18 @@ string Board::toString() {
   }
 
   string stock_str = this->stock.toString();
-
   string tbl_str = this->tableau.toString();
 
-  string board_str;
+  if (this->show_labels) {
+    string extra_help = " f1  f2  f3  f4    s";
+    board_str += extra_help;
+  }
+
   board_str = fdns_str + "   " + stock_str + '\n' + tbl_str;
   return board_str;
+}
+
+void Board::toggle_labels() {
+  this->show_labels = !this->show_labels;
+  this->tableau.toggle_labels();
 }

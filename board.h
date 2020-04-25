@@ -13,6 +13,7 @@
 class Board {
   private:
     bool isSolved(); // check if the game is "Solved"/"Solvable"
+    bool show_labels = false;
 
   public:
     Tableau tableau;
@@ -21,6 +22,8 @@ class Board {
 
     Board(Deck&);
     std::string toString();
+
+    void toggle_labels();
 };
 
 #endif // BOARD_H
