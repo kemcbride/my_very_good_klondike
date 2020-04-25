@@ -34,6 +34,6 @@ string Board::toString() {
   string tbl_str = this->tableau.toString();
 
   string board_str;
-  board_str = fdns_str + '\n' + stock_str + '\n' + tbl_str;
+  board_str = fdns_str + "   " + stock_str + '\n' + tbl_str;
   return board_str;
 }
