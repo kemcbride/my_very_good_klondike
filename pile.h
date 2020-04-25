@@ -19,7 +19,7 @@ class Pile {
     // TODO: Not sure which I want to use...
     Pile(std::vector<Card>);
     Pile(std::vector<Run>);
-    Pile(Deck, int);
+    Pile(Deck&, int);
 
     std::optional<Card> peek();
     std::optional<Card> pop(); // remove the top card

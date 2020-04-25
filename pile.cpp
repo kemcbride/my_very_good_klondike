@@ -25,7 +25,7 @@ Pile::Pile(vector<Run> runs) {
   this->runs.back().reveal();
 }
 
-Pile::Pile(Deck d, int n) {
+Pile::Pile(Deck &d, int n) {
   vector<Run> myruns;
 
   // Initialize 1-card hidden runs

@@ -15,7 +15,7 @@ class Tableau {
     Tableau() = delete;
     std::vector<Pile> piles;
 
-    Tableau(Deck);
+    Tableau(Deck&);
 
     std::string toString();
 };

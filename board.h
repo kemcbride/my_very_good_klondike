@@ -19,7 +19,9 @@ class Board {
     Stock stock;
     std::vector<Foundation> foundations;
 
-    Board(Deck);
+    Board(Deck&);
+    Board(Tableau, Stock);
+    std::string toString();
 };
 
 #endif // BOARD_H
