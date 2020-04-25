@@ -8,10 +8,12 @@
 #include "pile.h"
 #include "stock.h"
 #include "tableau.h"
+#include "move.h"
 
 
 class Board {
   private:
+    bool is_solved = false;
     bool isSolved(); // check if the game is "Solved"/"Solvable"
     bool show_labels = false;
 
@@ -25,6 +27,8 @@ class Board {
 
     void toggle_labels();
     void next();
+
+    void move(Move);
 };
 
 #endif // BOARD_H

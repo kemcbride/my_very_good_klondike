@@ -51,3 +51,26 @@ void Board::toggle_labels() {
 void Board::next() {
   this->stock.next();
 }
+
+bool Board::isSolved() {
+  if (this->stock.cards.size() == 0) {
+    for (auto p : this->tableau.piles) {
+      for (auto r : p.runs) {
+        if ( !(r.isRevealed()) ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+void Board::move(Move m) {
+  cerr << "hehe not implemented" << endl;
+
+  this->is_solved = this->isSolved();
+  if (this->is_solved) {
+    cerr << "Game has been won! Good job, good job." << endl;
+  }
+}
