@@ -1,5 +1,18 @@
 # My Very Good Solitaire Project
 
+
+## How to build & run
+
+This project uses Make and g++ with C++17 standards (I use std::optional).
+You should be able to clone this repo to your computer using `git clone`,
+and then run `make solitaire` inside the repo's directory to build the binary.
+
+Then, to run the program, just do: `./solitaire` from that same directory!
+
+----
+
+## What's this All About
+
 Basically just a little bit of practice writing C++, implementing solitaire!
 Technically, I want to implement the game, and then implement a few algorithms
 that try to win, and see how good they are on average.
@@ -7,32 +20,23 @@ that try to win, and see how good they are on average.
 Maybe it'd be cool to have a Microsoft-like tool that can generate games of
 varying difficulty...
 
-Anyways, not getting ahead of myself. All it does now is shuffle decks
-and print cards.
+Right now you can kind of win a game. It's supposed to auto-figure out when you win....
+But for some reason it is not successful at that.
 
 
-------
+-----
 
-Unfortunately terminal colors not preserved... but if you can imagine, red cards are printed in bold red font!
+## TODO
 
-```
-ke2mcbri:solitaire./solitaire
-Shuffling and drawing top card a few times...
-5♣
-7♣
-4♠
-7♥
-9♦
-6♠
-7♦
-2♠
-6♥
-2♥
-Now let's draw a few hands.
-2♥ 5♦ 3♠ K♥ 9♥
-10♣ 6♥ 8♣ Q♣ 6♣
-8♦ A♣ 10♦ 6♦ 2♠
-```
+* make isSolved() check actually work
+* implement "new game" command
+* implement "reset" command (just in case...)
+* implement scoring tools
+* implement undo? (TBH it doesn't seem so difficult to do...)
+* implement draw-3 mode
+* implement game timer?
+* integrate with some third party libraries (ncurses?) to practice using third party libraries
+* revolutionize the makefile (lol)
 
 
 -----
