@@ -126,5 +126,6 @@ void Board::move(Move m) {
   this->is_solved = this->isSolved();
   if (this->is_solved) {
     cerr << "Game has been won! Good job, good job." << endl;
+    cerr << "Deal a new game using the 'restart' command" << endl;
   }
 }

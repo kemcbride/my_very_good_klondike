@@ -27,6 +27,7 @@ string game_help() {
   helpstr += "game help for solitaire:\n";
   helpstr += "* x, exit: quit the game\n";
   helpstr += "* h, help: print this help\n";
+  helpstr += "* r, restart: restart and deal a new game\n";
   helpstr += "* t, toggle: toggle board labels\n";
   helpstr += "* b, board: print the board\n";
   helpstr += "* n, next: go to next card in stock\n";
@@ -51,6 +52,10 @@ bool is_help(string str) {
   return (str == "help" || str == "h");
 }
 
+bool is_restart(string str) {
+  return (str == "restart" || str == "r");
+}
+
 bool is_toggle(string str) {
   return (str == "toggle" || str == "t");
 }
@@ -68,18 +73,26 @@ string ignore_first_bit(string str) {
   return string(str, str.find(" ")+1, str.size());
 }
 
+Board new_game() {
+  Deck d;
+  d.shuffle();
+  Board b(d);
+  return b;
+}
+
 int play() {
   cout << "Welcome to the game! (h=help, x=exit)" << endl;
 
   int score = 0;
-  Deck d;
-  d.shuffle();
-  Board b(d);
+  Board b = new_game();
 
   string cmd = get_cmd();
   while (is_not_exit(cmd)) {
     if (is_help(cmd)) {
       cout << game_help() << endl;
+    } else if (is_restart(cmd)) {
+      cout << "Restarting the game." << endl;
+      b = new_game();
     } else if (is_toggle(cmd)) {
       b.toggle_labels();
     } else if (is_next(cmd)) {
