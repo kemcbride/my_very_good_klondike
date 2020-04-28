@@ -28,9 +28,9 @@ But for some reason it is not successful at that.
 
 ## TODO
 
-* make isSolved() check actually work
-* implement "new game" command
-* implement "reset" command (just in case...)
+* ~make isSolved() check actually work~
+* ~implement "new game" command~
+* ~implement "reset" command (just in case...)~
 * implement scoring tools
 * implement undo? (TBH it doesn't seem so difficult to do...)
 * implement draw-3 mode
