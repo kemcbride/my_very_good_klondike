@@ -105,6 +105,8 @@ int play() {
         b.move(m);
       } catch (runtime_error &e) {
         cerr << e.what() << endl;
+      } catch (invalid_argument &e) {
+        cerr << e.what() << " error: invalid argument, no count in your p move?" << endl;
       }
       cout << b.toString() << endl;
     } else {
@@ -128,7 +130,7 @@ int main(int argc, char** argv) {
         cout << program_help() << endl;
     } else if (cmd == "play") {
       if ( argc >= 3 ) {
-        int seed = int(argv[2][0] - '0');
+        int seed = char_to_int(argv[2][0]);
         srand(seed);
       }
       return play();

@@ -122,7 +122,7 @@ void Board::move(Move m) {
     }
   }
 
-  // Update isSolved() state
+  // Update isSolved() state - have you won?
   this->is_solved = this->isSolved();
   if (this->is_solved) {
     cerr << "Game has been won! Good job, good job." << endl;

@@ -8,6 +8,10 @@
 
 using namespace std;
 
+int char_to_int(char c) {
+  return c - '0';
+}
+
 Move::Move(string str) {
   // We have to parse out the source, count, and dest
   // from the input string.
@@ -52,7 +56,7 @@ Source Move::parseSource(string str) {
       throw runtime_error("Invalid source: " + source);
     }
     src.type = 'p';
-    src.idx = int(source[1] - '0');
+    src.idx = char_to_int(source[1]);
   } else if (source[0] == 's') {
     // stock
     src.type = 's';
@@ -62,7 +66,7 @@ Source Move::parseSource(string str) {
       throw runtime_error("Invalid source: " + source);
     }
     src.type = 'f';
-    src.idx = int(source[1] - '0');
+    src.idx = char_to_int(source[1]);
   }
   return src;
 }
@@ -77,7 +81,7 @@ Dest Move::parseDest(string str) {
       throw runtime_error("Invalid dest: " + dest);
     }
     dst.type = 'p';
-    dst.idx = int(dest[1] - '0');
+    dst.idx = char_to_int(dest[1]);
   } else if (dest[0] == 's') {
     // stock
     dst.type = 's';
@@ -87,7 +91,7 @@ Dest Move::parseDest(string str) {
       throw runtime_error("Invalid dest: " + dest);
     }
     dst.type = 'f';
-    dst.idx = int(dest[1] - '0');
+    dst.idx = char_to_int(dest[1]);
   }
   return dst;
 }
@@ -96,7 +100,7 @@ int Move::parseCount(string str) {
   string second_half = string(str, str.find(" ")+1, str.size());
   string count_part = string(second_half, 0, str.find(" "));
 
-  int c = count_part[0] - '0';
+  int c = stoi(count_part);
   if ( c < 0 || c > 13) {
     throw runtime_error("Invalid count: " + count_part);
   }
@@ -105,7 +109,7 @@ int Move::parseCount(string str) {
 
 bool Move::validateFdn(string s) {
   if (s[0] == 'f') {
-    int f = s[1] - '0';
+    int f = char_to_int(s[1]);
     if (f > 0 && f < 5) {
       return true;
     }
@@ -115,7 +119,7 @@ bool Move::validateFdn(string s) {
 
 bool Move::validatePile(string s) {
   if (s[0] == 'p') {
-    int p = s[1] - '0';
+    int p = char_to_int(s[1]);
     if (p > 0 && p < 8) {
       return true;
     }

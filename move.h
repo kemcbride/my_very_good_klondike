@@ -4,6 +4,9 @@
 #include <iostream>
 #include <string>
 
+// Useful helper... why is this task annoying? Who knows.
+int char_to_int(char);
+
 class Location {
   public:
     int idx = 0;
