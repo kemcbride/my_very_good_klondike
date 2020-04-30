@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <random>
+#include <chrono>
 
 #include "deck.h"
 #include "board.h"
@@ -116,8 +117,8 @@ int play() {
 }
 
 int main(int argc, char** argv) {
-  std::srand(1); // default is 1
-  /* std::srand(std::time(nullptr)); // use current time as seed for random generator */
+  std::srand(std::time(nullptr)); // use current time as seed for random generator
+
   if (argc == 1) {
     cout << program_help() << endl;
   } else if (argc > 1) {
