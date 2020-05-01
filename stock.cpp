@@ -40,6 +40,7 @@ optional<Card> Stock::pop() {
   }
   Card c = this->cards.at(this->index);
   this->cards.erase(this->cards.cbegin() + this->index);
+  this->index--;
   this->update_index();
   return c;
 }
