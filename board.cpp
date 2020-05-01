@@ -80,7 +80,7 @@ void Board::move(Move m) {
       Foundation &f = this->foundations.at(m.getDest().idx-1);
       try {
         f.push(c);
-        Card c = this->stock.pop().value();
+        (void) this->stock.pop();
       } catch (runtime_error &e) {
         cerr << "Invalid move: " << e.what() << endl;
         return;
