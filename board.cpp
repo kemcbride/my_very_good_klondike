@@ -87,9 +87,23 @@ void Board::move(Move m) {
         target_pile.put(c.value());
         this->stock.pop();
       }
+    }
+  } else if (m.getSource().type == 'f') { // source: foundation
+    // only foundation -> pile supported
+    if (m.getDest().type != 'p')
+      throw runtime_error("Invalid move: from foundation, only pile is valid dest.");
 
+    unsigned int i = m.getSource().idx;
+    Foundation &f = this->foundations.at(i-1);
+    optional<Card> fdn_card = f.peek();
+    if (!fdn_card.has_value()) {
+      cerr << "Invalid move: No cards in foundation " << i << endl;
       return;
     }
+    Card c = fdn_card.value();
+    Pile &p = this->tableau.piles.at(m.getDest().idx-1);
+    p.put(c);
+    (void) f.pop();
   } else { // source: pile
     if (m.getDest().type == 'f') { // pile -> foundation
       // move from pile to fdn
