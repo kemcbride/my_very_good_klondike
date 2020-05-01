@@ -78,13 +78,8 @@ void Board::move(Move m) {
 
     if (m.getDest().type == 'f') { // stock -> foundation
       Foundation &f = this->foundations.at(m.getDest().idx-1);
-      try {
-        f.push(c);
-        (void) this->stock.pop();
-      } catch (runtime_error &e) {
-        cerr << "Invalid move: " << e.what() << endl;
-        return;
-      }
+      f.push(c);
+      (void) this->stock.pop();
     } else { // stock -> pile
       Pile &target_pile = this->tableau.piles.at(m.getDest().idx-1);
       optional<Card> c = this->stock.peek();
@@ -111,12 +106,9 @@ void Board::move(Move m) {
       optional<Run> maybe_run = src_pile.take(m.getCount());
       if (maybe_run.has_value()) {
         Run r = maybe_run.value();
-        try {
-          dst_pile.put(r);
-        } catch (runtime_error &e) {
-          src_pile.put(r);
-          cerr << "Invalid move; try something else." << endl;
-        }
+        dst_pile.put(r);
+        // TODO: need to properly handle case where this put fails
+        // https://github.com/kemcbride/my_very_good_klondike/issues/2
       }
       return;
     }
