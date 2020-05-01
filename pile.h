@@ -30,6 +30,7 @@ class Pile {
     void put(std::vector<Card>); // add a stack of viable cards to the top of the pile
     void put(Run); // add a stack of viable cards to the top of the pile
     void put(Card); // add just one card (like, from stock or fdn)
+    void reveal_top(); // for when a move is done, reveal the top of the pile
 
     std::string toString();
 };

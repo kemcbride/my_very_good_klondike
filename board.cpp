@@ -67,6 +67,10 @@ bool Board::isSolved() {
   return true;
 }
 
+void Board::reveal_top_runs() {
+  this->tableau.reveal_top_runs();
+}
+
 void Board::move(Move m) {
   if (m.getSource().type == 's') { // source: stock
     optional<Card> stock_card = this->stock.peek();
@@ -124,8 +128,8 @@ void Board::move(Move m) {
         // TODO: need to properly handle case where this put fails
         // https://github.com/kemcbride/my_very_good_klondike/issues/2
       }
-      return;
     }
+    this->reveal_top_runs();
   }
 
   // Update isSolved() state - have you won?

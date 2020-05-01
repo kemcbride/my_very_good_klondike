@@ -43,13 +43,8 @@ optional<Card> Pile::peek() {
 }
 
 void Pile::clear_empty_run() {
-  if (this->runs.back().cards.size() == 0) {
+  if (this->runs.back().cards.size() == 0)
     this->runs.pop_back(); // remove empty run
-
-    if (this->runs.size() > 0) {
-      this->runs.back().reveal(); // reveal new front
-    }
-  }
 }
 
 optional<Run> Pile::pop() {
@@ -100,7 +95,7 @@ void Pile::put(Card c) {
 void Pile::put(Run run) {
   if (this->runs.empty()) {
     if (run.cards.empty()) {
-      return; // pointless. pointless!
+      return; // pointless to try to put an empty run somewhere
     }
     Card c = run.cards.front();
     if (c.getRank() != 13)
@@ -112,6 +107,10 @@ void Pile::put(Run run) {
   }
 }
 
+void Pile::reveal_top() {
+  if (!this->runs.empty())
+    this->runs.back().reveal();
+}
 
 string Pile::toString() {
   string runs_str;

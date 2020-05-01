@@ -33,3 +33,9 @@ string Tableau::toString() {
 void Tableau::toggle_labels() {
   this->show_labels = !(this->show_labels);
 }
+
+void Tableau::reveal_top_runs() {
+  for (auto &p : this->piles) {
+    p.reveal_top();
+  }
+}

@@ -20,6 +20,7 @@ class Tableau {
     std::string toString();
 
     void toggle_labels();
+    void reveal_top_runs();
 };
 
 #endif // TABLEAU_H

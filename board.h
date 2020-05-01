@@ -18,6 +18,8 @@ class Board {
     bool isSolved(); // check if the game is "Solved"/"Solvable"
     bool show_labels = false;
 
+    void reveal_top_runs();
+
   public:
     Tableau tableau;
     Stock stock;
