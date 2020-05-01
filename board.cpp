@@ -124,7 +124,12 @@ void Board::move(Move m) {
       optional<Run> maybe_run = src_pile.take(m.getCount());
       if (maybe_run.has_value()) {
         Run r = maybe_run.value();
-        dst_pile.put(r);
+        try {
+          dst_pile.put(r);
+        } catch (runtime_error &e) {
+          cerr << "doesn't satisfy run constraints" << endl;
+          src_pile.put(r);
+        }
         // TODO: need to properly handle case where this put fails
         // https://github.com/kemcbride/my_very_good_klondike/issues/2
       }

@@ -103,7 +103,12 @@ void Pile::put(Run run) {
     run.reveal();
     this->runs.push_back(run);
   } else {
-    this->runs.back().put(run);
+    if (!this->runs.back().isRevealed()) {
+      // then we can put anything, we were in the middle of a move and it failed
+      this->runs.push_back(run);
+    } else {
+      this->runs.back().put(run);
+    }
   }
 }
 
