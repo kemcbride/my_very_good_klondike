@@ -19,7 +19,7 @@ Run::Run(Card c) {
 
 Run::Run(std::vector<Card> cards) {
   // TODO: must validate that this set of cards satisfies "run" constarints
-  if (false) throw runtime_error("doesnt satisfy run constraints");
+  if (false) throw runtime_error("run.cpp: doesn't satisfy run constraints");
   this->cards = cards;
 }
 
@@ -63,7 +63,7 @@ void Run::put(Run r) {
   // If we're adding a run, we know it already internally satsfies run constraints
   // so we only need to check that we can add it. (or its top card)
   if (!this->canAdd(r))
-    throw runtime_error("doesnt satisfy run constraints");
+    throw runtime_error("run.cpp: doesn't satisfy run constraints");
 
   for(auto c : r.cards) {
     this->cards.push_back(c);
