@@ -1,4 +1,4 @@
-CC=g++
+CC=clang++
 CC_FLAGS=-Wall -g -I. --std=c++17
 
 objects = card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o move.o
