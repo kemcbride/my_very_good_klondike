@@ -31,12 +31,13 @@ But for some reason it is not successful at that.
 * ~make isSolved() check actually work~
 * ~implement "new game" command~
 * ~implement "reset" command (just in case...)~
-* implement scoring tools
+* ~revolutionize the makefile (lol)~
+* make isStuck() check work
 * implement undo? (TBH it doesn't seem so difficult to do...)
+* implement scoring tools
 * implement draw-3 mode
 * implement game timer?
 * integrate with some third party libraries (ncurses?) to practice using third party libraries
-* revolutionize the makefile (lol)
 
 
 -----
