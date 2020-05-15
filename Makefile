@@ -8,7 +8,7 @@ objects = card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o move
 all: solitaire
 
 clean:
-	rm *.o solitaire
+	rm -f *.o solitaire
 
 %.o: %.cpp %.h
 	$(CC) -o $@ -c $< $(CC_FLAGS) 
