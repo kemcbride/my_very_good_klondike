@@ -15,8 +15,12 @@
 class Board {
   private:
     bool is_solved = false;
-    bool isSolved(); // check if the game is "Solved"/"Solvable"
     bool show_labels = false;
+    bool isSolved(); // check if the game is "Solved"/"Won"
+    bool isStuck(); // check if the game is "Stuck"/"Lost"
+    bool isLegal(Move);
+    std::vector<Move> allPossibleMoves();
+    std::vector<Move> allLegalMoves();
 
     void reveal_top_runs();
 

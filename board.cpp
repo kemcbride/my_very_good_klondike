@@ -67,6 +67,26 @@ bool Board::isSolved() {
   return true;
 }
 
+vector<Move> Board::allPossibleMoves() {
+  vector<Move> moves; 
+  // In order to do this, we need to:
+  // * iterate over all sources
+  //   * iterate for each move size
+  //     * iterate for each dest
+
+  // Good thing I implemented Source & Dest as objects...
+  // Except!! I fucked up implementing their constructors.
+  // OK - what are possible move sources?
+  // Foundation
+  // Stock
+  // Piles
+  Stock& s = this->stock;
+  for (auto f : this->foundations) {
+    cout << "hello f!" << endl;
+  }
+
+}
+
 void Board::reveal_top_runs() {
   this->tableau.reveal_top_runs();
 }
