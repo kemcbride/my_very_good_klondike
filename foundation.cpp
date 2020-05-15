@@ -41,6 +41,17 @@ Suit Foundation::getSuit() {
   return this->suit.value();
 }
 
+bool Foundation::canPush(Card c) {
+  if ( !(this->hasSuit()) ) {
+    return true;
+  } else if (this->hasSuit() && c.getSuit() == this->getSuit()) {
+    Card top = this->peek().value();
+    if (c.getRank() == top.getRank() + 1)
+      return true;
+  }
+  return false;
+}
+
 void Foundation::push(Card c) {
   if ( !(this->hasSuit()) ) {
     // If it's empty, we can add it and set the suit to this.

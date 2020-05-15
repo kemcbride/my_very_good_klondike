@@ -13,7 +13,6 @@ class Run {
   private:
     bool revealed = false;
     bool canAdd(Run);
-    bool canAdd(Card);
 
   public:
     std::vector<Card> cards;
@@ -28,6 +27,8 @@ class Run {
     void put(Run); // you can add another run to a run
     void put(std::vector<Card>); // you can just try to add cards
     void put(Card); // you can just try to add a card
+
+    bool canAdd(Card);
 
     void reveal();
     void hide();

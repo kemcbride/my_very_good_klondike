@@ -35,6 +35,8 @@ Move::Move(char s, int s_idx, char d, int d_idx, int count) :
   dest(d, d_idx)
 {}
 
+Move::Move(Source s, Dest d, int c) : source(s), dest(d), count(c) {}
+
 Source Move::getSource() {
   return this->source;
 }

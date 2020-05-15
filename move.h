@@ -48,6 +48,7 @@ class Move {
   public:
     Move(std::string);
     Move(char, int, char, int, int);
+    Move(Source, Dest, int);
 
     Source getSource();
     Dest getDest();

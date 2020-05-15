@@ -15,10 +15,14 @@
 class Board {
   private:
     bool is_solved = false;
+    bool is_stuck = false;
     bool show_labels = false;
     bool isSolved(); // check if the game is "Solved"/"Won"
     bool isStuck(); // check if the game is "Stuck"/"Lost"
     bool isLegal(Move);
+    std::vector<Source> getAllSources();
+    std::vector<Dest> getAllDests();
+    std::vector<int> getAllCounts(Run); // return list of possible move sizes
     std::vector<Move> allPossibleMoves();
     std::vector<Move> allLegalMoves();
 
