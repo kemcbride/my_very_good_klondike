@@ -52,34 +52,33 @@ int Move::getCount() {
 // All of the parse* funcs can throw. So Watch the heck out
 Source Move::parseSource(string str) {
   string source = string(str, 0, str.find(" "));
-  char type;
-  int idx;
+  // Default values:
+  char type = 's';
+  int idx = 0;
 
-  if(source[0] == 'p') {
-    // pile
+  if(source[0] == 'p') { // pile
     if( !(this->validatePile(source)) ){
       throw runtime_error("Invalid source: " + source);
     }
     type = 'p';
     idx = char_to_int(source[1]);
-  } else if (source[0] == 's') {
-    // stock
-    type = 's';
-  } else if (source[0] == 'f') {
-    // foundation
+  } else if (source[0] == 'f') { // foundation
     if( !this->validateFdn(source) ){
       throw runtime_error("Invalid source: " + source);
     }
     type = 'f';
     idx = char_to_int(source[1]);
+  } else { // stock
+    type = 's';
   }
   return Source(type, idx);
 }
 
 Dest Move::parseDest(string str) {
   string dest = string(str, str.rfind(" ")+1, str.size());
-  char type;
-  int idx;
+  // Default values:
+  char type = 'f';
+  int idx = 1;
 
   if(dest[0] == 'p') {
     // pile
@@ -88,9 +87,6 @@ Dest Move::parseDest(string str) {
     }
     type = 'p';
     idx = char_to_int(dest[1]);
-  } else if (dest[0] == 's') {
-    // stock
-    type = 's';
   } else if (dest[0] == 'f') {
     // foundation
     if( !this->validateFdn(dest) ){
@@ -98,6 +94,9 @@ Dest Move::parseDest(string str) {
     }
     type = 'f';
     idx = char_to_int(dest[1]);
+  } else {
+    // anything else is actually invalid. Should I throw here? yes.
+    throw runtime_error("Invalid dest: " + dest);
   }
   return Dest(type, idx);
 }
