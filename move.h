@@ -11,7 +11,7 @@ class Location {
   private:
     Location() = delete;
   public:
-    int idx = 0;
+    int idx = 0; // 0-offset index into list of piles or foundations
     char type = 'p';
     Location(char, int);
 };
@@ -30,9 +30,9 @@ class Dest : public Location {
     Dest(char, int);
 };
 
-class Move {
+class MoveCmd {
   private:
-    Move() = delete;
+    MoveCmd() = delete;
     std::string cmd;
     Source source;
     Dest dest;
@@ -46,9 +46,9 @@ class Move {
     bool validatePile(std::string);
     
   public:
-    Move(std::string);
-    Move(char, int, char, int, int);
-    Move(Source, Dest, int);
+    MoveCmd(std::string);
+    MoveCmd(char, int, char, int, int);
+    MoveCmd(Source, Dest, int);
 
     Source getSource();
     Dest getDest();

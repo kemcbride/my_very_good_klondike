@@ -1,5 +1,5 @@
 /* move.cpp
- * like, contains the implementation of the Move object.
+ * like, contains the implementation of the MoveCmd object.
  * cause you play solitaire by making moves
  * @kemcbride/ke2mcbri 2020 :o
  */
@@ -23,34 +23,34 @@ Source::Source(char c, int i) : Location(c, i) {
 Dest::Dest(char c, int i) : Location(c, i) {
 }
 
-Move::Move(string str) :
+MoveCmd::MoveCmd(string str) :
   cmd(str),
   source(this->parseSource(str)),
   dest(this->parseDest(str)),
   count(this->parseCount(str)) {
 }
 
-Move::Move(char s, int s_idx, char d, int d_idx, int count) :
+MoveCmd::MoveCmd(char s, int s_idx, char d, int d_idx, int count) :
   source(s, s_idx),
   dest(d, d_idx)
 {}
 
-Move::Move(Source s, Dest d, int c) : source(s), dest(d), count(c) {}
+MoveCmd::MoveCmd(Source s, Dest d, int c) : source(s), dest(d), count(c) {}
 
-Source Move::getSource() {
+Source MoveCmd::getSource() {
   return this->source;
 }
 
-Dest Move::getDest() {
+Dest MoveCmd::getDest() {
   return this->dest;
 }
 
-int Move::getCount() {
+int MoveCmd::getCount() {
   return this->count;
 }
 
 // All of the parse* funcs can throw. So Watch the heck out
-Source Move::parseSource(string str) {
+Source MoveCmd::parseSource(string str) {
   string source = string(str, 0, str.find(" "));
   // Default values:
   char type = 's';
@@ -61,20 +61,20 @@ Source Move::parseSource(string str) {
       throw runtime_error("Invalid source: " + source);
     }
     type = 'p';
-    idx = char_to_int(source[1]);
+    idx = char_to_int(source[1]) - 1;
   } else if (source[0] == 'f') { // foundation
     if( !this->validateFdn(source) ){
       throw runtime_error("Invalid source: " + source);
     }
     type = 'f';
-    idx = char_to_int(source[1]);
+    idx = char_to_int(source[1]) - 1;
   } else { // stock
     type = 's';
   }
   return Source(type, idx);
 }
 
-Dest Move::parseDest(string str) {
+Dest MoveCmd::parseDest(string str) {
   string dest = string(str, str.rfind(" ")+1, str.size());
   // Default values:
   char type = 'f';
@@ -86,14 +86,14 @@ Dest Move::parseDest(string str) {
       throw runtime_error("Invalid dest: " + dest);
     }
     type = 'p';
-    idx = char_to_int(dest[1]);
+    idx = char_to_int(dest[1]) - 1;
   } else if (dest[0] == 'f') {
     // foundation
     if( !this->validateFdn(dest) ){
       throw runtime_error("Invalid dest: " + dest);
     }
     type = 'f';
-    idx = char_to_int(dest[1]);
+    idx = char_to_int(dest[1]) - 1;
   } else {
     // anything else is actually invalid. Should I throw here? yes.
     throw runtime_error("Invalid dest: " + dest);
@@ -101,7 +101,7 @@ Dest Move::parseDest(string str) {
   return Dest(type, idx);
 }
 
-int Move::parseCount(string str) {
+int MoveCmd::parseCount(string str) {
   string second_half = string(str, str.find(" ")+1, str.size());
   string count_part = string(second_half, 0, str.find(" "));
   // if we call this in initializer list; must support non-p answeers
@@ -116,20 +116,22 @@ int Move::parseCount(string str) {
   return c;
 }
 
-bool Move::validateFdn(string s) {
+bool MoveCmd::validateFdn(string s) {
   if (s[0] == 'f') {
-    int f = char_to_int(s[1]);
-    if (f > 0 && f < 5) {
+    // From the string (1-offset) to 0-offset
+    int f = char_to_int(s[1]) - 1;
+    if (f >= 0 && f < 4) {
       return true;
     }
   }
   return false;
 };
 
-bool Move::validatePile(string s) {
+bool MoveCmd::validatePile(string s) {
   if (s[0] == 'p') {
-    int p = char_to_int(s[1]);
-    if (p > 0 && p < 8) {
+    // From the string (1-offset) to 0-offset
+    int p = char_to_int(s[1]) - 1;
+    if (p >= 0 && p < 7) {
       return true;
     }
   }

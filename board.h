@@ -19,12 +19,12 @@ class Board {
     bool show_labels = false;
     bool isSolved(); // check if the game is "Solved"/"Won"
     bool isStuck(); // check if the game is "Stuck"/"Lost"
-    bool isLegal(Move);
+    bool isLegal(MoveCmd);
     std::vector<Source> getAllSources();
     std::vector<Dest> getAllDests();
     std::vector<int> getAllCounts(Run); // return list of possible move sizes
-    std::vector<Move> allPossibleMoves();
-    std::vector<Move> allLegalMoves();
+    std::vector<MoveCmd> allPossibleMoves();
+    std::vector<MoveCmd> allLegalMoves();
 
     void reveal_top_runs();
 
@@ -39,7 +39,7 @@ class Board {
     void toggle_labels();
     void next();
 
-    void move(Move);
+    void move(MoveCmd);
 };
 
 #endif // BOARD_H
