@@ -144,7 +144,7 @@ void Board::move(MoveCmd m) {
     cerr << "Deal a new game using the 'restart' command" << endl;
   }
   // Causing out_of_range errors :(
-  this->is_stuck = this->isStuck();
+  /* this->is_stuck = this->isStuck(); */
   if (this->is_stuck) {
     cerr << "You're out of legal moves!" << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;

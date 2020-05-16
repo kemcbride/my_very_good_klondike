@@ -1,8 +1,13 @@
-#ifndef MOVE_H
-#define MOVE_H
+#ifndef MOVE_CMD_H
+#define MOVE_CMD_H
 
 #include <iostream>
 #include <string>
+
+#include "move.h"
+/* #include "board.h" */
+
+class Board;
 
 // Useful helper... why is this task annoying? Who knows.
 int char_to_int(char);
@@ -49,6 +54,7 @@ class MoveCmd {
     MoveCmd(std::string);
     MoveCmd(char, int, char, int, int);
     MoveCmd(Source, Dest, int);
+    Move toMove(Board);
 
     Source getSource();
     Dest getDest();
@@ -56,4 +62,4 @@ class MoveCmd {
 
 };
 
-#endif // MOVE_H
+#endif // MOVE_CMD_H
