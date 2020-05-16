@@ -9,7 +9,7 @@
 #include "pile.h"
 #include "stock.h"
 #include "tableau.h"
-#include "move.h"
+#include "move_cmd.h"
 
 
 class Board {

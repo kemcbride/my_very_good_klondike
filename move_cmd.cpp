@@ -4,7 +4,7 @@
  * @kemcbride/ke2mcbri 2020 :o
  */
 
-#include "move.h"
+#include "move_cmd.h"
 
 using namespace std;
 

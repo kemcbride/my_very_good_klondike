@@ -10,7 +10,7 @@
 
 #include "deck.h"
 #include "board.h"
-#include "move.h"
+#include "move_cmd.h"
 
 using namespace std;
 
