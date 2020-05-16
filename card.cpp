@@ -67,7 +67,7 @@ bool operator==(Suit a, Suit b) {
 Rank::Rank() { this->value = 1;};
 Rank::Rank(int val) {
   if (val < 1 || val > 13) {
-    throw invalid_argument("Card Ranks go from 1 to 13, invalid number: " + val);
+    throw invalid_argument("Card Ranks go from 1 to 13, invalid number: " + to_string(val));
   }
   this->value = val;
 };
