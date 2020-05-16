@@ -25,6 +25,7 @@ class Pile {
     Pile(Deck&, int);
 
     std::optional<Card> peek();
+    std::optional<Run> peek(unsigned int); // take a look at the top N cards
     std::optional<Run> pop(); // remove the top card from the top run
     std::optional<Run> take(unsigned int); // take the top N visible cards (if they are movable)
     void put(std::vector<Card>); // add a stack of viable cards to the top of the pile

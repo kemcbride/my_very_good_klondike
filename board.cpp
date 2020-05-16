@@ -121,14 +121,14 @@ void Board::move(MoveCmd m) {
     } else { // pile -> pile
       Pile &src_pile = this->tableau.piles.at(m.getSource().idx);
       Pile &dst_pile = this->tableau.piles.at(m.getDest().idx);
-      optional<Run> maybe_run = src_pile.take(m.getCount());
+      optional<Run> maybe_run = src_pile.peek(m.getCount());
       if (maybe_run.has_value()) {
         Run r = maybe_run.value();
         try {
           dst_pile.put(r);
+	  src_pile.take(m.getCount());
         } catch (runtime_error &e) {
           cerr << "doesn't satisfy run constraints" << endl;
-          src_pile.put(r);
         }
         // TODO: need to properly handle case where this put fails
         // https://github.com/kemcbride/my_very_good_klondike/issues/2

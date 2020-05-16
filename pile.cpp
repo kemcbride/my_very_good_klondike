@@ -56,6 +56,20 @@ optional<Run> Pile::pop() {
   return result_run;
 }
 
+optional<Run> Pile::peek(unsigned int n) {
+  if (this->runs.size() == 0)
+    return nullopt;
+  vector<Card> run_cards = this->runs.back().view();
+  if (run_cards.size() < n) {
+    return run_cards;
+  }
+  // return the back N cards from the view
+  unsigned int start_offset = run_cards.size() - n;
+  vector<Card> peeked_cards(run_cards.begin() + start_offset, run_cards.end());
+  optional<Run> peeked_run(peeked_cards);
+  return peeked_run;
+}
+
 optional<Run> Pile::take(unsigned int i) {
   optional<Run> result_run = this->runs.back().take(i);
   if (!result_run.has_value()) {
