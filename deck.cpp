@@ -23,10 +23,10 @@ void Deck::sort() {
   vector<Card> sorted_deck;
   for (int i=0; i < 4; ++i) { // suit
     for (int j=1; j < 14; ++j) { // rank
-      cards.push_back(Card(j, i));
+      sorted_deck.push_back(Card(j, i));
     }
   }
-  this->cards = cards;
+  this->cards = sorted_deck;
 }
 
 vector<Card> Deck::draw(int n) {
