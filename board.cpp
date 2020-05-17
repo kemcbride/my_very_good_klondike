@@ -84,7 +84,6 @@ void Board::move(Move m) {
   Run srcRun = m.getSrcRun();
   Run dstRun = m.getDstRun();
   unsigned int count = m.getCount();
-  cerr << "in move() after initializing all members from Move" << endl;
 
   if (srcLoc.type == 's') { // source: stock
     optional<Card> stock_card = this->stock.peek();
@@ -260,13 +259,12 @@ bool Board::isLegal(Move m) {
 vector<Move> Board::allLegalMoves() {
   vector<Move> all_legal_moves;
   vector<Move> all_possible_moves = this->allPossibleMoves();
-  cerr << "Possible moves: " << all_possible_moves.size();
   for ( auto m : all_possible_moves ) {
     if ( this->isLegal(m) ) {
       all_legal_moves.push_back(m);
     }
   }
-  cerr << ", Legal Moves: " << all_legal_moves.size() << endl;
+  cerr << "Valid moves remaining: " << all_legal_moves.size() << endl;
   return all_legal_moves;
 }
 
