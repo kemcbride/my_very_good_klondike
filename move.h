@@ -5,20 +5,29 @@
 #include <string>
 
 #include "run.h"
+#include "board.h"
+#include "move_cmd.h"
 
 class Move {
   private:
     Move() = delete;
-    Run source;
-    Run dest;
+    Run srcRun;
+    Source srcLoc;
+    Run dstRun;
+    Dest dstLoc;
+    unsigned int count;
 
     
   public:
-    Move(Run, Run);
+    Move(Board, MoveCmd);
+    Move(Board, Source, Dest, unsigned int);
+    Move(Run, Source, Run, Dest);
 
     bool isLegal();
-    Run getSource();
-    Run getDest();
+    Source getSrc();
+    Dest getDst();
+    Run getSrcRun();
+    Run getDstRun();
 
 };
 #endif // MOVE_H

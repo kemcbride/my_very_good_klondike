@@ -213,67 +213,11 @@ vector<MoveCmd> Board::allPossibleMoves() {
   return moves;
 }
 
-bool Board::isLegal(MoveCmd m) {
-  cerr << "start of isLegal" << endl;
-  // OK - so we know that the sources are valid, so now we need to try to see
-  // if the destinations will accept those moves
-
-  // Deal with finding out if the source is valid
-  // and find the "bottom" of its stack, for considering the dest later
-  cerr << "checking move: " << m.getSource().type << " " << m.getSource().idx+1  << endl;
-  cerr << "               " << m.getDest().type << " " << m.getDest().idx+1 << endl;
-  Card source_bottom;
-  if (m.getSource().type == 's') {
-    optional<Card> stock_src_opt = this->stock.peek();
-    if (stock_src_opt.has_value()) {
-      source_bottom = stock_src_opt.value();
-    } else {
-      return false;
-    }
-  } else if (m.getSource().type == 'f') {
-    Foundation& f = this->foundations.at(m.getSource().idx);
-    optional<Card> fdn_src_opt = f.peek();
-    if (fdn_src_opt.has_value()) {
-      source_bottom = fdn_src_opt.value();
-    } else {
-      return false;
-    }
-  } else if (m.getSource().type == 'p') {
-    Pile& p = this->tableau.piles.at(m.getSource().idx);
-    optional<Run> run_opt = p.take(m.getCount());
-    if (run_opt.has_value()) {
-      Run r = run_opt.value();
-      if (r.cards.size() != (unsigned int) m.getCount()) {
-        return false;
-      }
-      source_bottom = r.cards.back();
-    } else {
-      return false;
-    }
-  }
-
-  // Destination logic & filtering
-  if (m.getDest().type == 'f') {
-    if (m.getCount() > 1) return false;
-    Foundation& f = this->foundations.at(m.getDest().idx);
-    return f.canPush(source_bottom);
-  } else if (m.getDest().type == 'p') {
-    Pile& p = this->tableau.piles.at(m.getDest().idx);
-    if (p.runs.empty() && source_bottom.getRank() != 'K') {
-      return false;
-    }
-    Run& r = p.runs.back();
-    return r.canAdd(source_bottom);
-  }
-  cerr << "Hello end of isLegal" << endl;
-  return false;
-}
-
 vector<MoveCmd> Board::allLegalMoves() {
   vector<MoveCmd> all_legal_moves;
   vector<MoveCmd> all_possible_moves = this->allPossibleMoves();
   for ( auto m : all_possible_moves ) {
-    if ( this->isLegal(m) ) {
+    if ( true ) { // this->isLegal(m) ) {
       cerr << "OK: Legal move!" << endl;
       all_legal_moves.push_back(m);
     }
@@ -287,4 +231,55 @@ bool Board::isStuck() {
     return true;
   }
   return false;
+}
+
+Run Board::getSourceRun(Source s, unsigned int count) {
+  Run srcRun;
+  if (s.type == 's') { // source: stock
+    optional<Card> stock_card = this->stock.peek();
+    if (!stock_card.has_value())
+      throw runtime_error("Board::getSourceRun:Invalid move: No cards remaining in stock");
+    Card c = stock_card.value();
+    srcRun = Run(c);
+
+  } else if (s.type == 'f') { // source: foundation
+    unsigned int i = s.idx;
+    Foundation &f = this->foundations.at(i);
+    optional<Card> fdn_card = f.peek();
+    if (!fdn_card.has_value())
+      throw runtime_error("Board::getSourceRun:Invalid move: No cards in foundation ");
+    Card c = fdn_card.value();
+    srcRun = Run(c);
+
+  } else { // source: pile
+    Pile &src_pile = this->tableau.piles.at(s.idx);
+    optional<Run> opt_src_run = src_pile.peek(count);
+    if (opt_src_run.has_value())
+      srcRun = Run(opt_src_run.value());
+    else
+      throw runtime_error("Board::getSourceRun: Tried to take from a pile that didn't have anything");
+  }
+  return srcRun;
+}
+
+Run Board::getDestRun(Dest d) {
+  Run dstRun; // default is empty run
+  // Now set up the dest run for this move (expected: 1 or 0 cards)
+  // for foundation, we have peek (optional<Card>)
+  // for pile, we have peek (optional<Card>)
+  if (d.type == 'f') {
+    Foundation f = this->foundations.at(d.idx);
+    optional<Card> c = f.peek();
+    if (c.has_value())
+      dstRun = Run(c.value());
+
+  } else if (d.type == 'p') {
+    Pile p = this->tableau.piles.at(d.idx);
+    optional<Card> c = p.peek();
+    if (c.has_value())
+      dstRun = Run(c.value());
+
+  } else
+    throw runtime_error("B:getDestRun: stock is not a valid destination");
+  return dstRun;
 }

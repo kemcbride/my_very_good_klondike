@@ -7,9 +7,11 @@
 #include "deck.h"
 #include "foundation.h"
 #include "pile.h"
+#include "run.h"
 #include "stock.h"
 #include "tableau.h"
 #include "move_cmd.h"
+#include "location.h"
 
 
 class Board {
@@ -18,8 +20,8 @@ class Board {
     bool is_stuck = false;
     bool show_labels = false;
     bool isSolved(); // check if the game is "Solved"/"Won"
+    // IN PROGRESS
     bool isStuck(); // check if the game is "Stuck"/"Lost"
-    bool isLegal(MoveCmd);
     std::vector<Source> getAllSources();
     std::vector<Dest> getAllDests();
     std::vector<int> getAllCounts(Run); // return list of possible move sizes
@@ -40,6 +42,9 @@ class Board {
     void next();
 
     void move(MoveCmd);
+
+    Run getSourceRun(Source, unsigned int); // returns count-sized run (or less)
+    Run getDestRun(Dest); // returns empty or 1-card run
 };
 
 #endif // BOARD_H
