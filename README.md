@@ -3,7 +3,7 @@
 
 ## How to build & run
 
-This project uses Make and g++ with C++17 standards (I use std::optional).
+This project uses Make and clang++ with C++17 standards (I use std::optional).
 You should be able to clone this repo to your computer using `git clone`,
 and then run `make solitaire` inside the repo's directory to build the binary.
 
