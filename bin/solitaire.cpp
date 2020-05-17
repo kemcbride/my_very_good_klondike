@@ -8,9 +8,9 @@
 #include <random>
 #include <string>
 
-#include "board.h"
-#include "deck.h"
-#include "move_cmd.h"
+#include "lib/board.h"
+#include "lib/deck.h"
+#include "lib/move_cmd.h"
 
 using namespace std;
 

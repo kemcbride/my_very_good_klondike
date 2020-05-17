@@ -11,8 +11,8 @@ all: solitaire
 clean:
 	rm -f *.o solitaire
 
-%.o: %.cpp %.h
+%.o: lib/%.cpp lib/%.h
 	$(CC) -o $@ -c $< $(CC_FLAGS) 
 
-solitaire: solitaire.cpp $(objects)
-	$(CC) -o solitaire  solitaire.cpp $(objects) $(CC_FLAGS)
+solitaire: bin/solitaire.cpp $(objects)
+	$(CC) -o solitaire  bin/solitaire.cpp $(objects) $(CC_FLAGS)
