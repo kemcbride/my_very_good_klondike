@@ -16,3 +16,6 @@ clean:
 
 solitaire: bin/solitaire.cpp $(objects)
 	$(CC) -o solitaire  bin/solitaire.cpp $(objects) $(CC_FLAGS)
+
+test_solitaire: test/test_solitaire.cpp Catch2/single_include/catch2/* $(objects)
+	$(CC) -o test_solitaire $< $(objects) $(CC_FLAGS)

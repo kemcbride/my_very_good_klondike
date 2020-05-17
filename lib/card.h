@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 enum suits {
   clubs,
@@ -15,6 +16,7 @@ enum suits {
   hearts,
   diamonds,
 };
+const std::vector<suits> SuitEnumList = { clubs, spades, hearts, diamonds };
 
 enum colors {
   red,
@@ -28,6 +30,7 @@ private:
 public:
   Suit();
   Suit(suits);
+  Suit(unsigned int);
   colors getColor();
   suits getSuit();
   std::string toString();

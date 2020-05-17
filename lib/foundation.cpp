@@ -50,23 +50,18 @@ bool Foundation::canPush(Card c) {
 }
 
 void Foundation::push(Card c) {
-  if (!(this->hasSuit())) {
-    // If it's empty, we can add it and set the suit to this.
-    this->cards.push_back(c);
-    this->suit = c.getSuit();
-    return;
-
-  } else if (this->hasSuit() && c.getSuit() == this->getSuit()) {
-    // If it's not empty, let's check suit first.
-    Card top = this->peek().value();
-    if (c.getRank() == top.getRank() + 1) {
-      // Right suit, is it the right value? If so, we can add it.
+  if (this->canPush(c)) {
+    if (!(this->hasSuit())) {
+      // If it's empty, we can add it and set the suit to this.
       this->cards.push_back(c);
-      return;
+      this->suit = c.getSuit();
+    } else {
+      this->cards.push_back(c);
     }
+  } else {
+    throw runtime_error("cannot push " + c.toString() + " onto " +
+                        this->getSuit().toString() + "foundation");
   }
-  throw runtime_error("Cannot push " + c.toString() + " onto " +
-                      this->getSuit().toString() + "foundation");
 }
 
 string Foundation::toString() {

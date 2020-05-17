@@ -34,8 +34,9 @@ static const char *EnumStrings[] = {"♣", "♠", "♥", "♦"};
 const char *suitStr(int enumVal) { return EnumStrings[enumVal]; }
 
 // Suit
-Suit::Suit() { this->s = spades; };
-Suit::Suit(suits su) { this->s = su; };
+Suit::Suit() : s(spades) {};
+Suit::Suit(unsigned int i) : s(SuitEnumList.at(i)) {};
+Suit::Suit(suits su) : s(su) {};
 
 colors Suit::getColor() {
   if (this->s == spades || this->s == clubs)
