@@ -5,7 +5,7 @@
 #include <string>
 
 #include "run.h"
-#include "board.h"
+/* #include "board.h" */
 #include "move_cmd.h"
 
 class Move {
@@ -19,13 +19,11 @@ class Move {
 
     
   public:
-    Move(Board, MoveCmd);
-    Move(Board, Source, Dest, unsigned int);
-    Move(Run, Source, Run, Dest);
+    Move(Run, Source, Run, Dest, unsigned int);
 
-    bool isLegal();
     Source getSrc();
     Dest getDst();
+    unsigned int getCount();
     Run getSrcRun();
     Run getDstRun();
 

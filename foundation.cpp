@@ -42,7 +42,7 @@ Suit Foundation::getSuit() {
 }
 
 bool Foundation::canPush(Card c) {
-  if ( !(this->hasSuit()) ) {
+  if ( !(this->hasSuit()) && c.getRank() == 1) {
     return true;
   } else if (this->hasSuit() && c.getSuit() == this->getSuit()) {
     Card top = this->peek().value();

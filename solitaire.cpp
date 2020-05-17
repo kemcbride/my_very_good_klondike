@@ -101,8 +101,8 @@ int play() {
       cout << b.toString() << endl;
     } else if (is_move(cmd)) {
       try {
-        MoveCmd m(ignore_first_bit(cmd));
-        b.move(m);
+        MoveCmd m_cmd(ignore_first_bit(cmd));
+        b.move(m_cmd);
       } catch (runtime_error &e) {
         cerr << e.what() << endl;
       } catch (invalid_argument &e) {

@@ -71,8 +71,22 @@ void Board::reveal_top_runs() {
   this->tableau.reveal_top_runs();
 }
 
-void Board::move(MoveCmd m) {
-  if (m.getSource().type == 's') { // source: stock
+void Board::move(MoveCmd mcmd) {
+  Run srcRun = this->getSourceRun(mcmd.getSource(), mcmd.getCount());
+  Run dstRun = this->getDestRun(mcmd.getDest());
+  Move m(srcRun, mcmd.getSource(), dstRun, mcmd.getDest(), mcmd.getCount());
+  this->move(m);
+}
+
+void Board::move(Move m) {
+  Source srcLoc = m.getSrc();
+  Dest dstLoc = m.getDst();
+  Run srcRun = m.getSrcRun();
+  Run dstRun = m.getDstRun();
+  unsigned int count = m.getCount();
+  cerr << "in move() after initializing all members from Move" << endl;
+
+  if (srcLoc.type == 's') { // source: stock
     optional<Card> stock_card = this->stock.peek();
     if (!stock_card.has_value()) {
       cerr << "Invalid move: No cards remaining in stock" << endl;
@@ -80,24 +94,26 @@ void Board::move(MoveCmd m) {
     }
     Card c = stock_card.value();
 
-    if (m.getDest().type == 'f') { // stock -> foundation
-      Foundation &f = this->foundations.at(m.getDest().idx);
-      f.push(c);
-      (void) this->stock.pop();
+    if (dstLoc.type == 'f') { // stock -> foundation
+      Foundation &f = this->foundations.at(dstLoc.idx);
+      if ( f.canPush(c) ) {
+        f.push(c);
+        (void) this->stock.pop();
+      }
     } else { // stock -> pile
-      Pile &target_pile = this->tableau.piles.at(m.getDest().idx);
+      Pile &target_pile = this->tableau.piles.at(dstLoc.idx);
       optional<Card> c = this->stock.peek();
       if (c.has_value()) {
         target_pile.put(c.value());
         this->stock.pop();
       }
     }
-  } else if (m.getSource().type == 'f') { // source: foundation
+  } else if (srcLoc.type == 'f') { // source: foundation
     // only foundation -> pile supported
-    if (m.getDest().type != 'p')
+    if (dstLoc.type != 'p')
       throw runtime_error("Invalid move: from foundation, only pile is valid dest.");
 
-    unsigned int i = m.getSource().idx;
+    unsigned int i = srcLoc.idx;
     Foundation &f = this->foundations.at(i);
     optional<Card> fdn_card = f.peek();
     if (!fdn_card.has_value()) {
@@ -105,33 +121,39 @@ void Board::move(MoveCmd m) {
       return;
     }
     Card c = fdn_card.value();
-    Pile &p = this->tableau.piles.at(m.getDest().idx);
+    Pile &p = this->tableau.piles.at(dstLoc.idx);
     p.put(c);
     (void) f.pop();
   } else { // source: pile
-    if (m.getDest().type == 'f') { // pile -> foundation
+    if (dstLoc.type == 'f') { // pile -> foundation
       // move from pile to fdn
-      Pile &target_pile = this->tableau.piles.at(m.getSource().idx);
+      Pile &target_pile = this->tableau.piles.at(srcLoc.idx);
       optional<Card> c = target_pile.peek();
       if (c.has_value()) {
-        Foundation &fdn = this->foundations.at(m.getDest().idx);
-        fdn.push(c.value());
-        optional<Run> _ = target_pile.pop();
+        Foundation &fdn = this->foundations.at(dstLoc.idx);
+        if (fdn.canPush(c.value())) {
+          fdn.push(c.value());
+          optional<Run> _ = target_pile.pop();
+        }
       }
     } else { // pile -> pile
-      Pile &src_pile = this->tableau.piles.at(m.getSource().idx);
-      Pile &dst_pile = this->tableau.piles.at(m.getDest().idx);
-      optional<Run> maybe_run = src_pile.peek(m.getCount());
+      Pile &src_pile = this->tableau.piles.at(srcLoc.idx);
+      Pile &dst_pile = this->tableau.piles.at(dstLoc.idx);
+      cerr << "before src_pile(peek(n))" << endl;
+      optional<Run> maybe_run = src_pile.peek(count);
       if (maybe_run.has_value()) {
         Run r = maybe_run.value();
         try {
           dst_pile.put(r);
-	  src_pile.take(m.getCount());
+          cerr << "after put" << endl;
+          src_pile.take(count);
         } catch (runtime_error &e) {
           cerr << "doesn't satisfy run constraints" << endl;
         }
         // TODO: need to properly handle case where this put fails
         // https://github.com/kemcbride/my_very_good_klondike/issues/2
+      } else  {
+        cerr << "Maybe run didn't have value" << endl;
       }
     }
     this->reveal_top_runs();
@@ -144,28 +166,23 @@ void Board::move(MoveCmd m) {
     cerr << "Deal a new game using the 'restart' command" << endl;
   }
   // Causing out_of_range errors :(
-  /* this->is_stuck = this->isStuck(); */
+  this->is_stuck = this->isStuck();
   if (this->is_stuck) {
     cerr << "You're out of legal moves!" << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
   }
 }
 
-vector<Source> Board::getAllSources() {
+vector<Source> Board::getAllSourcesButStock() {
   vector<Source> all_sources;
-  // BUG: this means we'll only check the current top of "stock"
-  // But technically, we need to check every card in the stock.
-  all_sources.push_back(Source('s', 0));
   for (unsigned int i = 0; i < this->foundations.size(); ++i) {
     // It's only a valid source if there are some cards there.
     Foundation f = this->foundations.at(i);
     if ( !f.cards.empty() )
       all_sources.push_back(Source('f', i));
-    cerr << "getAllSources fdn iteration" << endl;
   }
   for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
     // It's only a valid source if there are some cards there.
-    cerr << "getAllSources pile iteration" << endl;
     Pile p = this->tableau.piles.at(i);
     if ( !p.runs.empty() )
       all_sources.push_back(Source('p', i));
@@ -174,7 +191,6 @@ vector<Source> Board::getAllSources() {
 }
 
 vector<Dest> Board::getAllDests() {
-  cerr << "start of getAllDests" << endl;
   vector<Dest> all_dests;
   for (unsigned int i = 0; i < this->foundations.size(); ++i) {
     all_dests.push_back(Dest('f', i));
@@ -183,50 +199,79 @@ vector<Dest> Board::getAllDests() {
     all_dests.push_back(Dest('p', i));
   }
   return all_dests;
-  cerr << "end of getAllDests" << endl;
 }
 
 vector<int> Board::getAllCounts(Run r) {
   return vector<int>(1, r.cards.size());
 }
 
-vector<MoveCmd> Board::allPossibleMoves() {
-  vector<MoveCmd> moves; 
+vector<Move> Board::allPossibleMoves() {
+  vector<Move> moves;
 
-  vector<Source> all_sources = this->getAllSources();
+  Source stock_source('s', 0);
+  vector<Source> all_sources = this->getAllSourcesButStock();
   vector<Dest> all_dests = this->getAllDests();
 
   for ( auto s : all_sources ) {
     for ( auto d : all_dests ) {
       // In order to figure out how many different moves we can do from this 
       // source, to this dest, we need to know how many cards there are in the run
-      Run r = this->tableau.piles.at(s.idx).runs.back();
-      for ( auto i : this->getAllCounts(r) ) {
-        moves.push_back(MoveCmd(s, d, i));
+      Pile p = this->tableau.piles.at(s.idx);
+      if ( ! p.runs.empty() )  {
+        Run r = p.runs.back();
+        if (! r.cards.empty() ) {
+          for ( auto i : this->getAllCounts(r) ) {
+            Run srcRun = this->getSourceRun(s, i);
+            Run dstRun = this->getDestRun(d);
+            moves.push_back(Move(srcRun, s, dstRun, d, i));
+          }
+        }
       }
     }
-    // TODO
-    // Logic for iterating through if any stock moves are viable should
-    // probably go here.
+    for ( auto c : this->stock.cards ) {
+      Run srcRun = Run(c);
+      for ( auto d : all_dests ) {
+        Run dstRun = this->getDestRun(d);
+        moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
+      }
+    }
   }
-  cerr << "Hello end of all PossibleMoves" << endl;
+  cerr << "end of all PossibleMoves" << endl;
   return moves;
 }
 
-vector<MoveCmd> Board::allLegalMoves() {
-  vector<MoveCmd> all_legal_moves;
-  vector<MoveCmd> all_possible_moves = this->allPossibleMoves();
+bool Board::isLegal(Move m) {
+  Dest d = m.getDst();
+  Run dstRun = m.getDstRun();
+  Run srcRun = m.getSrcRun();
+
+  if (d.type == 'p') {
+    return dstRun.canAdd(srcRun);
+  } else if (d.type == 'f') {
+    if (srcRun.cards.size() != 1)
+      return false;
+    Foundation f = this->foundations.at(d.idx);
+    Card c = srcRun.cards.front();
+    return f.canPush(c);
+  }
+  return false;
+}
+
+vector<Move> Board::allLegalMoves() {
+  vector<Move> all_legal_moves;
+  vector<Move> all_possible_moves = this->allPossibleMoves();
+  cerr << "Possible moves: " << all_possible_moves.size();
   for ( auto m : all_possible_moves ) {
-    if ( true ) { // this->isLegal(m) ) {
-      cerr << "OK: Legal move!" << endl;
+    if ( this->isLegal(m) ) {
       all_legal_moves.push_back(m);
     }
   }
+  cerr << ", Legal Moves: " << all_legal_moves.size() << endl;
   return all_legal_moves;
 }
 
 bool Board::isStuck() {
-  vector<MoveCmd> legal_moves = this->allLegalMoves();
+  vector<Move> legal_moves = this->allLegalMoves();
   if (legal_moves.size() == 0) {
     return true;
   }
@@ -238,7 +283,7 @@ Run Board::getSourceRun(Source s, unsigned int count) {
   if (s.type == 's') { // source: stock
     optional<Card> stock_card = this->stock.peek();
     if (!stock_card.has_value())
-      throw runtime_error("Board::getSourceRun:Invalid move: No cards remaining in stock");
+      throw runtime_error("B:getSourceRun:Invalid move: No cards remaining in stock");
     Card c = stock_card.value();
     srcRun = Run(c);
 
@@ -247,7 +292,7 @@ Run Board::getSourceRun(Source s, unsigned int count) {
     Foundation &f = this->foundations.at(i);
     optional<Card> fdn_card = f.peek();
     if (!fdn_card.has_value())
-      throw runtime_error("Board::getSourceRun:Invalid move: No cards in foundation ");
+      throw runtime_error("B:getSourceRun:Invalid move: No cards in foundation ");
     Card c = fdn_card.value();
     srcRun = Run(c);
 
@@ -257,7 +302,7 @@ Run Board::getSourceRun(Source s, unsigned int count) {
     if (opt_src_run.has_value())
       srcRun = Run(opt_src_run.value());
     else
-      throw runtime_error("Board::getSourceRun: Tried to take from a pile that didn't have anything");
+      throw runtime_error("B:getSourceRun:Invalid move: Tried to take from empty pile");
   }
   return srcRun;
 }
@@ -265,8 +310,6 @@ Run Board::getSourceRun(Source s, unsigned int count) {
 Run Board::getDestRun(Dest d) {
   Run dstRun; // default is empty run
   // Now set up the dest run for this move (expected: 1 or 0 cards)
-  // for foundation, we have peek (optional<Card>)
-  // for pile, we have peek (optional<Card>)
   if (d.type == 'f') {
     Foundation f = this->foundations.at(d.idx);
     optional<Card> c = f.peek();

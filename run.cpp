@@ -21,8 +21,15 @@ Run::Run(Card c) {
 }
 
 Run::Run(std::vector<Card> cards) {
-  // TODO: must validate that this set of cards satisfies "run" constarints
-  if (false) throw runtime_error("run.cpp: doesn't satisfy run constraints");
+  if (!cards.empty()) {
+    // validate run constraints, so you're not making bogus runs
+    for (auto it = cards.begin()+1; it != cards.end(); ++it) {
+      vector<Card> first_part(cards.begin(), it);
+      vector<Card> second_part(it, cards.end());
+      if (!Run(first_part).canAdd(Run(second_part)))
+        throw runtime_error("run from vec<card> - doesnt satisfy run constraints");
+    }
+  }
   this->cards = cards;
 }
 
@@ -100,6 +107,8 @@ bool Run::canAdd(Card c) {
     // If I'm empty (strange case, but used for programmatically generated moves)
     // During normal game play this is handled via empty pile put, not run put
     return true;
+  } else if (this->cards.empty()) {
+    return false;
   }
 
   Card myCard = this->cards.back();
@@ -110,8 +119,11 @@ bool Run::canAdd(Card c) {
 }
 
 bool Run::canAdd(Run r) {
-  Card your_first_card = r.cards.front();
-  return this->canAdd(your_first_card);
+  if (!r.cards.empty()) {
+    Card your_first_card = r.cards.front();
+    return this->canAdd(your_first_card);
+  }
+  return false;
 }
 
 string Run::toString() {

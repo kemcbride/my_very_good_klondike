@@ -57,16 +57,16 @@ optional<Run> Pile::pop() {
 }
 
 optional<Run> Pile::peek(unsigned int n) {
-  if (this->runs.size() == 0)
+  if (this->runs.size() == 0 || n == 0)
     return nullopt;
-  vector<Card> run_cards = this->runs.back().view();
+  vector<Card> run_cards = this->runs.back().cards;
   if (run_cards.size() < n) {
     return run_cards;
   }
   // return the back N cards from the view
   unsigned int start_offset = run_cards.size() - n;
   vector<Card> peeked_cards(run_cards.begin() + start_offset, run_cards.end());
-  optional<Run> peeked_run(peeked_cards);
+  Run peeked_run(peeked_cards);
   return peeked_run;
 }
 
@@ -109,7 +109,7 @@ void Pile::put(Card c) {
 void Pile::put(Run run) {
   if (this->runs.empty()) {
     if (run.cards.empty()) {
-      return; // pointless to try to put an empty run somewhere
+      throw runtime_error("Pile:put: don't put empty runs");
     }
     Card c = run.cards.front();
     if (c.getRank() != 13)

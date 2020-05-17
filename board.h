@@ -11,6 +11,7 @@
 #include "stock.h"
 #include "tableau.h"
 #include "move_cmd.h"
+#include "move.h"
 #include "location.h"
 
 
@@ -22,11 +23,11 @@ class Board {
     bool isSolved(); // check if the game is "Solved"/"Won"
     // IN PROGRESS
     bool isStuck(); // check if the game is "Stuck"/"Lost"
-    std::vector<Source> getAllSources();
+    std::vector<Source> getAllSourcesButStock();
     std::vector<Dest> getAllDests();
     std::vector<int> getAllCounts(Run); // return list of possible move sizes
-    std::vector<MoveCmd> allPossibleMoves();
-    std::vector<MoveCmd> allLegalMoves();
+    std::vector<Move> allPossibleMoves();
+    std::vector<Move> allLegalMoves();
 
     void reveal_top_runs();
 
@@ -41,6 +42,8 @@ class Board {
     void toggle_labels();
     void next();
 
+    bool isLegal(Move);
+    void move(Move);
     void move(MoveCmd);
 
     Run getSourceRun(Source, unsigned int); // returns count-sized run (or less)
