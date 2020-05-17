@@ -3,37 +3,10 @@
 
 #include <iostream>
 #include <string>
-
-#include "move.h"
-/* #include "board.h" */
-
-class Board;
+#include "location.h"
 
 // Useful helper... why is this task annoying? Who knows.
 int char_to_int(char);
-
-class Location {
-  private:
-    Location() = delete;
-  public:
-    int idx = 0; // 0-offset index into list of piles or foundations
-    char type = 'p';
-    Location(char, int);
-};
-
-class Source : public Location {
-  private:
-    Source() = delete;
-  public:
-    Source(char, int);
-};
-
-class Dest : public Location {
-  private:
-    Dest() = delete;
-  public:
-    Dest(char, int);
-};
 
 class MoveCmd {
   private:
@@ -54,7 +27,6 @@ class MoveCmd {
     MoveCmd(std::string);
     MoveCmd(char, int, char, int, int);
     MoveCmd(Source, Dest, int);
-    Move toMove(Board);
 
     Source getSource();
     Dest getDest();

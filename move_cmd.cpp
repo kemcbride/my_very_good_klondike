@@ -12,17 +12,6 @@ int char_to_int(char c) {
   return c - '0';
 }
 
-Location::Location(char c, int i) {
-  this->type = c;
-  this->idx = i;
-}
-
-Source::Source(char c, int i) : Location(c, i) {
-}
-
-Dest::Dest(char c, int i) : Location(c, i) {
-}
-
 MoveCmd::MoveCmd(string str) :
   cmd(str),
   source(this->parseSource(str)),
@@ -137,4 +126,3 @@ bool MoveCmd::validatePile(string s) {
   }
   return false;
 };
-
