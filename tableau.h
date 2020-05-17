@@ -6,21 +6,20 @@
 #include "deck.h"
 #include "pile.h"
 
-
 // The Tableau consists of 7 piles
 class Tableau {
-  private:
-    bool show_labels = false;
+private:
+  bool show_labels = false;
 
-  public:
-    Tableau() = delete;
-    std::vector<Pile> piles;
+public:
+  Tableau() = delete;
+  std::vector<Pile> piles;
 
-    Tableau(Deck&);
-    std::string toString();
+  Tableau(Deck &);
+  std::string toString();
 
-    void toggle_labels();
-    void reveal_top_runs();
+  void toggle_labels();
+  void reveal_top_runs();
 };
 
 #endif // TABLEAU_H

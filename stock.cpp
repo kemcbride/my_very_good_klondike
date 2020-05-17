@@ -1,4 +1,4 @@
-/* stock.cpp 
+/* stock.cpp
  * contains some stuff to define stock for solitaire play.
  * klondike specfiically, for now.
  * @kemcbride/@ke2mcbri 2020

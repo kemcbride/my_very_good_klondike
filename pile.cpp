@@ -1,4 +1,4 @@
-/* pile.cpp 
+/* pile.cpp
  * contains some stuff to define pile for klondike solitaire
  * @kemcbride/@ke2mcbri 2020
  */

@@ -1,15 +1,15 @@
-/* solitaire.cpp 
+/* solitaire.cpp
  * contains some stuff to define cards and a deck for solitaire play.
  * klondike specfiically, for now.
  * @kemcbride/@ke2mcbri 2020
  */
-#include <iostream>
-#include <string>
-#include <random>
 #include <chrono>
+#include <iostream>
+#include <random>
+#include <string>
 
-#include "deck.h"
 #include "board.h"
+#include "deck.h"
 #include "move_cmd.h"
 
 using namespace std;
@@ -32,8 +32,10 @@ string game_help() {
   helpstr += "* t, toggle: toggle board labels\n";
   helpstr += "* b, board: print the board\n";
   helpstr += "* n, next: go to next card in stock\n";
-  helpstr += "* m, move: move <s><#> <d> - attempt to move # cards from s to d\n";
-  helpstr += "  from stock or fdn, do not provide a count. from pile, please do.\n";
+  helpstr +=
+      "* m, move: move <s><#> <d> - attempt to move # cards from s to d\n";
+  helpstr +=
+      "  from stock or fdn, do not provide a count. from pile, please do.\n";
   helpstr += "  eg. m p2 3 p1; m s f3; m f1 p4; m s p7";
   return helpstr;
 }
@@ -45,25 +47,15 @@ string get_cmd() {
   return cmd;
 }
 
-bool is_not_exit(string str) {
-  return (str != "exit" && str != "x");
-}
+bool is_not_exit(string str) { return (str != "exit" && str != "x"); }
 
-bool is_help(string str) {
-  return (str == "help" || str == "h");
-}
+bool is_help(string str) { return (str == "help" || str == "h"); }
 
-bool is_restart(string str) {
-  return (str == "restart" || str == "r");
-}
+bool is_restart(string str) { return (str == "restart" || str == "r"); }
 
-bool is_toggle(string str) {
-  return (str == "toggle" || str == "t");
-}
+bool is_toggle(string str) { return (str == "toggle" || str == "t"); }
 
-bool is_next(string str) {
-  return (str == "next" || str == "n");
-}
+bool is_next(string str) { return (str == "next" || str == "n"); }
 
 bool is_move(string str) {
   string first_bit = string(str, 0, str.find(" "));
@@ -71,7 +63,7 @@ bool is_move(string str) {
 }
 
 string ignore_first_bit(string str) {
-  return string(str, str.find(" ")+1, str.size());
+  return string(str, str.find(" ") + 1, str.size());
 }
 
 Board new_game() {
@@ -106,7 +98,8 @@ int play() {
       } catch (runtime_error &e) {
         cerr << e.what() << endl;
       } catch (invalid_argument &e) {
-        cerr << e.what() << " error: invalid argument, no count in your p move?" << endl;
+        cerr << e.what() << " error: invalid argument, no count in your p move?"
+             << endl;
       }
       cout << b.toString() << endl;
     } else {
@@ -118,18 +111,19 @@ int play() {
   return score;
 }
 
-int main(int argc, char** argv) {
-  std::srand(std::time(nullptr)); // use current time as seed for random generator
+int main(int argc, char **argv) {
+  std::srand(
+      std::time(nullptr)); // use current time as seed for random generator
 
   if (argc == 1) {
     cout << program_help() << endl;
   } else if (argc > 1) {
 
     string cmd = argv[1];
-     if (cmd == "help") {
-        cout << program_help() << endl;
+    if (cmd == "help") {
+      cout << program_help() << endl;
     } else if (cmd == "play") {
-      if ( argc >= 3 ) {
+      if (argc >= 3) {
         int seed = char_to_int(argv[2][0]);
         srand(seed);
       }
@@ -137,7 +131,6 @@ int main(int argc, char** argv) {
     } else {
       cout << program_help() << endl;
     }
-
   }
-	return 0;
+  return 0;
 }

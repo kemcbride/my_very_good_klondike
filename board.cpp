@@ -1,4 +1,4 @@
-/* board.cpp 
+/* board.cpp
  * contains some stuff to define board for solitaire play.
  * klondike specfiically, for now.
  * @kemcbride/@ke2mcbri 2020
@@ -14,7 +14,7 @@ Board::Board(Deck &d) : tableau(d), stock(d) {
   // Then, using the same deck, we fill the stock.
   // Then we create the foundations.
   vector<Foundation> my_fdns;
-  for (int i =0; i < 4; ++i) {
+  for (int i = 0; i < 4; ++i) {
     my_fdns.push_back(Foundation());
   }
   this->foundations = my_fdns;
@@ -48,9 +48,7 @@ void Board::toggle_labels() {
   this->tableau.toggle_labels();
 }
 
-void Board::next() {
-  this->stock.next();
-}
+void Board::next() { this->stock.next(); }
 
 bool Board::isSolved() {
   if (!(this->stock.cards.size() == 0)) {
@@ -59,7 +57,7 @@ bool Board::isSolved() {
 
   for (auto p : this->tableau.piles) {
     for (auto r : p.runs) {
-      if ( !(r.isRevealed()) ) {
+      if (!(r.isRevealed())) {
         return false;
       }
     }
@@ -67,9 +65,7 @@ bool Board::isSolved() {
   return true;
 }
 
-void Board::reveal_top_runs() {
-  this->tableau.reveal_top_runs();
-}
+void Board::reveal_top_runs() { this->tableau.reveal_top_runs(); }
 
 void Board::move(MoveCmd mcmd) {
   Run srcRun = this->getSourceRun(mcmd.getSource(), mcmd.getCount());
@@ -94,9 +90,9 @@ void Board::move(Move m) {
 
     if (dstLoc.type == 'f') { // stock -> foundation
       Foundation &f = this->foundations.at(dstLoc.idx);
-      if ( f.canPush(c) ) {
+      if (f.canPush(c)) {
         f.push(c);
-        (void) this->stock.pop();
+        (void)this->stock.pop();
       }
     } else { // stock -> pile
       Pile &target_pile = this->tableau.piles.at(dstLoc.idx);
@@ -109,7 +105,8 @@ void Board::move(Move m) {
   } else if (srcLoc.type == 'f') { // source: foundation
     // only foundation -> pile supported
     if (dstLoc.type != 'p')
-      throw runtime_error("Invalid move: from foundation, only pile is valid dest.");
+      throw runtime_error(
+          "Invalid move: from foundation, only pile is valid dest.");
 
     unsigned int i = srcLoc.idx;
     Foundation &f = this->foundations.at(i);
@@ -120,8 +117,8 @@ void Board::move(Move m) {
     Card c = fdn_card.value();
     Pile &p = this->tableau.piles.at(dstLoc.idx);
     p.put(c);
-    (void) f.pop();
-  } else { // source: pile
+    (void)f.pop();
+  } else {                    // source: pile
     if (dstLoc.type == 'f') { // pile -> foundation
       // move from pile to fdn
       Pile &target_pile = this->tableau.piles.at(srcLoc.idx);
@@ -167,13 +164,13 @@ vector<Source> Board::getAllSourcesButStock() {
   for (unsigned int i = 0; i < this->foundations.size(); ++i) {
     // It's only a valid source if there are some cards there.
     Foundation f = this->foundations.at(i);
-    if ( !f.cards.empty() )
+    if (!f.cards.empty())
       all_sources.push_back(Source('f', i));
   }
   for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
     // It's only a valid source if there are some cards there.
     Pile p = this->tableau.piles.at(i);
-    if ( !p.runs.empty() )
+    if (!p.runs.empty())
       all_sources.push_back(Source('p', i));
   }
   return all_sources;
@@ -201,15 +198,16 @@ vector<Move> Board::allPossibleMoves() {
   vector<Source> all_sources = this->getAllSourcesButStock();
   vector<Dest> all_dests = this->getAllDests();
 
-  for ( auto s : all_sources ) {
-    for ( auto d : all_dests ) {
-      // In order to figure out how many different moves we can do from this 
-      // source, to this dest, we need to know how many cards there are in the run
+  for (auto s : all_sources) {
+    for (auto d : all_dests) {
+      // In order to figure out how many different moves we can do from this
+      // source, to this dest, we need to know how many cards there are in the
+      // run
       Pile p = this->tableau.piles.at(s.idx);
-      if ( ! p.runs.empty() )  {
+      if (!p.runs.empty()) {
         Run r = p.runs.back();
-        if (! r.cards.empty() ) {
-          for ( auto i : this->getAllCounts(r) ) {
+        if (!r.cards.empty()) {
+          for (auto i : this->getAllCounts(r)) {
             Run srcRun = this->getSourceRun(s, i);
             Run dstRun = this->getDestRun(d);
             moves.push_back(Move(srcRun, s, dstRun, d, i));
@@ -217,9 +215,9 @@ vector<Move> Board::allPossibleMoves() {
         }
       }
     }
-    for ( auto c : this->stock.cards ) {
+    for (auto c : this->stock.cards) {
       Run srcRun = Run(c);
-      for ( auto d : all_dests ) {
+      for (auto d : all_dests) {
         Run dstRun = this->getDestRun(d);
         moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
       }
@@ -248,8 +246,8 @@ bool Board::isLegal(Move m) {
 vector<Move> Board::allLegalMoves() {
   vector<Move> all_legal_moves;
   vector<Move> all_possible_moves = this->allPossibleMoves();
-  for ( auto m : all_possible_moves ) {
-    if ( this->isLegal(m) ) {
+  for (auto m : all_possible_moves) {
+    if (this->isLegal(m)) {
       all_legal_moves.push_back(m);
     }
   }
@@ -269,7 +267,8 @@ Run Board::getSourceRun(Source s, unsigned int count) {
   if (s.type == 's') { // source: stock
     optional<Card> stock_card = this->stock.peek();
     if (!stock_card.has_value())
-      throw runtime_error("B:getSourceRun:Invalid move: No cards remaining in stock");
+      throw runtime_error(
+          "B:getSourceRun:Invalid move: No cards remaining in stock");
     Card c = stock_card.value();
     srcRun = Run(c);
 
@@ -278,7 +277,8 @@ Run Board::getSourceRun(Source s, unsigned int count) {
     Foundation &f = this->foundations.at(i);
     optional<Card> fdn_card = f.peek();
     if (!fdn_card.has_value())
-      throw runtime_error("B:getSourceRun:Invalid move: No cards in foundation ");
+      throw runtime_error(
+          "B:getSourceRun:Invalid move: No cards in foundation ");
     Card c = fdn_card.value();
     srcRun = Run(c);
 
@@ -288,7 +288,8 @@ Run Board::getSourceRun(Source s, unsigned int count) {
     if (opt_src_run.has_value())
       srcRun = Run(opt_src_run.value());
     else
-      throw runtime_error("B:getSourceRun:Invalid move: Tried to take from empty pile");
+      throw runtime_error(
+          "B:getSourceRun:Invalid move: Tried to take from empty pile");
   }
   return srcRun;
 }

@@ -1,4 +1,4 @@
-/* foundation.cpp 
+/* foundation.cpp
  * contains some stuff to define "foundation" for solitaire play.
  * klondike specfiically, for now.
  * @kemcbride/@ke2mcbri 2020
@@ -7,7 +7,6 @@
 #include "foundation.h"
 
 using namespace std;
-
 
 Foundation::Foundation() {
   this->suit = nullopt;
@@ -31,9 +30,7 @@ optional<Card> Foundation::pop() {
   return c;
 }
 
-bool Foundation::hasSuit() {
-  return this->suit.has_value();
-}
+bool Foundation::hasSuit() { return this->suit.has_value(); }
 
 Suit Foundation::getSuit() {
   if (!this->hasSuit())
@@ -42,7 +39,7 @@ Suit Foundation::getSuit() {
 }
 
 bool Foundation::canPush(Card c) {
-  if ( !(this->hasSuit()) && c.getRank() == 1) {
+  if (!(this->hasSuit()) && c.getRank() == 1) {
     return true;
   } else if (this->hasSuit() && c.getSuit() == this->getSuit()) {
     Card top = this->peek().value();
@@ -53,7 +50,7 @@ bool Foundation::canPush(Card c) {
 }
 
 void Foundation::push(Card c) {
-  if ( !(this->hasSuit()) ) {
+  if (!(this->hasSuit())) {
     // If it's empty, we can add it and set the suit to this.
     this->cards.push_back(c);
     this->suit = c.getSuit();
@@ -68,9 +65,8 @@ void Foundation::push(Card c) {
       return;
     }
   }
-  throw runtime_error(
-    "Cannot push " + c.toString() + " onto " + this->getSuit().toString() + "foundation"
-  );
+  throw runtime_error("Cannot push " + c.toString() + " onto " +
+                      this->getSuit().toString() + "foundation");
 }
 
 string Foundation::toString() {

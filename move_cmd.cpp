@@ -8,35 +8,22 @@
 
 using namespace std;
 
-int char_to_int(char c) {
-  return c - '0';
-}
+int char_to_int(char c) { return c - '0'; }
 
-MoveCmd::MoveCmd(string str) :
-  cmd(str),
-  source(this->parseSource(str)),
-  dest(this->parseDest(str)),
-  count(this->parseCount(str)) {
-}
+MoveCmd::MoveCmd(string str)
+    : cmd(str), source(this->parseSource(str)), dest(this->parseDest(str)),
+      count(this->parseCount(str)) {}
 
-MoveCmd::MoveCmd(char s, int s_idx, char d, int d_idx, int count) :
-  source(s, s_idx),
-  dest(d, d_idx)
-{}
+MoveCmd::MoveCmd(char s, int s_idx, char d, int d_idx, int count)
+    : source(s, s_idx), dest(d, d_idx) {}
 
 MoveCmd::MoveCmd(Source s, Dest d, int c) : source(s), dest(d), count(c) {}
 
-Source MoveCmd::getSource() {
-  return this->source;
-}
+Source MoveCmd::getSource() { return this->source; }
 
-Dest MoveCmd::getDest() {
-  return this->dest;
-}
+Dest MoveCmd::getDest() { return this->dest; }
 
-int MoveCmd::getCount() {
-  return this->count;
-}
+int MoveCmd::getCount() { return this->count; }
 
 // All of the parse* funcs can throw. So Watch the heck out
 Source MoveCmd::parseSource(string str) {
@@ -45,14 +32,14 @@ Source MoveCmd::parseSource(string str) {
   char type = 's';
   int idx = 0;
 
-  if(source[0] == 'p') { // pile
-    if( !(this->validatePile(source)) ){
+  if (source[0] == 'p') { // pile
+    if (!(this->validatePile(source))) {
       throw runtime_error("Invalid source: " + source);
     }
     type = 'p';
     idx = char_to_int(source[1]) - 1;
   } else if (source[0] == 'f') { // foundation
-    if( !this->validateFdn(source) ){
+    if (!this->validateFdn(source)) {
       throw runtime_error("Invalid source: " + source);
     }
     type = 'f';
@@ -64,21 +51,21 @@ Source MoveCmd::parseSource(string str) {
 }
 
 Dest MoveCmd::parseDest(string str) {
-  string dest = string(str, str.rfind(" ")+1, str.size());
+  string dest = string(str, str.rfind(" ") + 1, str.size());
   // Default values:
   char type = 'f';
   int idx = 1;
 
-  if(dest[0] == 'p') {
+  if (dest[0] == 'p') {
     // pile
-    if( !this->validatePile(dest) ){
+    if (!this->validatePile(dest)) {
       throw runtime_error("Invalid dest: " + dest);
     }
     type = 'p';
     idx = char_to_int(dest[1]) - 1;
   } else if (dest[0] == 'f') {
     // foundation
-    if( !this->validateFdn(dest) ){
+    if (!this->validateFdn(dest)) {
       throw runtime_error("Invalid dest: " + dest);
     }
     type = 'f';
@@ -91,7 +78,7 @@ Dest MoveCmd::parseDest(string str) {
 }
 
 int MoveCmd::parseCount(string str) {
-  string second_half = string(str, str.find(" ")+1, str.size());
+  string second_half = string(str, str.find(" ") + 1, str.size());
   string count_part = string(second_half, 0, str.find(" "));
   // if we call this in initializer list; must support non-p answeers
   if (str[0] != 'p') {
@@ -99,7 +86,7 @@ int MoveCmd::parseCount(string str) {
   }
 
   int c = stoi(count_part);
-  if ( c < 0 || c > 13) {
+  if (c < 0 || c > 13) {
     throw runtime_error("Invalid count: " + count_part);
   }
   return c;

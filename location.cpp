@@ -12,9 +12,6 @@ Location::Location(char c, int i) {
   this->idx = i;
 }
 
-Source::Source(char c, int i) : Location(c, i) {
-}
+Source::Source(char c, int i) : Location(c, i) {}
 
-Dest::Dest(char c, int i) : Location(c, i) {
-}
-
+Dest::Dest(char c, int i) : Location(c, i) {}

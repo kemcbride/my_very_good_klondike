@@ -1,4 +1,4 @@
-/* card.h 
+/* card.h
  * contains some stuff to define cards
  * @kemcbride/@ke2mcbri 2020
  */
@@ -10,10 +10,10 @@
 #include <string>
 
 enum suits {
-	clubs,
-	spades,
-	hearts,
-	diamonds,
+  clubs,
+  spades,
+  hearts,
+  diamonds,
 };
 
 enum colors {
@@ -22,45 +22,46 @@ enum colors {
 };
 
 class Suit {
-  private:
-    suits s;
-  public:
-    Suit();
-    Suit(suits);
-    colors getColor();
-    suits getSuit();
-    std::string toString();
+private:
+  suits s;
+
+public:
+  Suit();
+  Suit(suits);
+  colors getColor();
+  suits getSuit();
+  std::string toString();
 };
-std::ostream& operator<<(std::ostream& os, Suit& obj);
+std::ostream &operator<<(std::ostream &os, Suit &obj);
 bool operator==(Suit a, Suit b);
 
 class Rank {
-  protected:
-    int value;
-  public:
-    Rank();
-    Rank(int);
-    int getValue();
-    std::string toString();
-    operator int();
-};
-std::ostream& operator<<(std::ostream& os, Rank& obj);
+protected:
+  int value;
 
+public:
+  Rank();
+  Rank(int);
+  int getValue();
+  std::string toString();
+  operator int();
+};
+std::ostream &operator<<(std::ostream &os, Rank &obj);
 
 class Card {
-  private:
-    Rank rank;
-    Suit suit;
+private:
+  Rank rank;
+  Suit suit;
 
-  public:
-    Card();
-    Card(Rank, Suit);
-    Card(int, int);
-    Suit getSuit();
-    Rank getRank();
-    colors getColor();
-    std::string toString();
+public:
+  Card();
+  Card(Rank, Suit);
+  Card(int, int);
+  Suit getSuit();
+  Rank getRank();
+  colors getColor();
+  std::string toString();
 };
-std::ostream& operator<<(std::ostream& os, Card& obj);
+std::ostream &operator<<(std::ostream &os, Card &obj);
 
 #endif // CARD_H
