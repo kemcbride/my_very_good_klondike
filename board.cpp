@@ -87,10 +87,9 @@ void Board::move(Move m) {
 
   if (srcLoc.type == 's') { // source: stock
     optional<Card> stock_card = this->stock.peek();
-    if (!stock_card.has_value()) {
-      cerr << "Invalid move: No cards remaining in stock" << endl;
-      return;
-    }
+    if (!stock_card.has_value())
+      throw runtime_error("Invalid move: No cards remaining in stock");
+
     Card c = stock_card.value();
 
     if (dstLoc.type == 'f') { // stock -> foundation
@@ -115,10 +114,9 @@ void Board::move(Move m) {
     unsigned int i = srcLoc.idx;
     Foundation &f = this->foundations.at(i);
     optional<Card> fdn_card = f.peek();
-    if (!fdn_card.has_value()) {
-      cerr << "Invalid move: No cards in foundation " << i << endl;
-      return;
-    }
+    if (!fdn_card.has_value())
+      throw runtime_error("Invalid move: No cards in foundation ");
+
     Card c = fdn_card.value();
     Pile &p = this->tableau.piles.at(dstLoc.idx);
     p.put(c);
@@ -138,21 +136,15 @@ void Board::move(Move m) {
     } else { // pile -> pile
       Pile &src_pile = this->tableau.piles.at(srcLoc.idx);
       Pile &dst_pile = this->tableau.piles.at(dstLoc.idx);
-      cerr << "before src_pile(peek(n))" << endl;
       optional<Run> maybe_run = src_pile.peek(count);
       if (maybe_run.has_value()) {
         Run r = maybe_run.value();
         try {
           dst_pile.put(r);
-          cerr << "after put" << endl;
           src_pile.take(count);
         } catch (runtime_error &e) {
-          cerr << "doesn't satisfy run constraints" << endl;
+          cerr << "Invalid move: doesn't satisfy run constraints" << endl;
         }
-        // TODO: need to properly handle case where this put fails
-        // https://github.com/kemcbride/my_very_good_klondike/issues/2
-      } else  {
-        cerr << "Maybe run didn't have value" << endl;
       }
     }
     this->reveal_top_runs();
@@ -160,13 +152,11 @@ void Board::move(Move m) {
 
   // Update isSolved() state - have you won?
   this->is_solved = this->isSolved();
+  this->is_stuck = this->isStuck();
   if (this->is_solved) {
     cerr << "Game has been won! Good job, good job." << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
-  }
-  // Causing out_of_range errors :(
-  this->is_stuck = this->isStuck();
-  if (this->is_stuck) {
+  } else if (this->is_stuck) {
     cerr << "You're out of legal moves!" << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
   }
@@ -235,7 +225,6 @@ vector<Move> Board::allPossibleMoves() {
       }
     }
   }
-  cerr << "end of all PossibleMoves" << endl;
   return moves;
 }
 
@@ -264,7 +253,6 @@ vector<Move> Board::allLegalMoves() {
       all_legal_moves.push_back(m);
     }
   }
-  cerr << "Valid moves remaining: " << all_legal_moves.size() << endl;
   return all_legal_moves;
 }
 
