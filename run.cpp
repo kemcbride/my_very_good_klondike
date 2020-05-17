@@ -11,6 +11,9 @@ using namespace std;
 #define GREENSTR string("\033[32m")
 #define RESETSTR string("\033[0m")
 
+Run::Run() {
+}
+
 Run::Run(Card c) {
   vector<Card> my_cards;
   my_cards.push_back(c);
@@ -93,6 +96,12 @@ void Run::hide() {
 }
 
 bool Run::canAdd(Card c) {
+  if (this->cards.empty() && c.getRank() == 13) {
+    // If I'm empty (strange case, but used for programmatically generated moves)
+    // During normal game play this is handled via empty pile put, not run put
+    return true;
+  }
+
   Card myCard = this->cards.back();
   if (myCard.getColor() != c.getColor() && myCard.getRank() == c.getRank() + 1) {
     return true;

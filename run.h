@@ -12,11 +12,13 @@
 class Run {
   private:
     bool revealed = false;
-    bool canAdd(Run);
 
   public:
     std::vector<Card> cards;
     bool isRevealed();
+
+    // default constructor is fine for this case
+    Run(); // empty run - useful in case of discovering isStuck() state
 
     Run(Card);
     Run(std::vector<Card>);
@@ -29,6 +31,7 @@ class Run {
     void put(Card); // you can just try to add a card
 
     bool canAdd(Card);
+    bool canAdd(Run);
 
     void reveal();
     void hide();
