@@ -5,8 +5,6 @@
 
 #include "location.h"
 
-using namespace std;
-
 Location::Location(char c, int i) {
   this->type = c;
   this->idx = i;
