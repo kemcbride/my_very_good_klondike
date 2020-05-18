@@ -1,4 +1,5 @@
-# don't include the binary :p
+# don't include the binaries
 solitaire
+test_solitaire
 *.d
 *.o
