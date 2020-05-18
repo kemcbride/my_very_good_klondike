@@ -4,7 +4,7 @@
 ## How to build & run
 
 This project uses Make and clang++ with C++17 standards (I use std::optional).
-You should be able to clone this repo to your computer using `git clone`,
+You should be able to clone this repo to your computer using `git clone --recurse-submodules`,
 and then run `make solitaire` inside the repo's directory to build the binary.
 
 Then, to run the program, just do: `./solitaire` from that same directory!
@@ -20,9 +20,10 @@ that try to win, and see how good they are on average.
 Maybe it'd be cool to have a Microsoft-like tool that can generate games of
 varying difficulty...
 
-Right now you can kind of win a game. It's supposed to auto-figure out when you win....
-But for some reason it is not successful at that.
+Right now you can play (and win) games.
+The game can mostly tell if you're stuck, and can tell if you've won.
 
+There are still some bugs floating around though...
 
 -----
 
@@ -32,8 +33,8 @@ But for some reason it is not successful at that.
 * ~implement "new game" command~
 * ~implement "reset" command (just in case...)~
 * ~revolutionize the makefile (lol)~
-* make isStuck() check work
-* implement undo? (TBH it doesn't seem so difficult to do...)
+* ~make isStuck() check work~
+* implement undo? (implementing undo stack wouldn't be hard, but implementing the undo itself)
 * implement scoring tools
 * implement draw-3 mode
 * implement game timer?
@@ -42,7 +43,8 @@ But for some reason it is not successful at that.
 
 -----
 
-Update: You can now move cards from the stock to a foundation!
+
+A snippet of example output:
 
 ```
 cmd: n
