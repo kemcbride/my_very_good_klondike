@@ -6,6 +6,7 @@
 #include <ctime>
 
 #include "../lib/foundation.h"
+#include "../lib/run.h"
 #include "../lib/card.h"
 
 using namespace std;
@@ -77,7 +78,7 @@ TEST_CASE( "Foundations work as expected", "[foundation]" ) {
       REQUIRE_NOTHROW(f.push(c));
     }
 
-    // Now that they have the 2nd cards, try to re-add correct suit 1s - should FAIL
+    // Now that they have the 2nd cards, try to re-add correct suit 1s - should FAILt
     for (unsigned int i=0; i < fdns.size(); ++i) {
       Foundation f = fdns.at(i);
       Card c = valid_first_pushes.at(i);
@@ -86,4 +87,49 @@ TEST_CASE( "Foundations work as expected", "[foundation]" ) {
     }
 
   }
+}
+
+TEST_CASE( "Runs work as expected", "[run]" ) {
+  SECTION( "Run initialization tests" ) {
+    REQUIRE_NOTHROW(Run());
+    // The first 2 suits are black, the second 2 suits are red
+    // Card(rank, suit)
+    Card c(1, 3); // red ace
+    Run r(c);
+    REQUIRE_NOTHROW(r);
+    REQUIRE(!r.isRevealed());
+    vector<Card> v;
+    r = Run(v);
+    REQUIRE_NOTHROW(r); // an empty vector init IS VALID
+    REQUIRE(!r.isRevealed());
+    v.push_back(c);
+    r = Run(v);
+    REQUIRE_NOTHROW(r);
+    REQUIRE(!r.isRevealed());
+
+    // Invalid run(vector): order-wise
+    vector<Card> invalid_run;
+    invalid_run.push_back(c);
+    invalid_run.push_back(Card(2, 0)); // black 2
+    REQUIRE_THROWS(Run(invalid_run));
+
+    invalid_run.clear();
+    // Invalid run(vector): suit-wise
+    invalid_run.push_back(Card(2, 2)); // red 2
+    invalid_run.push_back(c); // red ace
+    REQUIRE_THROWS(Run(invalid_run));
+  }
+  SECTION( "Run push/add tests" ) {
+  }
+  /* vector<Card> valid_first_pushes; */
+  /* for (auto s : SuitEnumList) { */
+  /*   Card c = Card(1, s); */
+  /*   valid_first_pushes.push_back(c); */
+  /* } */
+  /* vector<Card> valid_second_pushes; */
+  /* for (auto s : SuitEnumList) { */
+  /*   Card c = Card(2, s); */
+  /*   valid_second_pushes.push_back(c); */
+  /* } */
+  
 }
