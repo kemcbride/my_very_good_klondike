@@ -119,17 +119,36 @@ TEST_CASE( "Runs work as expected", "[run]" ) {
     invalid_run.push_back(c); // red ace
     REQUIRE_THROWS(Run(invalid_run));
   }
-  SECTION( "Run push/add tests" ) {
+  SECTION( "Empty Run push/add tests" ) {
+    // TODO: Is this desirable behavior?
+    vector<Card> all_kings;
+    vector<Card> all_aces;
+    for (auto s : SuitEnumList) {
+      all_aces.push_back(Card(1, s));
+      all_kings.push_back(Card(13, s));
+    }
+    for (auto c : all_aces) {
+      Run r;
+      REQUIRE_FALSE(r.canAdd(c));
+      REQUIRE_THROWS(r.put(c));
+    }
+    for (auto c : all_kings) {
+      Run r;
+      REQUIRE(r.canAdd(c));
+      REQUIRE_NOTHROW(r.put(c));
+    }
   }
-  /* vector<Card> valid_first_pushes; */
-  /* for (auto s : SuitEnumList) { */
-  /*   Card c = Card(1, s); */
-  /*   valid_first_pushes.push_back(c); */
-  /* } */
-  /* vector<Card> valid_second_pushes; */
-  /* for (auto s : SuitEnumList) { */
-  /*   Card c = Card(2, s); */
-  /*   valid_second_pushes.push_back(c); */
-  /* } */
-  
+  SECTION( "Populated (single-card) Run push/add tests" ) {
+    Card red_2(2, 2);
+    Card red_ace = Card(1, 2);
+    Card black_ace = Card(1, 1);
+    Run has_red_2(red_2);
+
+    REQUIRE_FALSE(has_red_2.canAdd(red_ace));
+    REQUIRE_THROWS(has_red_2.put(red_ace));
+
+    REQUIRE(has_red_2.canAdd(black_ace));
+    REQUIRE_NOTHROW(has_red_2.put(black_ace));
+  }
+  // TODO: could also similarly test put with vector of card and put with run, same cases
 }
