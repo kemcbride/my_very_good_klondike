@@ -5,7 +5,7 @@
 using namespace std;
 
 Move::Move(Run s, Source src, Run d, Dest dst, unsigned int i)
-    : srcRun(s), srcLoc(src), dstRun(d), dstLoc(dst) {}
+    : srcRun(s), srcLoc(src), dstRun(d), dstLoc(dst), count(i) {}
 
 Source Move::getSrc() { return this->srcLoc; }
 
