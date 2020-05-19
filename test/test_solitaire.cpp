@@ -6,6 +6,7 @@
 #include <ctime>
 
 #include "../lib/foundation.h"
+#include "../lib/pile.h"
 #include "../lib/run.h"
 #include "../lib/card.h"
 
@@ -151,4 +152,61 @@ TEST_CASE( "Runs work as expected", "[run]" ) {
     REQUIRE_NOTHROW(has_red_2.put(black_ace));
   }
   // TODO: could also similarly test put with vector of card and put with run, same cases
+  SECTION( "Run put tests" ) {
+    vector<Card> red_cards;
+    vector<Card> black_cards;
+    for (int i = 1; i < 14; ++i) {
+      red_cards.push_back(Card(i, 2));
+      black_cards.push_back(Card(i, 0));
+    }
+    vector<Card> some_cards_run;
+    vector<Card> same_cards_but_less_run;
+    for (int i = 0; i < 4; ++i) {
+      vector<Card> src_deck = black_cards;
+      if (i % 2 == 0) {
+        src_deck = red_cards; // on even, it's red.
+      }
+      some_cards_run.push_back(src_deck.at(12 - i));
+      if (i < 3) {
+        same_cards_but_less_run.push_back(src_deck.at(12 - i));
+      }
+    }
+    Run r1(some_cards_run);
+    Run r2(same_cards_but_less_run);
+    r1.reveal();
+    r2.reveal();
+
+    Run r3(r1.view().back());
+    REQUIRE_NOTHROW(r2.put(r3));
+
+    REQUIRE_NOTHROW(r3 = r1.take(1));
+    REQUIRE(r3.cards.size() == 1);
+  }
+}
+TEST_CASE( "Pile works as expected", "[pile]" ) {
+  SECTION( "Peek(n) takes right number of cards" ) {
+    vector<Card> red_cards;
+    vector<Card> black_cards;
+    for (int i = 1; i < 14; ++i) {
+      red_cards.push_back(Card(i, 2));
+      black_cards.push_back(Card(i, 0));
+    }
+    vector<Card> some_cards_run;
+    for (int i = 0; i < 4; ++i) {
+      vector<Card> src_deck = black_cards;
+      if (i % 2 == 0) {
+        src_deck = red_cards; // on even, it's red.
+      }
+      some_cards_run.push_back(src_deck.at(12 - i));
+    }
+    Run example_src_run(some_cards_run);
+    vector<Run> pile_setup;
+    pile_setup.push_back(example_src_run);
+    Pile p(pile_setup);
+    REQUIRE(p.runs.back().cards.size() == 4);
+
+    optional<Run> maybe_run = p.peek(2);
+    REQUIRE(maybe_run.has_value());
+    REQUIRE(maybe_run.value().cards.size() == 2);
+  }
 }
