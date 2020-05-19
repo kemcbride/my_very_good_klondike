@@ -19,6 +19,8 @@ private:
   bool is_solved = false;
   bool is_stuck = false;
   bool show_labels = false;
+  std::vector<Move> legal_moves;
+
   bool isSolved(); // check if the game is "Solved"/"Won"
   bool isStuck();  // check if the game is "Stuck"/"Lost"
   std::vector<Source> getAllSourcesButStock();

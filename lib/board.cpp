@@ -18,6 +18,7 @@ Board::Board(Deck &d) : tableau(d), stock(d) {
     my_fdns.push_back(Foundation());
   }
   this->foundations = my_fdns;
+  this->is_stuck = this->isStuck(); // also initializes this->legal_moves
 }
 
 string Board::toString() {
@@ -35,7 +36,8 @@ string Board::toString() {
   string tbl_str = this->tableau.toString();
 
   if (this->show_labels == true) {
-    string extra_help = " f1    f2    f3    f4      s\n";
+    string extra_help = " f1    f2    f3    f4      s";
+    extra_help += "  |moves: " + to_string(this->legal_moves.size()) + "|\n";
     board_str += extra_help;
   }
 
@@ -255,8 +257,8 @@ vector<Move> Board::allLegalMoves() {
 }
 
 bool Board::isStuck() {
-  vector<Move> legal_moves = this->allLegalMoves();
-  if (legal_moves.size() == 0) {
+  this->legal_moves = this->allLegalMoves();
+  if (this->legal_moves.size() == 0) {
     return true;
   }
   return false;
