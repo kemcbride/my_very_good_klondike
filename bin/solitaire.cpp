@@ -57,6 +57,8 @@ bool is_toggle(string str) { return (str == "toggle" || str == "t"); }
 
 bool is_next(string str) { return (str == "next" || str == "n"); }
 
+bool is_hint(string str) { return str == "hint"; }
+
 bool is_move(string str) {
   string first_bit = string(str, 0, str.find(" "));
   return (first_bit == "move" || first_bit == "m");
@@ -91,6 +93,8 @@ int play() {
     } else if (is_next(cmd)) {
       b.next();
       cout << b.toString() << endl;
+    } else if (is_hint(cmd)) {
+      cout << b.hint() << endl;
     } else if (is_move(cmd)) {
       try {
         MoveCmd m_cmd(ignore_first_bit(cmd));

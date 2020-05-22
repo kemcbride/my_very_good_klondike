@@ -34,6 +34,8 @@ There are still some bugs floating around though...
 * ~implement "reset" command (just in case...)~
 * ~revolutionize the makefile (lol)~
 * ~make isStuck() check work~
+* add hint() command
+* refactor commands? that could clean up solitaire.cpp
 * implement undo? (implementing undo stack wouldn't be hard, but implementing the undo itself)
 * implement scoring tools
 * implement draw-3 mode

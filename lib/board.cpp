@@ -52,6 +52,20 @@ void Board::toggle_labels() {
 
 void Board::next() { this->stock.next(); }
 
+string Board::hint() {
+  if (this->is_stuck) {
+    return "No moves are possible. Please start a new game.";
+  }
+
+  if (this->hint_idx >= this->legal_moves.size())
+    this->hint_idx = 0;
+
+  Move m = this->legal_moves.at(this->hint_idx);
+  this->hint_idx++;
+
+  return m.toString();
+}
+
 bool Board::isSolved() {
   if (!(this->stock.cards.size() == 0)) {
     return false;
@@ -246,14 +260,15 @@ bool Board::isLegal(Move m) {
 }
 
 vector<Move> Board::allLegalMoves() {
-  vector<Move> all_legal_moves;
+  set<Move> all_legal_moves;
   vector<Move> all_possible_moves = this->allPossibleMoves();
   for (auto m : all_possible_moves) {
     if (this->isLegal(m)) {
-      all_legal_moves.push_back(m);
+      all_legal_moves.insert(m);
     }
   }
-  return all_legal_moves;
+  vector<Move> legal_moves(all_legal_moves.begin(), all_legal_moves.end());
+  return legal_moves;
 }
 
 bool Board::isStuck() {

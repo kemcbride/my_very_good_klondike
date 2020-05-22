@@ -3,6 +3,7 @@
 
 #include <optional>
 #include <vector>
+#include <set>
 
 #include "deck.h"
 #include "foundation.h"
@@ -20,6 +21,7 @@ private:
   bool is_stuck = false;
   bool show_labels = false;
   std::vector<Move> legal_moves;
+  int hint_idx = 0;
 
   bool isSolved(); // check if the game is "Solved"/"Won"
   bool isStuck();  // check if the game is "Stuck"/"Lost"
@@ -41,6 +43,7 @@ public:
 
   void toggle_labels();
   void next();
+  std::string hint();
 
   bool isLegal(Move);
   void move(Move);
