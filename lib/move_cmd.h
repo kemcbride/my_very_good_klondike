@@ -1,14 +1,16 @@
 #ifndef MOVE_CMD_H
 #define MOVE_CMD_H
 
-#include "location.h"
-#include <iostream>
 #include <string>
+#include <stdexcept>
+
+#include "command.h"
+#include "location.h"
 
 // Useful helper... why is this task annoying? Who knows.
 int char_to_int(char);
 
-class MoveCmd {
+class MoveCmd : public Command {
 private:
   MoveCmd() = delete;
   std::string cmd;

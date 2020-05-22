@@ -1,4 +1,4 @@
-/* move.cpp
+/* move_cmd.cpp
  * like, contains the implementation of the MoveCmd object.
  * cause you play solitaire by making moves
  * @kemcbride/ke2mcbri 2020 :o
