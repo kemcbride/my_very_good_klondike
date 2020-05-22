@@ -57,7 +57,7 @@ bool is_toggle(string str) { return (str == "toggle" || str == "t"); }
 
 bool is_next(string str) { return (str == "next" || str == "n"); }
 
-bool is_hint(string str) { return str == "hint"; }
+bool is_hint(string str) { return (str == "hint" || str == "i"); }
 
 bool is_move(string str) {
   string first_bit = string(str, 0, str.find(" "));
