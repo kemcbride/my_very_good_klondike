@@ -27,6 +27,10 @@ optional<Card> Foundation::pop() {
   }
   Card c = this->cards.back();
   this->cards.pop_back();
+
+  // Reset the suit of the fdn if it becomes empty!
+  if (this->cards.empty())
+    this->suit = nullopt;
   return c;
 }
 
