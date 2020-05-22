@@ -19,6 +19,7 @@ private:
 
 public:
   Move(Run, Source, Run, Dest, unsigned int);
+  MoveCmd toMoveCmd();
 
   Source getSrc();
   Dest getDst();
