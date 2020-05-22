@@ -129,7 +129,6 @@ void Board::move(Move m) {
     optional<Card> fdn_card = f.peek();
     if (!fdn_card.has_value())
       throw runtime_error("Invalid move: No cards in foundation ");
-
     Card c = fdn_card.value();
     Pile &p = this->tableau.piles.at(dstLoc.idx);
     p.put(c);
@@ -219,15 +218,24 @@ vector<Move> Board::allPossibleMoves() {
       // In order to figure out how many different moves we can do from this
       // source, to this dest, we need to know how many cards there are in the
       // run
-      Pile p = this->tableau.piles.at(s.idx);
-      if (!p.runs.empty()) {
-        Run r = p.runs.back();
-        if (!r.cards.empty()) {
-          for (auto i : this->getAllCounts(r)) {
-            Run srcRun = this->getSourceRun(s, i);
-            Run dstRun = this->getDestRun(d);
-            moves.push_back(Move(srcRun, s, dstRun, d, i));
+      if (s.type == 'p') {
+        Pile p = this->tableau.piles.at(s.idx);
+        if (!p.runs.empty()) {
+          Run r = p.runs.back();
+          if (!r.cards.empty()) {
+            for (auto i : this->getAllCounts(r)) {
+              Run srcRun = this->getSourceRun(s, i);
+              Run dstRun = this->getDestRun(d);
+              moves.push_back(Move(srcRun, s, dstRun, d, i));
+            }
           }
+        }
+      } else if (s.type == 'f') {
+        Foundation f = this->foundations.at(s.idx);
+        if (!f.cards.empty()) {
+          Run srcRun = f.peek().value();
+          Run dstRun = this->getDestRun(d);
+          moves.push_back(Move(srcRun, s, dstRun, d, 1));
         }
       }
     }
@@ -263,6 +271,16 @@ bool Board::isMeaningful(Move m) {
   // moves from one foundation to another are NOT meaningful
   if (m.getSrc().type == 'f' && m.getDst().type == 'f')
     return false;
+  // moves from a stock state that doesn't currently exist don't count
+  // TODO: move this logic actually to filter commands, later, not moves, here
+  if (m.getSrc().type == 's') {
+    if (!this->stock.peek().has_value())
+      return false;
+    Card stock_cur_card = this->stock.peek().value();
+    Card src_card = m.getSrcRun().cards.back();
+    if (src_card != stock_cur_card)
+      return false;
+  }
   return true;
 }
 
@@ -270,9 +288,8 @@ vector<Move> Board::allLegalMoves() {
   set<Move> all_legal_moves;
   vector<Move> all_possible_moves = this->allPossibleMoves();
   for (auto m : all_possible_moves) {
-    if (this->isLegal(m) && this->isMeaningful(m)) {
+    if (this->isLegal(m) && this->isMeaningful(m))
       all_legal_moves.insert(m);
-    }
   }
   vector<Move> legal_moves(all_legal_moves.begin(), all_legal_moves.end());
   return legal_moves;
