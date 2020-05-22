@@ -31,6 +31,8 @@ public:
   Source getSource();
   Dest getDest();
   int getCount();
+
+  std::string toString();
 };
 
 #endif // MOVE_CMD_H

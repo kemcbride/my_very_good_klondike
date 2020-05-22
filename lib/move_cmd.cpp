@@ -113,3 +113,10 @@ bool MoveCmd::validatePile(string s) {
   }
   return false;
 };
+
+string MoveCmd::toString() {
+  string src = this->getSource().toString();
+  string dst = this->getDest().toString();
+  string cnt = to_string(this->getCount());
+  return src + " " + cnt + " " + dst;
+}
