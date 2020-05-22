@@ -39,11 +39,11 @@ Suit Foundation::getSuit() {
 }
 
 bool Foundation::canPush(Card c) {
-  if (!(this->hasSuit()) && c.getRank() == 1) {
+  if (!(this->hasSuit()) && c.getRank().getValue() == 1) {
     return true;
   } else if (this->hasSuit() && c.getSuit() == this->getSuit()) {
     Card top = this->peek().value();
-    if (c.getRank() == top.getRank() + 1)
+    if (c.getRank().getValue() == top.getRank() + 1)
       return true;
   }
   return false;
