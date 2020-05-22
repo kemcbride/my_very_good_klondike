@@ -259,11 +259,18 @@ bool Board::isLegal(Move m) {
   return false;
 }
 
+bool Board::isMeaningful(Move m) {
+  // moves from one foundation to another are NOT meaningful
+  if (m.getSrc().type == 'f' && m.getDst().type == 'f')
+    return false;
+  return true;
+}
+
 vector<Move> Board::allLegalMoves() {
   set<Move> all_legal_moves;
   vector<Move> all_possible_moves = this->allPossibleMoves();
   for (auto m : all_possible_moves) {
-    if (this->isLegal(m)) {
+    if (this->isLegal(m) && this->isMeaningful(m)) {
       all_legal_moves.insert(m);
     }
   }

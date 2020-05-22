@@ -46,6 +46,7 @@ public:
   std::string hint();
 
   bool isLegal(Move);
+  bool isMeaningful(Move);
   void move(Move);
   void move(MoveCmd);
 
