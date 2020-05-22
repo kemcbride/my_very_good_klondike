@@ -25,5 +25,10 @@ public:
   unsigned int getCount();
   Run getSrcRun();
   Run getDstRun();
+
+  std::string toString();
 };
+
+// To support set<Move>
+const bool operator<(Move, Move);
 #endif // MOVE_H

@@ -15,3 +15,21 @@ Dest Move::getDst() { return this->dstLoc; }
 Run Move::getDstRun() { return this->dstRun; }
 
 unsigned int Move::getCount() { return this->count; }
+
+string Move::toString() {
+  string src = this->getSrc().toString();
+  string dst = this->getDst().toString();
+  string cnt = to_string(this->getCount());
+  return src + " " + cnt + " " + dst;
+}
+
+const bool operator<(Move a, Move b) {
+  Source as = a.getSrc();
+  Source bs = b.getSrc();
+  Dest ad = a.getDst();
+  Dest bd = b.getDst();
+  return ( as.type < bs.type || as.idx < bs.idx ||
+      ad.type < bd.type || ad.idx < bd.idx ||
+      a.getCount() < b.getCount()
+  );
+}
