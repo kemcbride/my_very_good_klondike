@@ -68,6 +68,7 @@ Rank::Rank(int val) {
 int Rank::getValue() { return this->value; }
 
 ostream &operator<<(ostream &os, Rank &obj) { return os << obj.toString(); };
+bool operator==(Rank a, Rank b) { return a.getValue() == b.getValue(); };
 
 string Rank::toString() {
   int val = this->getValue();
@@ -118,3 +119,11 @@ string Card::toString() {
 };
 
 ostream &operator<<(ostream &os, Card &obj) { return os << obj.toString(); };
+bool operator==(Card a, Card b) {
+  return (a.getRank().getValue() == b.getRank().getValue() &&
+      a.getSuit().getSuit() == b.getSuit().getSuit());
+}
+
+bool operator!=(Card a, Card b) {
+  return !(a == b);
+}

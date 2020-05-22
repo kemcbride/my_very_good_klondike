@@ -50,6 +50,7 @@ public:
   operator int();
 };
 std::ostream &operator<<(std::ostream &os, Rank &obj);
+bool operator==(Rank a, Rank b);
 
 class Card {
 private:
@@ -66,5 +67,7 @@ public:
   std::string toString();
 };
 std::ostream &operator<<(std::ostream &os, Card &obj);
+bool operator==(Card a, Card b);
+bool operator!=(Card a, Card b);
 
 #endif // CARD_H
