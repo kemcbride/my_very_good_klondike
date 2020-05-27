@@ -10,6 +10,7 @@ private:
 public:
   Command() = default;
   Command(std::string);
+  virtual ~Command() = 0;
 
   std::string virtual toString();
 };

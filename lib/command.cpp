@@ -10,6 +10,7 @@
 using namespace std;
 
 Command::Command(string cmd) : cmd(cmd) {};
+Command::~Command() {};
 
 string Command::toString() {
   return this->cmd;

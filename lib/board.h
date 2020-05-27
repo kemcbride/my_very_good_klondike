@@ -21,6 +21,7 @@ private:
   bool is_stuck = false;
   bool show_labels = false;
   std::vector<Move> legal_moves;
+  std::vector<Command> legal_commands;
   int hint_idx = 0;
 
   bool isSolved(); // check if the game is "Solved"/"Won"
