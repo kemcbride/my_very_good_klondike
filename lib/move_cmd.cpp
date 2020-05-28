@@ -19,11 +19,11 @@ MoveCmd::MoveCmd(char s, int s_idx, char d, int d_idx, int count)
 
 MoveCmd::MoveCmd(Source s, Dest d, int c) : source(s), dest(d), count(c) {}
 
-Source MoveCmd::getSource() { return this->source; }
+Source MoveCmd::getSource() const { return this->source; }
 
-Dest MoveCmd::getDest() { return this->dest; }
+Dest MoveCmd::getDest() const { return this->dest; }
 
-int MoveCmd::getCount() { return this->count; }
+int MoveCmd::getCount() const { return this->count; }
 
 // All of the parse* funcs can throw. So Watch the heck out
 Source MoveCmd::parseSource(string str) {
@@ -113,7 +113,7 @@ bool MoveCmd::validatePile(string s) {
   return false;
 };
 
-string MoveCmd::toString() {
+const string MoveCmd::toString() const {
   string src = this->getSource().toString();
   string dst = this->getDest().toString();
   string cnt = to_string(this->getCount());

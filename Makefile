@@ -2,7 +2,7 @@ CC=clang++
 CC_FLAGS=-Wall -g -I. --std=c++17
 
 objects = card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o \
-	  command.o move_cmd.o move.o location.o
+	  command.o move_cmd.o hint_cmd.o move.o location.o
 
 .PHONY: all clean test
 

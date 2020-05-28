@@ -12,6 +12,6 @@ using namespace std;
 Command::Command(string cmd) : cmd(cmd) {};
 Command::~Command() {};
 
-string Command::toString() {
+const string Command::toString() const {
   return this->cmd;
 }

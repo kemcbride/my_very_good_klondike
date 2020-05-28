@@ -9,6 +9,7 @@
 #include "foundation.h"
 #include "location.h"
 #include "move.h"
+#include "command.h"
 #include "move_cmd.h"
 #include "pile.h"
 #include "run.h"
@@ -21,7 +22,7 @@ private:
   bool is_stuck = false;
   bool show_labels = false;
   std::vector<Move> legal_moves;
-  std::vector<Command> legal_commands;
+  std::vector<std::string> legal_commands;
   int hint_idx = 0;
 
   bool isSolved(); // check if the game is "Solved"/"Won"
@@ -31,6 +32,7 @@ private:
   std::vector<int> getAllCounts(Run); // return list of possible move sizes
   std::vector<Move> allPossibleMoves();
   std::vector<Move> allLegalMoves();
+  std::vector<std::string> allLegalCommands();
 
   void reveal_top_runs();
 

@@ -37,7 +37,7 @@ string Board::toString() {
 
   if (this->show_labels == true) {
     string extra_help = " f1    f2    f3    f4      s";
-    extra_help += "  |moves: " + to_string(this->legal_moves.size()) + "|\n";
+    extra_help += "  |moves: " + to_string(this->legal_commands.size()) + "|\n";
     board_str += extra_help;
   }
 
@@ -50,20 +50,22 @@ void Board::toggle_labels() {
   this->tableau.toggle_labels();
 }
 
-void Board::next() { this->stock.next(); }
+void Board::next() {
+  // Update hints & possible moves
+  this->is_stuck = this->isStuck();
+  this->stock.next();
+}
 
 string Board::hint() {
-  if (this->is_stuck) {
+  if (this->is_stuck)
     return "No moves are possible. Please start a new game.";
-  }
 
-  if (this->hint_idx >= this->legal_moves.size())
+  if (this->hint_idx >= this->legal_commands.size())
     this->hint_idx = 0;
 
-  Move m = this->legal_moves.at(this->hint_idx);
+  string cmd = this->legal_commands.at(this->hint_idx);
   this->hint_idx++;
-
-  return m.toString();
+  return cmd;
 }
 
 bool Board::isSolved() {
@@ -239,12 +241,12 @@ vector<Move> Board::allPossibleMoves() {
         }
       }
     }
-    for (auto c : this->stock.cards) {
-      Run srcRun = Run(c);
-      for (auto d : all_dests) {
-        Run dstRun = this->getDestRun(d);
-        moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
-      }
+  }
+  for (auto c : this->stock.cards) {
+    Run srcRun = Run(c);
+    for (auto d : all_dests) {
+      Run dstRun = this->getDestRun(d);
+      moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
     }
   }
   return moves;
@@ -271,16 +273,7 @@ bool Board::isMeaningful(Move m) {
   // moves from one foundation to another are NOT meaningful
   if (m.getSrc().type == 'f' && m.getDst().type == 'f')
     return false;
-  // moves from a stock state that doesn't currently exist don't count
-  // TODO: move this logic actually to filter commands, later, not moves, here
-  if (m.getSrc().type == 's') {
-    if (!this->stock.peek().has_value())
-      return false;
-    Card stock_cur_card = this->stock.peek().value();
-    Card src_card = m.getSrcRun().cards.back();
-    if (src_card != stock_cur_card)
-      return false;
-  }
+
   return true;
 }
 
@@ -295,9 +288,26 @@ vector<Move> Board::allLegalMoves() {
   return legal_moves;
 }
 
+vector<string> Board::allLegalCommands() {
+  set<string> cmds;
+  for (auto m : this->legal_moves) {
+    // Moves from the stock should be translated to 'next' if curr stock != that source
+    Source s = m.getSrc();
+    Card src_top = m.getSrcRun().peek().value();
+    if ( s.type == 's' && (src_top != this->stock.peek().value())) {
+      cmds.insert("next");
+    } else {
+      cmds.insert(m.toString());
+    }
+  } // for
+  vector<string> legal_cmds(cmds.begin(), cmds.end());
+  return legal_cmds;
+}
+
 bool Board::isStuck() {
   this->legal_moves = this->allLegalMoves();
-  if (this->legal_moves.size() == 0) {
+  this->legal_commands = this->allLegalCommands();
+  if (this->legal_commands.size() == 0) {
     return true;
   }
   return false;

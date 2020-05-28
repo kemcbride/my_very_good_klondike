@@ -12,7 +12,7 @@ public:
   Command(std::string);
   virtual ~Command() = 0;
 
-  std::string virtual toString();
+  const std::string virtual toString() const;
 };
 
 #endif // CMD_H

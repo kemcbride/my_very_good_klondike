@@ -30,11 +30,11 @@ public:
   MoveCmd(char, int, char, int, int);
   MoveCmd(Source, Dest, int);
 
-  Source getSource();
-  Dest getDest();
-  int getCount();
+  Source getSource() const;
+  Dest getDest() const;
+  int getCount() const;
 
-  std::string toString();
+  const std::string toString() const;
 };
 
 #endif // MOVE_CMD_H
