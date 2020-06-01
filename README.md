@@ -20,10 +20,11 @@ that try to win, and see how good they are on average.
 Maybe it'd be cool to have a Microsoft-like tool that can generate games of
 varying difficulty...
 
-Right now you can play (and win) games.
-The game can mostly tell if you're stuck, and can tell if you've won.
+* Right now you can play (and win) games.
+* The game can tell if you're stuck, and can tell if you've won.
+* You can ask for hints, like in microsoft solitaire! The hints are mostly useful!
 
-There are still some bugs floating around though...
+There are probably still some bugs floating around though...
 
 -----
 
@@ -34,8 +35,8 @@ There are still some bugs floating around though...
 * ~implement "reset" command (just in case...)~
 * ~revolutionize the makefile (lol)~
 * ~make isStuck() check work~
-* add hint() command
-* refactor commands? that could clean up solitaire.cpp
+* ~add hint() command~
+* refactor commands? that could clean up solitaire.cpp (ehhhhhhh idk) (or clean up unused command stuff)
 * implement undo? (implementing undo stack wouldn't be hard, but implementing the undo itself)
 * implement scoring tools
 * implement draw-3 mode
