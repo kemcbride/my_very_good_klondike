@@ -52,8 +52,10 @@ void Board::toggle_labels() {
 
 void Board::next() {
   // Update hints & possible moves
-  this->is_stuck = this->isStuck();
+  // Note: we call isStuck after updating the stock to ensure that
+  // we are populating with moves for the new stock, not the previous stock
   this->stock.next();
+  this->is_stuck = this->isStuck();
 }
 
 string Board::hint() {
