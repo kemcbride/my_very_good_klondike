@@ -276,6 +276,17 @@ bool Board::isMeaningful(Move m) {
   if (m.getSrc().type == 'f' && m.getDst().type == 'f')
     return false;
 
+  // moves of a pile with 1 run starting with K to an empty pile are NOT meaningful
+  if (m.getSrc().type == 'p' && m.getDst().type == 'p') {
+    Pile &srcPile = this->tableau.piles.at(m.getSrc().idx);
+    Pile &dstPile = this->tableau.piles.at(m.getDst().idx);
+    if (srcPile.runs.size() == 1 && dstPile.runs.size() == 0) {
+      auto srcRun = srcPile.runs.front(); // there's only one /shrug
+      auto backCard = srcRun.cards.front();
+      if (backCard.getRank().getValue() == 13)
+        return false;
+    }
+  }
   return true;
 }
 
