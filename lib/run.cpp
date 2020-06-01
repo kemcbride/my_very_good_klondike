@@ -97,7 +97,7 @@ void Run::reveal() { this->revealed = true; }
 void Run::hide() { this->revealed = false; }
 
 bool Run::canAdd(Card c) {
-  if (this->cards.empty() && c.getRank() == 13) {
+  if (this->cards.empty() && c.getRank().getValue() == 13) {
     // If I'm empty (strange case, but used for programmatically generated
     // moves) During normal game play this is handled via empty pile put, not
     // run put
@@ -108,7 +108,7 @@ bool Run::canAdd(Card c) {
 
   Card myCard = this->cards.back();
   if (myCard.getColor() != c.getColor() &&
-      myCard.getRank() == c.getRank() + 1) {
+      myCard.getRank().getValue() == c.getRank().getValue() + 1) {
     return true;
   }
   return false;
