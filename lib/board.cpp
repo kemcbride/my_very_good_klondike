@@ -8,7 +8,44 @@
 
 using namespace std;
 
-Board::Board(Deck &d) : tableau(d), stock(d) {
+string prettyprint_duration(chrono::seconds dur) {
+  using namespace std::chrono;
+  using days = duration<int, std::ratio<86400>>;
+  auto d = duration_cast<days>(dur);
+  dur -= d;
+  auto h = duration_cast<hours>(dur);
+  dur -= h;
+  auto m = duration_cast<minutes>(dur);
+  dur -= m;
+  auto s = duration_cast<seconds>(dur);
+
+  auto dc = d.count();
+  auto hc = h.count();
+  auto mc = m.count();
+  auto sc = s.count();
+
+  std::stringstream ss;
+  ss.fill('0');
+  if (dc) {
+      ss << d.count() << "d";
+  }
+  if (dc || hc) {
+      if (dc) { ss << std::setw(2); } //pad if second set of numbers
+      ss << h.count() << "h";
+  }
+  if (dc || hc || mc) {
+      if (dc || hc) { ss << std::setw(2); }
+      ss << m.count() << "m";
+  }
+  if (dc || hc || mc || sc) {
+      if (dc || hc || mc) { ss << std::setw(2); }
+      ss << s.count() << 's';
+  }
+
+  return ss.str();
+}
+
+Board::Board(Deck &d) : game_start(chrono::system_clock::now()), tableau(d), stock(d) {
   // Assuming you start with a full deck!
   // First we fill the tableau.
   // Then, using the same deck, we fill the stock.
@@ -82,6 +119,7 @@ bool Board::isSolved() {
       }
     }
   }
+  this->game_end = chrono::system_clock::now();
   return true;
 }
 
@@ -169,11 +207,14 @@ void Board::move(Move m) {
   // Update isSolved() state - have you won?
   this->is_solved = this->isSolved();
   this->is_stuck = this->isStuck();
+  auto game_duration = chrono::duration_cast<chrono::seconds>(this->game_end - this->game_start);
   if (this->is_solved) {
     cerr << "Game has been won! Good job, good job." << endl;
+    cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
   } else if (this->is_stuck) {
     cerr << "You're out of legal moves!" << endl;
+    cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
   }
 }

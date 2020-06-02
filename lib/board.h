@@ -1,9 +1,12 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <chrono>
 #include <optional>
-#include <vector>
 #include <set>
+#include <vector>
+#include <iomanip>
+#include <sstream>
 
 #include "deck.h"
 #include "foundation.h"
@@ -24,6 +27,8 @@ private:
   std::vector<Move> legal_moves;
   std::vector<std::string> legal_commands;
   int hint_idx = 0;
+  std::chrono::time_point<std::chrono::system_clock> game_start;
+  std::chrono::time_point<std::chrono::system_clock> game_end;
 
   bool isSolved(); // check if the game is "Solved"/"Won"
   bool isStuck();  // check if the game is "Stuck"/"Lost"
