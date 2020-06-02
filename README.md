@@ -36,12 +36,13 @@ There are probably still some bugs floating around though...
 * ~revolutionize the makefile (lol)~
 * ~make isStuck() check work~
 * ~add hint() command~
+* ~implement game timer?~
 * refactor commands? that could clean up solitaire.cpp (ehhhhhhh idk) (or clean up unused command stuff)
 * implement undo? (implementing undo stack wouldn't be hard, but implementing the undo itself)
 * implement scoring tools
 * implement draw-3 mode
-* implement game timer?
 * integrate with some third party libraries (ncurses?) to practice using third party libraries
+* add meaningful tests
 
 
 -----
