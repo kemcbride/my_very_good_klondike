@@ -3,16 +3,21 @@
  * klondike specfiically, for now.
  * @kemcbride/@ke2mcbri 2020
  */
-#include <chrono>
-#include <iostream>
-#include <random>
-#include <string>
 
 #include "lib/board.h"
 #include "lib/deck.h"
 #include "lib/move_cmd.h"
 
+#include <chrono>
+#include <iostream>
+#include <random>
+#include <string>
+
+#include <gflags/gflags.h>
+
 using namespace std;
+
+DEFINE_bool(autoreveal, true, "Newly revealed cards will be flipped for the player automatically");
 
 string program_help() {
   string helpstr;
@@ -118,6 +123,8 @@ int play() {
 int main(int argc, char **argv) {
   std::srand(
       std::time(nullptr)); // use current time as seed for random generator
+  gflags::SetUsageMessage(program_help());
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
 
   if (argc == 1) {
     cout << program_help() << endl;
