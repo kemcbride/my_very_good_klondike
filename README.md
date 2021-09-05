@@ -4,6 +4,10 @@
 ## How to build & run
 
 This project uses Make and clang++ with C++17 standards (I use std::optional).
+
+The project also uses:
+- gflags (https://github.com/gflags/gflags/blob/master/INSTALL.md)
+
 You should be able to clone this repo to your computer using `git clone --recurse-submodules`,
 and then run `make solitaire` inside the repo's directory to build the binary.
 
