@@ -295,6 +295,10 @@ vector<Move> Board::allPossibleMoves() {
   return moves;
 }
 
+int Board::getScore() {
+  return this->score;
+}
+
 bool Board::isLegal(Move m) {
   Dest d = m.getDst();
   Run dstRun = m.getDstRun();

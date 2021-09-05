@@ -27,6 +27,7 @@ private:
   std::vector<Move> legal_moves;
   std::vector<std::string> legal_commands;
   int hint_idx = 0;
+  int score = 0;
   std::chrono::time_point<std::chrono::system_clock> game_start;
   std::chrono::time_point<std::chrono::system_clock> game_end;
 
@@ -52,6 +53,8 @@ public:
   void toggle_labels();
   void next();
   std::string hint();
+
+  int getScore();
 
   bool isLegal(Move);
   bool isMeaningful(Move);
