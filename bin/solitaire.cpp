@@ -32,6 +32,7 @@ string game_help() {
   helpstr += "* t, toggle: toggle board labels\n";
   helpstr += "* b, board: print the board\n";
   helpstr += "* n, next: go to next card in stock\n";
+  helpstr += "* hint: print a possible move. cycles through all possible moves\n";
   helpstr +=
       "* m, move: move <s><#> <d> - attempt to move # cards from s to d\n";
   helpstr +=
