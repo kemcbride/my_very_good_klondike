@@ -36,7 +36,6 @@ There are probably still some bugs floating around though...
 * ~revolutionize the makefile (lol)~
 * ~make isStuck() check work~
 * ~add hint() command~
-  * add hint() command in the HELP text!!
 * ~implement game timer?~
 * refactor commands? that could clean up solitaire.cpp (ehhhhhhh idk) (or clean up unused command stuff)
 * implement undo? (implementing undo stack wouldn't be hard, but implementing the undo itself)
