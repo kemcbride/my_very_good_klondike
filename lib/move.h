@@ -8,6 +8,10 @@
 /* #include "board.h" */
 #include "move_cmd.h"
 
+enum MoveType {
+  STK2FDN, STK2TBL, TBL2FDN, FDN2TBL, REVEAL, RECYCLE, UNKNOWN
+};
+
 class Move {
 private:
   Move() = delete;
@@ -16,6 +20,7 @@ private:
   Run dstRun;
   Dest dstLoc;
   unsigned int count = 0;
+  MoveType moveType = UNKNOWN;
 
 public:
   Move(Run, Source, Run, Dest, unsigned int);
@@ -24,6 +29,7 @@ public:
   Source getSrc();
   Dest getDst();
   unsigned int getCount();
+  MoveType getMoveType();
   Run getSrcRun();
   Run getDstRun();
 
