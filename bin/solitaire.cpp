@@ -79,7 +79,6 @@ Board new_game() {
 int play() {
   cout << "Welcome to the game! (h=help, x=exit)" << endl;
 
-  int score = 0;
   Board b = new_game();
 
   string cmd = get_cmd();
@@ -113,7 +112,7 @@ int play() {
 
     cmd = get_cmd();
   }
-  return score;
+  return b.getScore();
 }
 
 int main(int argc, char **argv) {
