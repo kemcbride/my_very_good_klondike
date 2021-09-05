@@ -24,6 +24,7 @@ Dest Move::getDst() { return this->dstLoc; }
 Run Move::getDstRun() { return this->dstRun; }
 
 unsigned int Move::getCount() { return this->count; }
+MoveType Move::getMoveType() {return this->moveType; }
 
 string Move::toString() {
   string src = this->getSrc().toString();
