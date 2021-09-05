@@ -1,5 +1,7 @@
 CC=clang++
 CC_FLAGS=-Wall -g -I. --std=c++17
+CPUS ?= $(shell (nproc --all || sysctl -n hw.ncpu) 2>/dev/null || echo 1)
+MAKEFLAGS += --jobs=$(CPUS)
 
 objects = card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o \
 	  command.o move_cmd.o hint_cmd.o move.o location.o
