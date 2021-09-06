@@ -15,7 +15,7 @@ Stock::Stock(Deck d) {
   this->index = 0;
 }
 
-void Stock::update_index() {
+bool Stock::update_index() {
   // So, let's say we just called next() or pop() - we've
   // changed the contents/state of ->cards and ->index somehow,
   // and we want to make sure it's still valid.
@@ -24,7 +24,9 @@ void Stock::update_index() {
   // http://www.cplusplus.com/reference/vector/vector/erase/
   if (this->index >= this->cards.size()) {
     this->index = 0;
+    return true;
   }
+  return false;
 }
 
 optional<Card> Stock::peek() {
@@ -45,9 +47,9 @@ optional<Card> Stock::pop() {
   return c;
 }
 
-void Stock::next() {
+bool Stock::next() {
   ++(this->index);
-  this->update_index(); // reset it to 0 if necessary
+  return this->update_index(); // reset it to 0 if necessary
 }
 
 string Stock::toString() {

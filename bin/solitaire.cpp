@@ -19,6 +19,7 @@ using namespace std;
 
 DEFINE_bool(autoreveal, true, "Newly revealed cards will be flipped for the player automatically");
 DEFINE_bool(autosolve, true, "Once all cards are revealed, the game will auto-solve itself for the player");
+DEFINE_bool(recycle_penalty, false, "-100 pts for each full cycle through the stock");
 
 string program_help() {
   string helpstr;
