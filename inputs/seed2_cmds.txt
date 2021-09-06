@@ -1,0 +1,132 @@
+m p5 1 p3
+m p2 1 p3
+m p2 1 f1
+next 
+next
+next
+n
+n
+n
+m s f2
+n
+m s f3
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+m s p2
+n
+n
+n
+n
+n
+n
+m s f4
+m p4 1 f4
+m p7 1 f4
+m p7 1 f1
+m p7 1 f3
+m p7 1 f2
+m p3 3 p7
+m p4 1 f3
+m p4 1 p7
+m p5 1 p7
+m p3 1 f4
+m p3 1 f1
+m p5 1 p1
+n
+n
+n
+m s f2
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+m s f3
+m p4 1 f1
+n
+n
+n
+n
+m s p4
+n
+n
+n
+n
+n
+m s p2
+n
+m s f2
+n
+m s f3
+m s f2
+n
+n
+m s f1
+n
+n
+m s f3
+n
+n
+n
+n
+n
+n
+n
+m s p2
+m p6 1 p2
+m p6 1 f4
+m p7 1 f1
+m p6 1 f1
+m s f4
+n
+n
+n
+m s p2
+m p5 1 p2
+m p5 1 p3
+n
+m s f3
+n
+n
+m s f2
+m p7 1 f4
+m p1 1 f2
+m p7 1 f3
+n
+n
+m s p3
+m p7 4 p3
+m p7 1 f4
+m s p6
+n
+n
+m s f2
+m p1 1 f4
+m p2 1 f3
+m p3 1 f1
+m p7 1 f1
+m s f4
+m p2 1 f2
+m p3 1 f3
+m p6 1 f2
+n
+m s f4
+m s f3
+m p6 1 f3
+m p6 1 p7
+m s p6
+solve
