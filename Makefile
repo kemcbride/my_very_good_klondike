@@ -13,8 +13,9 @@ all: solitaire test_solitaire run
 run: solitaire
 	./solitaire play
 
-test: test_solitaire
+test: test_solitaire solitaire
 	./test_solitaire
+	./full_solve_tests.sh
 
 clean:
 	rm -f *.o solitaire
