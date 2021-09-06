@@ -23,6 +23,8 @@ public:
   bool hasSuit();
   Suit getSuit();
 
+  bool isFull();
+
   std::string toString();
 };
 

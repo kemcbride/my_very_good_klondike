@@ -124,6 +124,13 @@ string Board::hint() {
   return cmd;
 }
 
+bool Board::foundationsFull() {
+  for (auto f : this->foundations) {
+    if (!f.isFull()) return false;
+  }
+  return true;
+}
+
 bool Board::isSolved() {
   if (!(this->stock.cards.size() == 0)) {
     return false;
@@ -140,12 +147,42 @@ bool Board::isSolved() {
   return true;
 }
 
+bool Board::isCleared() {
+  bool tableauEmpty = this->tableau.isEmpty();
+  if (!tableauEmpty) return false;
+  bool fdnsFull = this->foundationsFull();
+  if (!fdnsFull) return false;
+  return this->is_solved;
+}
+
 void Board::reveal_top_runs() {
   int num_reveals = this->tableau.reveal_top_runs();
   this->score += num_reveals * REVEAL_VALUE;
 }
 
-void Board::solve() {} // TODO IMPLEMENT THIS and also CALL IT SOMEWHERE
+void Board::solve() {
+  // Don't do anything if the game isn't solved, as a backstop here.
+  if (!this->is_solved) {
+    cout << "Board is not solved; can't just finish it off from here" << endl;
+    return;
+  }
+
+  cout << "In board::solve, starting solve loop..." << endl;
+  // TODO: somehow, this stalls...
+  while (!this->isCleared()) {
+    for (auto m : this->allLegalMoves()) {
+      cout << "Examining possible move: " << m.toString() << endl;
+      if (m.getMoveType() == TBL2FDN) {
+        cout << "executing move: " << m.toString() << endl;
+        this->move(m);
+        cout << this->toString() << endl;
+        break;
+      }
+    }
+    cout << "exited for move in all legal moves loop" << endl;
+  }
+  cout << "exited while this is not cleared loop" << endl;
+}
 
 void Board::move(MoveCmd mcmd) {
   Run srcRun = this->getSourceRun(mcmd.getSource(), mcmd.getCount());
@@ -240,11 +277,12 @@ void Board::move(Move m) {
     }
   }
 
-  // Update isSolved() state - have you won?
+  // Update isSolved(), isStuck(), isCleared() state - have you won?
   this->is_solved = this->isSolved();
   this->is_stuck = this->isStuck();
+  this->is_cleared = this->isCleared();
   auto game_duration = chrono::duration_cast<chrono::seconds>(this->game_end - this->game_start);
-  if (this->is_solved) {
+  if (this->is_cleared) {
     cerr << "Game has been won! Good job, good job." << endl;
     cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
     cerr << "Game score: " << this->getScore() << endl;
@@ -342,6 +380,10 @@ bool Board::isLegal(Move m) {
   Run dstRun = m.getDstRun();
   Run srcRun = m.getSrcRun();
 
+  // moves from one foundation to another are NOT legal
+  if (m.getSrc().type == 'f' && m.getDst().type == 'f')
+    return false;
+
   if (d.type == 'p') {
     return dstRun.canAdd(srcRun);
   } else if (d.type == 'f') {
@@ -355,10 +397,6 @@ bool Board::isLegal(Move m) {
 }
 
 bool Board::isMeaningful(Move m) {
-  // moves from one foundation to another are NOT meaningful
-  if (m.getSrc().type == 'f' && m.getDst().type == 'f')
-    return false;
-
   // moves of a pile with 1 run starting with K to an empty pile are NOT meaningful
   if (m.getSrc().type == 'p' && m.getDst().type == 'p') {
     Pile &srcPile = this->tableau.piles.at(m.getSrc().idx);
@@ -406,6 +444,16 @@ bool Board::isStuck() {
   if (this->legal_commands.size() == 0) {
     return true;
   }
+  return false;
+}
+
+bool Board::trySolve() {
+  if (this->is_solved) {
+    cout << "Board is solvable in current state; solving..." << endl;
+    this->solve();
+    return true;
+  }
+  cout << "Board is not solvable in current state" << endl;
   return false;
 }
 

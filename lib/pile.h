@@ -34,6 +34,7 @@ public:
   void put(Run);          // add a stack of viable cards to the top of the pile
   void put(Card);         // add just one card (like, from stock or fdn)
   int reveal_top();      // for when a move is done, reveal the top of the pile
+  bool isEmpty();
 
   std::string toString();
 };

@@ -38,7 +38,9 @@ string game_help() {
   helpstr += "* t, toggle: toggle board labels\n";
   helpstr += "* b, board: print the board\n";
   helpstr += "* n, next: go to next card in stock\n";
-  helpstr += "* hint: print a possible move. cycles through all possible moves\n";
+  helpstr += "* i, hint: print a possible move. cycles through possible moves\n";
+  helpstr += "* score: print current score\n";
+  helpstr += "* solve: solve the current game, if all cards have been revealed\n";
   helpstr +=
       "* m, move: move <s><#> <d> - attempt to move # cards from s to d\n";
   helpstr +=
@@ -51,6 +53,7 @@ string get_cmd() {
   cout << "cmd: ";
   string cmd;
   getline(cin, cmd);
+  cout << "Your command was: " << cmd << endl;
   return cmd;
 }
 
@@ -65,6 +68,10 @@ bool is_toggle(string str) { return (str == "toggle" || str == "t"); }
 bool is_next(string str) { return (str == "next" || str == "n"); }
 
 bool is_hint(string str) { return (str == "hint" || str == "i"); }
+
+bool is_score(string str) { return (str == "score"); }
+
+bool is_solve(string str) { return (str == "solve"); }
 
 bool is_move(string str) {
   string first_bit = string(str, 0, str.find(" "));
@@ -88,7 +95,7 @@ int play() {
   Board b = new_game();
 
   string cmd = get_cmd();
-  while (is_not_exit(cmd)) {
+  while (!cin.eof() && is_not_exit(cmd)) {
     if (is_help(cmd)) {
       cout << game_help() << endl;
     } else if (is_restart(cmd)) {
@@ -101,6 +108,14 @@ int play() {
       cout << b.toString() << endl;
     } else if (is_hint(cmd)) {
       cout << b.hint() << endl;
+    } else if (is_score(cmd)) {
+      cout << b.getScore() << endl;
+    } else if (is_solve(cmd)) {
+      auto solveResult = b.trySolve();
+      if (solveResult == false) {
+        cout << "Board cannot be solved from present state" << endl;
+      }
+      cout << b.toString() << endl;
     } else if (is_move(cmd)) {
       try {
         MoveCmd m_cmd(ignore_first_bit(cmd));
@@ -136,6 +151,7 @@ int main(int argc, char **argv) {
       cout << program_help() << endl;
     } else if (cmd == "play") {
       if (argc >= 3) {
+        // if extra arg provided, use as seed. single character only.. -_-
         int seed = char_to_int(argv[2][0]);
         srand(seed);
       }

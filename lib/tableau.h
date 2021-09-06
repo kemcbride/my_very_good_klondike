@@ -20,6 +20,8 @@ public:
 
   void toggleLabels();
   int reveal_top_runs();
+
+  bool isEmpty();
 };
 
 #endif // TABLEAU_H
