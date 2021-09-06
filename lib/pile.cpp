@@ -133,6 +133,10 @@ int Pile::reveal_top() {
   return 0;
 }
 
+bool Pile::isEmpty() {
+  return (this->runs.size() == 0);
+}
+
 string Pile::toString() {
   string runs_str;
   for (auto r : this->runs) {

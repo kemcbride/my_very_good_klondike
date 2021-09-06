@@ -39,3 +39,10 @@ int Tableau::reveal_top_runs() {
   }
   return num_reveals;
 }
+
+bool Tableau::isEmpty() {
+  for (auto p : this->piles) {
+    if (!p.isEmpty()) return false;
+  }
+  return true;
+}

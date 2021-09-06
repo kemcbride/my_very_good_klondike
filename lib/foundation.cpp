@@ -68,6 +68,10 @@ void Foundation::push(Card c) {
   }
 }
 
+bool Foundation::isFull() {
+  return (this->cards.size() == 13);
+}
+
 string Foundation::toString() {
   string card_str;
   if (this->peek().has_value()) {
