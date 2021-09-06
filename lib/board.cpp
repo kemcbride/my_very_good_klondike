@@ -167,11 +167,10 @@ void Board::solve() {
     return;
   }
 
-  // TODO: somehow, this stalls...
   while (!this->isCleared()) {
     for (auto m : this->allLegalMoves()) {
       if (m.getMoveType() == TBL2FDN) {
-        this->move(m);
+        this->_move(m);
         break;
       }
     }
@@ -186,6 +185,11 @@ void Board::move(MoveCmd mcmd) {
 }
 
 void Board::move(Move m) {
+  auto _ = this->_move(m);
+  this->_move_post_processing();
+}
+
+bool Board::_move(Move m) {
   Source srcLoc = m.getSrc();
   Dest dstLoc = m.getDst();
   Run srcRun = m.getSrcRun();
@@ -271,6 +275,10 @@ void Board::move(Move m) {
     }
   }
 
+  return true;
+}
+
+void Board::_move_post_processing() {
   // Update isSolved(), isStuck(), isCleared() state - have you won?
   this->is_solved = this->isSolved();
   this->is_stuck = this->isStuck();

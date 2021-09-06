@@ -53,7 +53,6 @@ string get_cmd() {
   cout << "cmd: ";
   string cmd;
   getline(cin, cmd);
-  cout << "Your command was: " << cmd << endl;
   return cmd;
 }
 
@@ -155,7 +154,7 @@ int main(int argc, char **argv) {
         int seed = char_to_int(argv[2][0]);
         srand(seed);
       }
-      return play();
+      play();
     } else {
       cout << program_help() << endl;
     }

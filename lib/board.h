@@ -56,6 +56,8 @@ private:
   std::vector<Move> allLegalMoves();
   std::vector<std::string> allLegalCommands();
 
+  bool _move(Move); // private move execution logic
+  void _move_post_processing(); // check game state, etc.
   void reveal_top_runs();
   void solve(); // if is_solved, run all moves to clear the board.
 
