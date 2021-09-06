@@ -126,9 +126,11 @@ void Pile::put(Run run) {
   }
 }
 
-void Pile::reveal_top() {
-  if (!this->runs.empty())
-    this->runs.back().reveal();
+int Pile::reveal_top() {
+  if (!this->runs.empty()) {
+    return this->runs.back().reveal();
+  }
+  return 0;
 }
 
 string Pile::toString() {

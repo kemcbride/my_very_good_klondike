@@ -91,7 +91,12 @@ void Run::put(Card c) {
   this->cards.push_back(c);
 }
 
-void Run::reveal() { this->revealed = true; }
+int Run::reveal() {
+  int change = 0;
+  if (!this->isRevealed()) change = 1;
+  this->revealed = true;
+  return change;
+}
 
 // NOTE: This function is likely completely unnecessary.
 void Run::hide() { this->revealed = false; }
