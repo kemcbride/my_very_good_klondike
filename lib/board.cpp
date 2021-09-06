@@ -167,21 +167,15 @@ void Board::solve() {
     return;
   }
 
-  cout << "In board::solve, starting solve loop..." << endl;
   // TODO: somehow, this stalls...
   while (!this->isCleared()) {
     for (auto m : this->allLegalMoves()) {
-      cout << "Examining possible move: " << m.toString() << endl;
       if (m.getMoveType() == TBL2FDN) {
-        cout << "executing move: " << m.toString() << endl;
         this->move(m);
-        cout << this->toString() << endl;
         break;
       }
     }
-    cout << "exited for move in all legal moves loop" << endl;
   }
-  cout << "exited while this is not cleared loop" << endl;
 }
 
 void Board::move(MoveCmd mcmd) {
@@ -451,11 +445,9 @@ bool Board::isStuck() {
 
 bool Board::trySolve() {
   if (this->is_solved) {
-    cout << "Board is solvable in current state; solving..." << endl;
     this->solve();
     return true;
   }
-  cout << "Board is not solvable in current state" << endl;
   return false;
 }
 
