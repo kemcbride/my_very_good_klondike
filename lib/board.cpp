@@ -115,7 +115,9 @@ void Board::next() {
   // Update hints & possible moves
   // Note: we call isStuck after updating the stock to ensure that
   // we are populating with moves for the new stock, not the previous stock
-  this->stock.next();
+  bool recycled = this->stock.next();
+  if (this->recycle_penalty && recycled)
+    this->score = std::max(0, this->score - 100);
   this->is_stuck = this->isStuck();
 }
 
@@ -194,7 +196,7 @@ void Board::move(MoveCmd mcmd) {
 }
 
 void Board::move(Move m) {
-  auto _ = this->_move(m);
+  this->_move(m);
   this->_move_post_processing();
 }
 
@@ -293,7 +295,10 @@ void Board::_move_post_processing() {
   this->is_stuck = this->isStuck();
   this->is_cleared = this->isCleared();
 
-  if (this->auto_solve && this->is_solved && !this->is_cleared) this->trySolve();
+  if (this->auto_solve && this->is_solved && !this->is_cleared) {
+    this->trySolve();
+    return; // return early to prevent double messages/double calls to this fn
+  }
 
   auto game_duration = chrono::duration_cast<chrono::milliseconds>(this->game_end - this->game_start);
   if (this->is_cleared) {

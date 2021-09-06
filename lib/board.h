@@ -35,6 +35,7 @@ private:
   bool show_labels = false;
   bool auto_solve = true;
   bool auto_reveal = true;
+  bool recycle_penalty = false;
 
   std::vector<Move> legal_moves;
   std::vector<std::string> legal_commands;

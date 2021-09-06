@@ -11,7 +11,7 @@
 class Stock {
 private:
   unsigned int index;
-  void update_index();
+  bool update_index(); // did we have to reset to 0?
 
 public:
   Stock() = delete;
@@ -21,7 +21,7 @@ public:
 
   std::optional<Card> peek();
   std::optional<Card> pop();
-  void next();
+  bool next(); // returns: did this move recycle the stock?
 
   std::string toString();
 };
