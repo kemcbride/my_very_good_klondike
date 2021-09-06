@@ -324,7 +324,9 @@ vector<Dest> Board::getAllDests() {
 }
 
 vector<int> Board::getAllCounts(Run r) {
-  return vector<int>(1, r.cards.size());
+  std::vector<int> v(r.cards.size());
+  std::iota(v.begin(), v.end(), 1);
+  return v;
 }
 
 vector<Move> Board::allPossibleMoves() {
