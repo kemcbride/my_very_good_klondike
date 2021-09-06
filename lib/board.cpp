@@ -82,9 +82,25 @@ string Board::toString() {
   return board_str;
 }
 
-void Board::toggle_labels() {
+void Board::enableAutoSolve() {
+  this->auto_solve = true;
+}
+
+void Board::disableAutoSolve() {
+  this->auto_solve = false;
+}
+
+void Board::enableAutoReveal() {
+  this->auto_reveal = true;
+}
+
+void Board::disableAutoReveal() {
+  this->auto_reveal = false;
+}
+
+void Board::toggleLabels() {
   this->show_labels = !(this->show_labels);
-  this->tableau.toggle_labels();
+  this->tableau.toggleLabels();
 }
 
 void Board::next() {
@@ -124,6 +140,8 @@ bool Board::isSolved() {
 }
 
 void Board::reveal_top_runs() { this->tableau.reveal_top_runs(); }
+
+void Board::solve() {} // TODO IMPLEMENT THIS and also CALL IT SOMEWHERE
 
 void Board::move(MoveCmd mcmd) {
   Run srcRun = this->getSourceRun(mcmd.getSource(), mcmd.getCount());

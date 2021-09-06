@@ -18,7 +18,7 @@ public:
   Tableau(Deck &);
   std::string toString();
 
-  void toggle_labels();
+  void toggleLabels();
   void reveal_top_runs();
 };
 
