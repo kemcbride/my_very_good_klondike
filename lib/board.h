@@ -5,6 +5,7 @@
 #include <optional>
 #include <set>
 #include <vector>
+#include <numeric>
 #include <iomanip>
 #include <sstream>
 
