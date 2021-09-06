@@ -7,6 +7,7 @@ This project uses Make and clang++ with C++17 standards (I use std::optional).
 
 The project also uses:
 - gflags (https://github.com/gflags/gflags/blob/master/INSTALL.md)
+- Catch2 (https://github.com/catchorg/Catch2) -- VIA SUBMODULES SO WATCH OUT...
 
 You should be able to clone this repo to your computer using `git clone --recurse-submodules`,
 and then run `make solitaire` inside the repo's directory to build the binary.
@@ -34,20 +35,11 @@ There are probably still some bugs floating around though...
 
 ## TODO
 
-* ~make isSolved() check actually work~
-* ~implement "new game" command~
-* ~implement "reset" command (just in case...)~
-* ~revolutionize the makefile (lol)~
-* ~make isStuck() check work~
-* ~add hint() command~
-* ~implement game timer?~
 * refactor commands? that could clean up solitaire.cpp (ehhhhhhh idk) (or clean up unused command stuff)
 * implement undo? (implementing undo stack wouldn't be hard, but implementing the undo itself)
-* implement scoring tools
 * implement draw-3 mode
 * integrate with some third party libraries (ncurses?) to practice using third party libraries
 * add meaningful tests
-
 
 -----
 
