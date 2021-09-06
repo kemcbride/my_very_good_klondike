@@ -8,7 +8,7 @@
 
 using namespace std;
 
-string prettyprint_duration(chrono::seconds dur) {
+string prettyprint_duration(chrono::milliseconds dur) {
   using namespace std::chrono;
   using days = duration<int, std::ratio<86400>>;
   auto d = duration_cast<days>(dur);
@@ -18,11 +18,14 @@ string prettyprint_duration(chrono::seconds dur) {
   auto m = duration_cast<minutes>(dur);
   dur -= m;
   auto s = duration_cast<seconds>(dur);
+  dur -= s;
+  auto ms = duration_cast<milliseconds>(dur);
 
   auto dc = d.count();
   auto hc = h.count();
   auto mc = m.count();
   auto sc = s.count();
+  auto msc = ms.count();
 
   std::stringstream ss;
   ss.fill('0');
@@ -40,6 +43,10 @@ string prettyprint_duration(chrono::seconds dur) {
   if (dc || hc || mc || sc) {
       if (dc || hc || mc) { ss << std::setw(2); }
       ss << s.count() << 's';
+  }
+  if (dc || hc || mc || sc || msc) {
+      if (dc || hc || mc || sc) { ss << std::setw(2); }
+      ss << ms.count() << "ms";
   }
 
   return ss.str();
@@ -143,7 +150,6 @@ bool Board::isSolved() {
       }
     }
   }
-  this->game_end = chrono::system_clock::now();
   return true;
 }
 
@@ -152,6 +158,9 @@ bool Board::isCleared() {
   if (!tableauEmpty) return false;
   bool fdnsFull = this->foundationsFull();
   if (!fdnsFull) return false;
+
+  if (this->is_solved)
+    this->game_end = chrono::system_clock::now();
   return this->is_solved;
 }
 
@@ -286,7 +295,7 @@ void Board::_move_post_processing() {
 
   if (this->auto_solve && this->is_solved && !this->is_cleared) this->trySolve();
 
-  auto game_duration = chrono::duration_cast<chrono::seconds>(this->game_end - this->game_start);
+  auto game_duration = chrono::duration_cast<chrono::milliseconds>(this->game_end - this->game_start);
   if (this->is_cleared) {
     cerr << "Game has been won! Good job, good job." << endl;
     cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
