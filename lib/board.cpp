@@ -283,6 +283,9 @@ void Board::_move_post_processing() {
   this->is_solved = this->isSolved();
   this->is_stuck = this->isStuck();
   this->is_cleared = this->isCleared();
+
+  if (this->auto_solve && this->is_solved && !this->is_cleared) this->trySolve();
+
   auto game_duration = chrono::duration_cast<chrono::seconds>(this->game_end - this->game_start);
   if (this->is_cleared) {
     cerr << "Game has been won! Good job, good job." << endl;
@@ -454,6 +457,7 @@ bool Board::isStuck() {
 bool Board::trySolve() {
   if (this->is_solved) {
     this->solve();
+    this->_move_post_processing();
     return true;
   }
   return false;
