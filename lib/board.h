@@ -19,6 +19,13 @@
 #include "stock.h"
 #include "tableau.h"
 
+#define REVEAL_VALUE 5
+#define STK_2_TBL_VALUE 5
+#define STK_2_FDN_VALUE 10
+#define TBL_2_FDN_VALUE 10
+#define FDN_2_TBL_VALUE -15
+#define RECYCLE_STOCK_VALUE -100
+
 class Board {
 private:
   bool is_solved = false;

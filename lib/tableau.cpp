@@ -32,8 +32,10 @@ string Tableau::toString() {
 
 void Tableau::toggleLabels() { this->show_labels = !(this->show_labels); }
 
-void Tableau::reveal_top_runs() {
+int Tableau::reveal_top_runs() {
+  int num_reveals = 0;
   for (auto &p : this->piles) {
-    p.reveal_top();
+    num_reveals += p.reveal_top();
   }
+  return num_reveals;
 }

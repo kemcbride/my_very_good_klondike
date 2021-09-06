@@ -78,7 +78,8 @@ string Board::toString() {
     board_str += extra_help;
   }
 
-  board_str += fdns_str + "   " + stock_str + '\n' + tbl_str;
+  string score_str = "|Score: " + to_string(this->getScore()) + "|";
+  board_str += fdns_str + "   " + stock_str + "  " + score_str + '\n' + tbl_str;
   return board_str;
 }
 
@@ -139,7 +140,10 @@ bool Board::isSolved() {
   return true;
 }
 
-void Board::reveal_top_runs() { this->tableau.reveal_top_runs(); }
+void Board::reveal_top_runs() {
+  int num_reveals = this->tableau.reveal_top_runs();
+  this->score += num_reveals * REVEAL_VALUE;
+}
 
 void Board::solve() {} // TODO IMPLEMENT THIS and also CALL IT SOMEWHERE
 
@@ -169,6 +173,8 @@ void Board::move(Move m) {
       if (f.canPush(c)) {
         f.push(c);
         (void)this->stock.pop();
+        // success! update score.
+        this->score += STK_2_FDN_VALUE;
       }
     } else { // stock -> pile
       Pile &target_pile = this->tableau.piles.at(dstLoc.idx);
@@ -176,6 +182,8 @@ void Board::move(Move m) {
       if (c.has_value()) {
         target_pile.put(c.value());
         this->stock.pop();
+        // success! update score.
+        this->score += STK_2_TBL_VALUE;
       }
     }
   } else if (srcLoc.type == 'f') { // source: foundation
@@ -189,10 +197,15 @@ void Board::move(Move m) {
     optional<Card> fdn_card = f.peek();
     if (!fdn_card.has_value())
       throw runtime_error("Invalid move: No cards in foundation ");
+    // TODO: is there enough validation happening here?
+    //   how do we know if the pile can actually receive the fdn card?
+    //   (for scoring)
     Card c = fdn_card.value();
     Pile &p = this->tableau.piles.at(dstLoc.idx);
     p.put(c);
     (void)f.pop();
+    // success! update score.
+    this->score += FDN_2_TBL_VALUE;
   } else {                    // source: pile
     if (dstLoc.type == 'f') { // pile -> foundation
       // move from pile to fdn
@@ -203,6 +216,8 @@ void Board::move(Move m) {
         if (fdn.canPush(c.value())) {
           fdn.push(c.value());
           optional<Run> _ = target_pile.pop();
+          // successf! update score.
+          this->score += TBL_2_FDN_VALUE;
         }
       }
     } else { // pile -> pile
@@ -219,7 +234,10 @@ void Board::move(Move m) {
         }
       }
     }
-    this->reveal_top_runs();
+    
+    if (this->auto_reveal) {
+      this->reveal_top_runs();
+    }
   }
 
   // Update isSolved() state - have you won?
@@ -229,10 +247,12 @@ void Board::move(Move m) {
   if (this->is_solved) {
     cerr << "Game has been won! Good job, good job." << endl;
     cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
+    cerr << "Game score: " << this->getScore() << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
   } else if (this->is_stuck) {
     cerr << "You're out of legal moves!" << endl;
     cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
+    cerr << "Game score: " << this->getScore() << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
   }
 }

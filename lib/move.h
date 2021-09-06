@@ -19,8 +19,8 @@ private:
   Source srcLoc;
   Run dstRun;
   Dest dstLoc;
+  MoveType moveType;
   unsigned int count = 0;
-  MoveType moveType = UNKNOWN;
 
 public:
   Move(Run, Source, Run, Dest, unsigned int);

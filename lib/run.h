@@ -32,7 +32,7 @@ public:
   bool canAdd(Card);
   bool canAdd(Run);
 
-  void reveal();
+  int reveal();
   void hide();
 
   std::string toString();

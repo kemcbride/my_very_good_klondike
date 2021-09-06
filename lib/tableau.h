@@ -19,7 +19,7 @@ public:
   std::string toString();
 
   void toggleLabels();
-  void reveal_top_runs();
+  int reveal_top_runs();
 };
 
 #endif // TABLEAU_H
