@@ -18,6 +18,7 @@
 using namespace std;
 
 DEFINE_bool(autoreveal, true, "Newly revealed cards will be flipped for the player automatically");
+DEFINE_bool(autosolve, true, "Once all cards are revealed, the game will auto-solve itself for the player");
 
 string program_help() {
   string helpstr;
@@ -94,7 +95,7 @@ int play() {
       cout << "Restarting the game." << endl;
       b = new_game();
     } else if (is_toggle(cmd)) {
-      b.toggle_labels();
+      b.toggleLabels();
     } else if (is_next(cmd)) {
       b.next();
       cout << b.toString() << endl;

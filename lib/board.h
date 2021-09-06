@@ -24,10 +24,15 @@ private:
   bool is_solved = false;
   bool is_stuck = false;
   bool show_labels = false;
+  bool auto_solve = true;
+  bool auto_reveal = true;
+
   std::vector<Move> legal_moves;
   std::vector<std::string> legal_commands;
+
   int hint_idx = 0;
   int score = 0;
+
   std::chrono::time_point<std::chrono::system_clock> game_start;
   std::chrono::time_point<std::chrono::system_clock> game_end;
 
@@ -41,6 +46,7 @@ private:
   std::vector<std::string> allLegalCommands();
 
   void reveal_top_runs();
+  void solve(); // if is_solved, run all moves to clear the board.
 
 public:
   Tableau tableau;
@@ -50,7 +56,12 @@ public:
   Board(Deck &);
   std::string toString();
 
-  void toggle_labels();
+  void enableAutoSolve();
+  void disableAutoSolve();
+  void enableAutoReveal();
+  void disableAutoReveal();
+
+  void toggleLabels();
   void next();
   std::string hint();
 

@@ -30,7 +30,7 @@ string Tableau::toString() {
   return tableau_str;
 }
 
-void Tableau::toggle_labels() { this->show_labels = !(this->show_labels); }
+void Tableau::toggleLabels() { this->show_labels = !(this->show_labels); }
 
 void Tableau::reveal_top_runs() {
   for (auto &p : this->piles) {
