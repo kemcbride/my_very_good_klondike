@@ -33,9 +33,9 @@ private:
   bool is_stuck = false;
   bool is_cleared = false;
   bool show_labels = false;
-  bool auto_solve = true;
-  bool auto_reveal = true;
-  bool recycle_penalty = false;
+  bool auto_solve; // for defaults of these, see the gflag definitions in solitaire.cpp
+  bool auto_reveal;
+  bool recycle_penalty;
 
   std::vector<Move> legal_moves;
   std::vector<std::string> legal_commands;
@@ -67,7 +67,7 @@ public:
   Stock stock;
   std::vector<Foundation> foundations;
 
-  Board(Deck &);
+  Board(Deck &, bool, bool, bool);
   std::string toString();
 
   void enableAutoSolve();
