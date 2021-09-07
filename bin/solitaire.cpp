@@ -85,7 +85,7 @@ string ignore_first_bit(string str) {
 Board new_game() {
   Deck d;
   d.shuffle();
-  Board b(d);
+  Board b(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
   return b;
 }
 

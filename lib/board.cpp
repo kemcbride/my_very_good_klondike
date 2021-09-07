@@ -52,7 +52,7 @@ string prettyprint_duration(chrono::milliseconds dur) {
   return ss.str();
 }
 
-Board::Board(Deck &d) : game_start(chrono::system_clock::now()), tableau(d), stock(d) {
+Board::Board(Deck &d, bool auto_solve, bool auto_reveal, bool recycle_penalty) : game_start(chrono::system_clock::now()), tableau(d), stock(d), auto_solve(auto_solve), auto_reveal(auto_reveal), recycle_penalty(recycle_penalty) {
   // Assuming you start with a full deck!
   // First we fill the tableau.
   // Then, using the same deck, we fill the stock.
