@@ -3,3 +3,4 @@ solitaire
 test_solitaire
 *.d
 *.o
+*.swp

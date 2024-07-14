@@ -30,29 +30,40 @@ string prettyprint_duration(chrono::milliseconds dur) {
   std::stringstream ss;
   ss.fill('0');
   if (dc) {
-      ss << d.count() << "d";
+    ss << d.count() << "d";
   }
   if (dc || hc) {
-      if (dc) { ss << std::setw(2); } //pad if second set of numbers
-      ss << h.count() << "h";
+    if (dc) {
+      ss << std::setw(2);
+    } // pad if second set of numbers
+    ss << h.count() << "h";
   }
   if (dc || hc || mc) {
-      if (dc || hc) { ss << std::setw(2); }
-      ss << m.count() << "m";
+    if (dc || hc) {
+      ss << std::setw(2);
+    }
+    ss << m.count() << "m";
   }
   if (dc || hc || mc || sc) {
-      if (dc || hc || mc) { ss << std::setw(2); }
-      ss << s.count() << 's';
+    if (dc || hc || mc) {
+      ss << std::setw(2);
+    }
+    ss << s.count() << 's';
   }
   if (dc || hc || mc || sc || msc) {
-      if (dc || hc || mc || sc) { ss << std::setw(2); }
-      ss << ms.count() << "ms";
+    if (dc || hc || mc || sc) {
+      ss << std::setw(2);
+    }
+    ss << ms.count() << "ms";
   }
 
   return ss.str();
 }
 
-Board::Board(Deck &d, bool auto_solve, bool auto_reveal, bool recycle_penalty) : game_start(chrono::system_clock::now()), tableau(d), stock(d), auto_solve(auto_solve), auto_reveal(auto_reveal), recycle_penalty(recycle_penalty) {
+Board::Board(Deck &d, bool auto_solve, bool auto_reveal, bool recycle_penalty)
+    : game_start(chrono::system_clock::now()), tableau(d), stock(d),
+      auto_solve(auto_solve), auto_reveal(auto_reveal),
+      recycle_penalty(recycle_penalty) {
   // Assuming you start with a full deck!
   // First we fill the tableau.
   // Then, using the same deck, we fill the stock.
@@ -90,21 +101,13 @@ string Board::toString() {
   return board_str;
 }
 
-void Board::enableAutoSolve() {
-  this->auto_solve = true;
-}
+void Board::enableAutoSolve() { this->auto_solve = true; }
 
-void Board::disableAutoSolve() {
-  this->auto_solve = false;
-}
+void Board::disableAutoSolve() { this->auto_solve = false; }
 
-void Board::enableAutoReveal() {
-  this->auto_reveal = true;
-}
+void Board::enableAutoReveal() { this->auto_reveal = true; }
 
-void Board::disableAutoReveal() {
-  this->auto_reveal = false;
-}
+void Board::disableAutoReveal() { this->auto_reveal = false; }
 
 void Board::toggleLabels() {
   this->show_labels = !(this->show_labels);
@@ -135,7 +138,8 @@ string Board::hint() {
 
 bool Board::foundationsFull() {
   for (auto f : this->foundations) {
-    if (!f.isFull()) return false;
+    if (!f.isFull())
+      return false;
   }
   return true;
 }
@@ -157,9 +161,11 @@ bool Board::isSolved() {
 
 bool Board::isCleared() {
   bool tableauEmpty = this->tableau.isEmpty();
-  if (!tableauEmpty) return false;
+  if (!tableauEmpty)
+    return false;
   bool fdnsFull = this->foundationsFull();
-  if (!fdnsFull) return false;
+  if (!fdnsFull)
+    return false;
 
   if (this->is_solved)
     this->game_end = chrono::system_clock::now();
@@ -280,7 +286,7 @@ bool Board::_move(Move m) {
         }
       }
     }
-    
+
     if (this->auto_reveal) {
       this->reveal_top_runs();
     }
@@ -300,7 +306,8 @@ void Board::_move_post_processing() {
     return; // return early to prevent double messages/double calls to this fn
   }
 
-  auto game_duration = chrono::duration_cast<chrono::milliseconds>(this->game_end - this->game_start);
+  auto game_duration = chrono::duration_cast<chrono::milliseconds>(
+      this->game_end - this->game_start);
   if (this->is_cleared) {
     cerr << "Game has been won! Good job, good job." << endl;
     cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
@@ -392,9 +399,7 @@ vector<Move> Board::allPossibleMoves() {
   return moves;
 }
 
-int Board::getScore() {
-  return this->score;
-}
+int Board::getScore() { return this->score; }
 
 bool Board::isLegal(Move m) {
   Dest d = m.getDst();
@@ -418,7 +423,8 @@ bool Board::isLegal(Move m) {
 }
 
 bool Board::isMeaningful(Move m) {
-  // moves of a pile with 1 run starting with K to an empty pile are NOT meaningful
+  // moves of a pile with 1 run starting with K to an empty pile are NOT
+  // meaningful
   if (m.getSrc().type == 'p' && m.getDst().type == 'p') {
     Pile &srcPile = this->tableau.piles.at(m.getSrc().idx);
     Pile &dstPile = this->tableau.piles.at(m.getDst().idx);
@@ -446,10 +452,11 @@ vector<Move> Board::allLegalMoves() {
 vector<string> Board::allLegalCommands() {
   set<string> cmds;
   for (auto m : this->legal_moves) {
-    // Moves from the stock should be translated to 'next' if curr stock != that source
+    // Moves from the stock should be translated to 'next' if curr stock != that
+    // source
     Source s = m.getSrc();
     Card src_top = m.getSrcRun().peek().value();
-    if ( s.type == 's' && (src_top != this->stock.peek().value())) {
+    if (s.type == 's' && (src_top != this->stock.peek().value())) {
       cmds.insert("next");
     } else {
       cmds.insert(m.toString());
