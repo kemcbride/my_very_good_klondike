@@ -83,7 +83,7 @@ optional<Run> Pile::take(unsigned int i) {
 void Pile::put(std::vector<Card> cards) {
   if (this->runs.empty()) {
     Card c = cards.front();
-    if (c.getRank() != 13)
+    if (c.getRank() != Rank(13))
       throw runtime_error("Only Kings can be placed on an empty pile");
 
     Run r(cards);
@@ -96,7 +96,7 @@ void Pile::put(std::vector<Card> cards) {
 
 void Pile::put(Card c) {
   if (this->runs.empty()) {
-    if (c.getRank() != 13)
+    if (c.getRank() != Rank(13))
       throw runtime_error("Only Kings can be placed on an empty pile");
     Run r(c);
     r.reveal();
@@ -112,7 +112,7 @@ void Pile::put(Run run) {
       throw runtime_error("Pile:put: don't put empty runs");
     }
     Card c = run.cards.front();
-    if (c.getRank() != 13)
+    if (c.getRank() != Rank(13))
       throw runtime_error("Only Kings can be placed on an empty pile");
     run.reveal();
     this->runs.push_back(run);

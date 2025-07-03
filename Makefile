@@ -1,5 +1,7 @@
 CC=clang++
-CC_FLAGS=-Wall -g -I. --std=c++17
+CC_FLAGS=-Wall -g -I. --std=c++20
+# On osx using homebrew, may need to add to CC_FLAGS:
+# -I$(shell (brew --prefix))/include -L$(shell (brew --prefix))/lib
 CPUS ?= $(shell (nproc --all || sysctl -n hw.ncpu) 2>/dev/null || echo 1)
 MAKEFLAGS += --jobs=$(CPUS)
 

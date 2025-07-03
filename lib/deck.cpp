@@ -13,7 +13,11 @@ Deck::Deck() {
   this->current_idx = 0;
 }
 
-void Deck::shuffle() { random_shuffle(this->cards.begin(), this->cards.end()); }
+void Deck::shuffle() {
+  random_device rd;
+  mt19937 g(rd());
+  ::shuffle(this->cards.begin(), this->cards.end(), g);
+}
 
 void Deck::sort() {
   // Assuming that the deck always contains the same 52 cards...

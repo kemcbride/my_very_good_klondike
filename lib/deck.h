@@ -2,6 +2,7 @@
 #define DECK_H
 
 #include <algorithm> // random_shuffle
+#include <random> // random_device / mt19937
 #include <vector>
 
 #include "card.h"
