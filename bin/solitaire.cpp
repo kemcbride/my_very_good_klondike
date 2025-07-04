@@ -22,7 +22,7 @@ DEFINE_bool(autoreveal, true, "Newly revealed cards will be flipped for the play
 DEFINE_bool(autosolve, true, "Once all cards are revealed, the game will auto-solve itself for the player");
 DEFINE_bool(recycle_penalty, false, "-100 pts for each full cycle through the stock");
 
-string program_help() {
+const string program_help() {
   string helpstr;
   helpstr += "command help for ./solitaire:\n";
   helpstr += "* ./solitaire      - print this help message\n";
@@ -140,7 +140,7 @@ int play() {
 int main(int argc, char **argv) {
   std::srand(
       std::time(nullptr)); // use current time as seed for random generator
-  gflags::SetUsageMessage(program_help());
+  // gflags::SetUsageMessage(program_help());
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
   if (argc == 1) {
