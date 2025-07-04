@@ -14,7 +14,7 @@ private:
 public:
   HintCmd(std::string);
   HintCmd(Move);
-  std::string toString();
+  const std::string toString() const;
 };
 
 #endif // HINT_CMD_H

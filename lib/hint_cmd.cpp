@@ -11,4 +11,4 @@ HintCmd::HintCmd(string str) : cmd(str) {}
 
 HintCmd::HintCmd(Move m) : cmd(m.toString()) {}
 
-string HintCmd::toString() { return this->cmd; }
+const string HintCmd::toString() const { return this->cmd; }
