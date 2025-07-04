@@ -20,5 +20,5 @@ jobs:
     - name: make solitaire
       run: make solitaire
     - name: make test
-      run: make test
+      run: make gtest
 
