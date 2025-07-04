@@ -24,8 +24,7 @@ all: solitaire test_solitaire run
 run: solitaire
 	./solitaire play
 
-test: test_solitaire solitaire
-	./test_solitaire
+test: test_gtest solitaire
 	./full_solve_tests.sh
 
 clean:
@@ -41,6 +40,8 @@ test_solitaire: test/test_solitaire.cpp Catch2/single_include/catch2/* $(objects
 	$(CC) -o test_solitaire $< $(objects) $(CC_FLAGS)
 
 
+test_gtest: gtest
+	./gtest
 
 test/gtest_solitaire_test.o: test/gtest_solitaire_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
 	$(CC) -o $@ -c $< $(CC_FLAGS) -lgtest
