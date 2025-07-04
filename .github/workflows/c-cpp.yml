@@ -15,8 +15,8 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
-    - name: install gflags
-      run: sudo apt install libgflags-dev
+    - name: install deps
+      run: sudo apt install libgflags-dev libgtest-dev libc++-dev
     - name: make solitaire
       run: make solitaire
     - name: make test
