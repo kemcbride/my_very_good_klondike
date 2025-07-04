@@ -1,7 +1,16 @@
 CC=clang++
-CC_FLAGS=-Wall -g -I. --std=c++20
+CXX=clang++
+CC_FLAGS=-Wall -Wextra -pthread -g -I. --std=c++20 -stdlib=libc++
 # On osx using homebrew, may need to add to CC_FLAGS:
 # -I$(shell (brew --prefix))/include -L$(shell (brew --prefix))/lib
+
+GFLAGS_IDIR = /usr/include/gflags
+GTEST_IDIR = /usr/include/gtest
+GTEST_SRCDIR = /usr/src/gtest
+GTEST_HEADERS = $(GTEST_IDIR)/*.h \
+				$(GTEST_IDIR)/internal/*.h
+GTEST_SRCS_ = $(GTEST_SRCDIR)/src/*.cc $(GTEST_SRCDIR)/src/*.h $(GTEST_HEADERS)
+
 CPUS ?= $(shell (nproc --all || sysctl -n hw.ncpu) 2>/dev/null || echo 1)
 MAKEFLAGS += --jobs=$(CPUS)
 
@@ -20,13 +29,38 @@ test: test_solitaire solitaire
 	./full_solve_tests.sh
 
 clean:
-	rm -f *.o solitaire
+	rm -f *.o *.a solitaire
 
 %.o: lib/%.cpp lib/%.h
-	$(CC) -o $@ -c $< $(CC_FLAGS) 
+	$(CC) -o $@ -c $< $(CC_FLAGS)
 
 solitaire: bin/solitaire.cpp $(objects)
-	$(CC) -o solitaire  bin/solitaire.cpp $(objects) $(CC_FLAGS) -lgflags
+	$(CC) $(objects) -lgflags $(CC_FLAGS) -o solitaire bin/solitaire.cpp
 
 test_solitaire: test/test_solitaire.cpp Catch2/single_include/catch2/* $(objects)
 	$(CC) -o test_solitaire $< $(objects) $(CC_FLAGS)
+
+
+
+test/gtest_solitaire_test.o: test/gtest_solitaire_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
+	$(CC) -o $@ -c $< $(CC_FLAGS) -lgtest
+
+gtest: test/gtest_solitaire_test.o gtest_main.a $(objects)
+	$(CC) $(CC_FLAGS) -lpthread $^ -o gtest
+
+
+
+# From https://github.com/google/googletest/blob/release-1.8.1/googletest/make/Makefile
+gtest-all.o : $(GTEST_SRCS_)
+		$(CC) $(CC_FLAGS) -I$(GTEST_IDIR) -I$(GTEST_SRCDIR) -c \
+			            $(GTEST_SRCDIR)/src/gtest-all.cc
+
+gtest_main.o : $(GTEST_SRCS_)
+		$(CC) $(CC_FLAGS) -I$(GTEST_IDIR) -I$(GTEST_SRCDIR) -c \
+			            $(GTEST_SRCDIR)/src/gtest_main.cc
+
+gtest.a : gtest-all.o
+		$(AR) $(ARFLAGS) $@ $^
+
+gtest_main.a : gtest-all.o gtest_main.o
+		$(AR) $(ARFLAGS) $@ $^

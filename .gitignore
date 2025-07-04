@@ -1,6 +1,8 @@
 # don't include the binaries
 solitaire
 test_solitaire
+gtest
 *.d
 *.o
+*.a
 *.swp
