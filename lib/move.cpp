@@ -8,6 +8,7 @@
 #include "move.h"
 
 using namespace std;
+using namespace solitaire;
 
 MoveType moveTypeFromSrcDst(Source s, Dest d) {
   switch (s.type) {

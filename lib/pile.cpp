@@ -6,6 +6,7 @@
 #include "pile.h"
 
 using namespace std;
+using namespace solitaire;
 
 Pile::Pile(vector<Card> deal) {
   vector<Run> myruns;

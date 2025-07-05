@@ -27,6 +27,8 @@
 #define FDN_2_TBL_VALUE -15
 #define RECYCLE_STOCK_VALUE -100
 
+using namespace solitaire;
+
 class Board {
 private:
   bool is_solved = false;
