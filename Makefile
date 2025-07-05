@@ -36,10 +36,6 @@ clean:
 solitaire: bin/solitaire.cpp $(objects)
 	$(CC) $(objects) -lgflags $(CC_FLAGS) -o solitaire bin/solitaire.cpp
 
-test_solitaire: test/test_solitaire.cpp Catch2/single_include/catch2/* $(objects)
-	$(CC) -o test_solitaire $< $(objects) $(CC_FLAGS)
-
-
 test_gtest: gtest
 	./gtest
 
@@ -52,6 +48,7 @@ gtest: test/gtest_solitaire_test.o gtest_main.a $(objects)
 
 
 # From https://github.com/google/googletest/blob/release-1.8.1/googletest/make/Makefile
+# With tweaks from me, even though they said you shouldn't need to... maybe WSL's fault?
 gtest-all.o : $(GTEST_SRCS_)
 		$(CC) $(CC_FLAGS) -I$(GTEST_IDIR) -I$(GTEST_SRCDIR) -c \
 			            $(GTEST_SRCDIR)/src/gtest-all.cc

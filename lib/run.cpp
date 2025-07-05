@@ -7,6 +7,7 @@
 #include "run.h"
 
 using namespace std;
+using namespace solitaire;
 
 #define GREENSTR string("\033[32m")
 #define RESETSTR string("\033[0m")
@@ -25,7 +26,9 @@ Run::Run(std::vector<Card> cards) {
     for (auto it = cards.begin() + 1; it != cards.end(); ++it) {
       vector<Card> first_part(cards.begin(), it);
       vector<Card> second_part(it, cards.end());
+
       if (!Run(first_part).canAdd(Run(second_part)))
+        // TODO - make this exception more detailed, list the first/second parts
         throw runtime_error(
             "run from vec<card> - doesnt satisfy run constraints");
     }

@@ -8,6 +8,8 @@
 
 #include "card.h"
 
+namespace solitaire {
+
 class Run {
 private:
   bool revealed = false;
@@ -37,5 +39,7 @@ public:
 
   std::string toString();
 };
+
+} // namespace solitaire
 
 #endif

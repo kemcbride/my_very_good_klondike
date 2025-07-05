@@ -8,6 +8,8 @@
 /* #include "board.h" */
 #include "move_cmd.h"
 
+using namespace solitaire;
+
 enum MoveType {
   STK2FDN, STK2TBL, TBL2FDN, FDN2TBL, TBL2TBL, REVEAL, RECYCLE, UNKNOWN
 };

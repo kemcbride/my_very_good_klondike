@@ -7,6 +7,7 @@
 #include "board.h"
 
 using namespace std;
+using namespace solitaire;
 
 string prettyprint_duration(chrono::milliseconds dur) {
   using namespace std::chrono;
