@@ -83,17 +83,17 @@ string ignore_first_bit(string str) {
   return string(str, str.find(" ") + 1, str.size());
 }
 
-Board new_game() {
-  Deck d;
+Board new_game(mt19937 generator) {
+  Deck d(generator);
   d.shuffle();
   Board b(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
   return b;
 }
 
-int play() {
+int play(mt19937 generator) {
   cout << "Welcome to the game! (h=help, x=exit)" << endl;
 
-  Board b = new_game();
+  Board b = new_game(generator);
 
   string cmd = get_cmd();
   while (!cin.eof() && is_not_exit(cmd)) {
@@ -101,7 +101,7 @@ int play() {
       cout << game_help() << endl;
     } else if (is_restart(cmd)) {
       cout << "Restarting the game." << endl;
-      b = new_game();
+      b = new_game(generator);
     } else if (is_toggle(cmd)) {
       b.toggleLabels();
     } else if (is_next(cmd)) {
@@ -138,8 +138,8 @@ int play() {
 }
 
 int main(int argc, char **argv) {
-  std::srand(
-      std::time(nullptr)); // use current time as seed for random generator
+  std::random_device rd;
+  std::mt19937 g(rd());
   // gflags::SetUsageMessage(program_help());
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
@@ -154,9 +154,9 @@ int main(int argc, char **argv) {
       if (argc >= 3) {
         // if extra arg provided, use as seed. single character only.. -_-
         int seed = char_to_int(argv[2][0]);
-        srand(seed);
+        g = std::mt19937(seed);
       }
-      play();
+      play(g);
     } else {
       cout << program_help() << endl;
     }

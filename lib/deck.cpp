@@ -8,15 +8,14 @@
 
 using namespace std;
 
-Deck::Deck() {
+Deck::Deck(mt19937 g) {
   this->sort(); // sets up the ->cards
   this->current_idx = 0;
+  this->generator = g;
 }
 
 void Deck::shuffle() {
-  random_device rd;
-  mt19937 g(rd());
-  ::shuffle(this->cards.begin(), this->cards.end(), g);
+  ::shuffle(this->cards.begin(), this->cards.end(), generator);
 }
 
 void Deck::sort() {

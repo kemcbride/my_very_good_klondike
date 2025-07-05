@@ -67,7 +67,7 @@ string Move::toString() {
   return src + " " + cnt + " " + dst;
 }
 
-const bool operator<(Move a, Move b) {
+bool operator<(Move a, Move b) {
   Source as = a.getSrc();
   Source bs = b.getSrc();
   Dest ad = a.getDst();

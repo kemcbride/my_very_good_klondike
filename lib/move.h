@@ -39,5 +39,5 @@ public:
 };
 
 // To support set<Move>
-const bool operator<(Move, Move);
+bool operator<(Move, Move);
 #endif // MOVE_H

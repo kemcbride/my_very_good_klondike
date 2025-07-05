@@ -10,11 +10,12 @@
 class Deck {
 private:
   int current_idx;
+  std::mt19937 generator;
 
 public:
   std::vector<Card> cards;
 
-  Deck();
+  Deck(std::mt19937 generator);
   void shuffle();
   void sort();
 
