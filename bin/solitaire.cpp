@@ -22,6 +22,8 @@ DEFINE_bool(autoreveal, true, "Newly revealed cards will be flipped for the play
 DEFINE_bool(autosolve, true, "Once all cards are revealed, the game will auto-solve itself for the player");
 DEFINE_bool(recycle_penalty, false, "-100 pts for each full cycle through the stock");
 
+vector<string> game_log;
+
 const string program_help() {
   string helpstr;
   helpstr += "command help for ./solitaire:\n";
@@ -36,6 +38,7 @@ string game_help() {
   helpstr += "game help for solitaire:\n";
   helpstr += "* x, exit: quit the game\n";
   helpstr += "* h, help: print this help\n";
+  helpstr += "* l, log: print out all commands you've given so far\n";
   helpstr += "* r, restart: restart and deal a new game\n";
   helpstr += "* t, toggle: toggle board labels\n";
   helpstr += "* b, board: print the board\n";
@@ -61,6 +64,8 @@ string get_cmd() {
 bool is_not_exit(string str) { return (str != "exit" && str != "x"); }
 
 bool is_help(string str) { return (str == "help" || str == "h"); }
+
+bool is_gamelog(string str) { return (str == "log" || str == "l"); }
 
 bool is_restart(string str) { return (str == "restart" || str == "r"); }
 
@@ -99,6 +104,11 @@ int play(mt19937 generator) {
   while (!cin.eof() && is_not_exit(cmd)) {
     if (is_help(cmd)) {
       cout << game_help() << endl;
+    } else if (is_gamelog(cmd)) {
+      cout << "Game log thus far:\n";
+      for (auto line : game_log) {
+        cout << line << "\n";
+      }
     } else if (is_restart(cmd)) {
       cout << "Restarting the game." << endl;
       b = new_game(generator);
@@ -133,6 +143,7 @@ int play(mt19937 generator) {
     }
 
     cmd = get_cmd();
+    game_log.push_back(cmd);
   }
   return b.getScore();
 }
