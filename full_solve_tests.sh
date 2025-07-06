@@ -12,7 +12,7 @@ else
 fi
 
 # Repeat for next test input - TODO should function-ize this
-timeout $TIMEOUT_LIMIT sh -c "time ./solitaire play 7 < inputs/seed6_input.txt"
+timeout $TIMEOUT_LIMIT sh -c "time ./solitaire play 7 < inputs/seed7_input.txt"
 TIMEOUT_RESULT=$?
 if [[ $TIMEOUT_RESULT = 124 ]]; then
 	echo "Timed out running example full test with time limit ${TIMEOUT_LIMIT}s";
