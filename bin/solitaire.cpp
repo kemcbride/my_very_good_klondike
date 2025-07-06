@@ -21,6 +21,7 @@ using namespace std;
 DEFINE_bool(autoreveal, true, "Newly revealed cards will be flipped for the player automatically");
 DEFINE_bool(autosolve, true, "Once all cards are revealed, the game will auto-solve itself for the player");
 DEFINE_bool(recycle_penalty, false, "-100 pts for each full cycle through the stock");
+DEFINE_bool(debug_log_after_win, false, "[debug] After a win, print the game log to stdout");
 
 vector<string> game_log;
 
@@ -142,8 +143,8 @@ int play(mt19937 generator) {
       cout << b.toString() << endl;
     }
 
-    cmd = get_cmd();
     game_log.push_back(cmd);
+    cmd = get_cmd();
   }
   return b.getScore();
 }

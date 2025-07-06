@@ -1,5 +1,12 @@
 # Recording game inputs
 
+## log command
+
+1. Play your game through normally,
+2. before (BEFORE!) you kill the program, run the `log` command
+3. collect the output (using tmux or ctrl-c, I don't care, tee output to a file, i dunno)
+
+## The old way (just use the log command)
 How did I create the files that live in this folder?
 
 These "integration tests" really save time for things that I haven't bothered to write proper unit tests for.
@@ -18,6 +25,6 @@ I did.. these things!
 10. OK, that actually makes `{next_intermediate_filename}` your final file. I guess this last step is manually examining the file! Make sure it looks like the actual sequence of commands you sent! For example, you might want to remove commands that were pretty much no-ops, and also clean up mistakes you had. NOTENOTENOTE NOTE!!! Script keeps EVERYTHING you did - and that means that it keeps your backspaces, so you'll have to manually clean those up in this step. Beware!
 
 
-## Running game inputs
+# Running game inputs
 
 Checkout the script at the repo's top level, `full_solve_tests.sh` for how to run them. You don't need any of the time/timeout stuff, I just put it in there to force it to eventually die in case of.. infinite loops... :/
