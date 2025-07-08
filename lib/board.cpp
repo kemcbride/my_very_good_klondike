@@ -228,6 +228,8 @@ bool Board::_move(Move m) {
         (void)this->stock.pop();
         // success! update score.
         this->score += STK_2_FDN_VALUE;
+      } else {
+        throw runtime_error("Invalid move: cannot move " + c.toString() + " to foundation");
       }
     } else { // stock -> pile
       Pile &target_pile = this->tableau.piles.at(dstLoc.idx);
