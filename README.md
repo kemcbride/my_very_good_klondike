@@ -7,9 +7,8 @@ This project uses Make and clang++ with C++17 standards (I use std::optional).
 
 The project also uses:
 - gflags (https://github.com/gflags/gflags/blob/master/INSTALL.md)
-- Catch2 (https://github.com/catchorg/Catch2) -- VIA SUBMODULES SO WATCH OUT...
-
-You should be able to clone this repo to your computer using `git clone --recurse-submodules`,
+- gtest (https://github.com/google/googletest)
+You should be able to clone this repo to your computer using `git clone`,
 and then run `make solitaire` inside the repo's directory to build the binary.
 
 Then, to run the program, just do: `./solitaire` from that same directory!
