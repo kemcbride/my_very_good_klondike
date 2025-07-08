@@ -273,6 +273,8 @@ bool Board::_move(Move m) {
           optional<Run> _ = target_pile.pop();
           // successf! update score.
           this->score += TBL_2_FDN_VALUE;
+        } else {
+          throw runtime_error("Invalid move: Cannot move " + c->toString() + " to foundation");
         }
       }
     } else { // pile -> pile
