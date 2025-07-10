@@ -31,4 +31,14 @@ TEST(DeckTest, Basics) {
   d1 = d.draw(1);
   e1 = e.draw(1);
   EXPECT_EQ(d1, e1);
+
+
+  // Valid, and strange: (maybe should disallow)
+  // Because draw just works by iterating through the deck,
+  // you can draw more than is in the deck.
+  d.draw(60);
+
+  // Now, a negative draw probably fails because you can't have a 
+  // vector with negative size.
+  EXPECT_THROW(d.draw(-1), std::exception);
 }
