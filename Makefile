@@ -43,9 +43,12 @@ test/gtest_solitaire_test.o: test/gtest_solitaire_test.cpp lib/*.cpp lib/*.h $(G
 	$(CC) -o $@ -c $< $(CC_FLAGS) -lgtest
 
 test/card_test.o: test/card_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
-	$(CC) -o $@ -c $< $(CC_FLAGS) -lgtest
+	$(CC) -o $@ -c $< $(CC_FLAGS)
 
-gtest: test/card_test.o test/gtest_solitaire_test.o gtest_main.a $(objects)
+test/deck_test.o: test/deck_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
+	$(CC) -o $@ -c $< $(CC_FLAGS)
+
+gtest: test/card_test.o test/deck_test.o test/gtest_solitaire_test.o gtest_main.a $(objects)
 	$(CC) $(CC_FLAGS) -lpthread $^ -o gtest
 
 
