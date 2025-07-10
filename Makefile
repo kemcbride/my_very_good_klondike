@@ -42,7 +42,10 @@ test_gtest: gtest
 test/gtest_solitaire_test.o: test/gtest_solitaire_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
 	$(CC) -o $@ -c $< $(CC_FLAGS) -lgtest
 
-gtest: test/gtest_solitaire_test.o gtest_main.a $(objects)
+test/card_test.o: test/card_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
+	$(CC) -o $@ -c $< $(CC_FLAGS) -lgtest
+
+gtest: test/card_test.o test/gtest_solitaire_test.o gtest_main.a $(objects)
 	$(CC) $(CC_FLAGS) -lpthread $^ -o gtest
 
 
