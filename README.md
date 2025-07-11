@@ -8,6 +8,7 @@ This project uses Make and clang++ with C++17 standards (I use std::optional).
 The project also uses:
 - gflags (https://github.com/gflags/gflags/blob/master/INSTALL.md)
 - gtest (https://github.com/google/googletest)
+- clang-format (https://clang.llvm.org/docs/ClangFormat.html)
 
 You should be able to clone this repo to your computer using `git clone`,
 and then run `make solitaire` inside the repo's directory to build the binary.
