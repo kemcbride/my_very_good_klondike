@@ -87,7 +87,7 @@ Board new_game(mt19937 generator) {
 }
 
 int play(mt19937 generator) {
-  cout << "Welcome to the game! (h=help, x=exit)" << endl;
+  cout << "Welcome to the game! (h=help, x=exit, b=show board)" << endl;
 
   Board b = new_game(generator);
 
