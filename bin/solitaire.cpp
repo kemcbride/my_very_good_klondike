@@ -12,6 +12,7 @@
 #include <chrono>
 #include <iostream>
 #include <random>
+#include <ranges>
 #include <string>
 #include <sstream>
 
@@ -55,13 +56,6 @@ string game_help() {
   return helpstr;
 }
 
-string get_cmd() {
-  cout << "cmd: ";
-  string cmd;
-  getline(cin, cmd);
-  return cmd;
-}
-
 bool is_not_exit(string str) { return (str != "exit" && str != "x"); }
 
 bool is_help(string str) { return (str == "help" || str == "h"); }
@@ -85,10 +79,6 @@ bool is_move(string str) {
   return (first_bit == "move" || first_bit == "m");
 }
 
-string ignore_first_bit(string str) {
-  return string(str, str.find(" ") + 1, str.size());
-}
-
 Board new_game(mt19937 generator) {
   Deck d(generator);
   d.shuffle();
@@ -101,7 +91,9 @@ int play(mt19937 generator) {
 
   Board b = new_game(generator);
 
-  string cmd = get_cmd();
+  cout << "cmd: ";
+  string cmd;
+  cin >> cmd;
   while (!cin.eof() && is_not_exit(cmd)) {
     if (is_help(cmd)) {
       cout << game_help() << endl;
@@ -130,7 +122,7 @@ int play(mt19937 generator) {
       cout << b.toString() << endl;
     } else if (is_move(cmd)) {
       try {
-        MoveCmd m_cmd(ignore_first_bit(cmd));
+        MoveCmd m_cmd = MoveCmd::create();
         b.move(m_cmd);
       } catch (runtime_error &e) {
         cerr << e.what() << endl;
@@ -144,7 +136,8 @@ int play(mt19937 generator) {
     }
 
     game_log.push_back(cmd);
-    cmd = get_cmd();
+    cout << "cmd: ";
+    cin >> cmd;
   }
   return b.getScore();
 }

@@ -1,6 +1,7 @@
 #ifndef MOVE_CMD_H
 #define MOVE_CMD_H
 
+#include <iostream>
 #include <string>
 #include <stdexcept>
 
@@ -18,17 +19,19 @@ private:
   Dest dest;
   int count = 0;
 
-  Source parseSource(std::string);
+  static Source parseSource(std::string);
   int parseCount(std::string);
-  Dest parseDest(std::string);
+  static Dest parseDest(std::string);
 
-  bool validateFdn(std::string);
-  bool validatePile(std::string);
+  static bool validateFdn(std::string);
+  static bool validatePile(std::string);
 
 public:
   MoveCmd(std::string);
   MoveCmd(char, int, char, int, int);
   MoveCmd(Source, Dest, int);
+
+  static MoveCmd create();
 
   Source getSource() const;
   Dest getDest() const;

@@ -10,12 +10,26 @@ using namespace std;
 
 int char_to_int(char c) { return c - '0'; }
 
+MoveCmd MoveCmd::create() {
+  string s, d;
+  int c = 0;
+  cin >> s;
+  Source source = parseSource(s);
+  // We only need a count if we're moving from a pile
+  if (source.type == 'p') {
+    cin >> c;
+  }
+  cin >> d;
+  Dest dest = parseDest(d);
+  return MoveCmd(source, dest, c);
+}
+
 MoveCmd::MoveCmd(string str)
     : cmd(str), source(this->parseSource(str)), dest(this->parseDest(str)),
       count(this->parseCount(str)) {}
 
 MoveCmd::MoveCmd(char s, int s_idx, char d, int d_idx, int count)
-    : source(s, s_idx), dest(d, d_idx) {}
+    : source(s, s_idx), dest(d, d_idx), count(count) {}
 
 MoveCmd::MoveCmd(Source s, Dest d, int c) : source(s), dest(d), count(c) {}
 
@@ -33,13 +47,13 @@ Source MoveCmd::parseSource(string str) {
   int idx = 0;
 
   if (source[0] == 'p') { // pile
-    if (!(this->validatePile(source))) {
+    if (!(validatePile(source))) {
       throw runtime_error("Invalid source: " + source);
     }
     type = 'p';
     idx = char_to_int(source[1]) - 1;
   } else if (source[0] == 'f') { // foundation
-    if (!this->validateFdn(source)) {
+    if (!validateFdn(source)) {
       throw runtime_error("Invalid source: " + source);
     }
     type = 'f';
@@ -58,14 +72,14 @@ Dest MoveCmd::parseDest(string str) {
 
   if (dest[0] == 'p') {
     // pile
-    if (!this->validatePile(dest)) {
+    if (!validatePile(dest)) {
       throw runtime_error("Invalid dest: " + dest);
     }
     type = 'p';
     idx = char_to_int(dest[1]) - 1;
   } else if (dest[0] == 'f') {
     // foundation
-    if (!this->validateFdn(dest)) {
+    if (!validateFdn(dest)) {
       throw runtime_error("Invalid dest: " + dest);
     }
     type = 'f';
