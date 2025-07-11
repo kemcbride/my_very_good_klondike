@@ -38,19 +38,17 @@ Pile::Pile(Deck &d, int n) {
 }
 
 optional<Card> Pile::peek() {
-  if (this->runs.size() == 0)
-    return nullopt;
+  if (this->runs.size() == 0) return nullopt;
   return this->runs.back().peek();
 }
 
 void Pile::clear_empty_run() {
   if (this->runs.back().cards.size() == 0)
-    this->runs.pop_back(); // remove empty run
+    this->runs.pop_back();  // remove empty run
 }
 
 optional<Run> Pile::pop() {
-  if (this->runs.size() == 0)
-    return nullopt;
+  if (this->runs.size() == 0) return nullopt;
 
   optional<Run> result_run = this->runs.back().take(1);
   this->clear_empty_run();
@@ -58,8 +56,7 @@ optional<Run> Pile::pop() {
 }
 
 optional<Run> Pile::peek(unsigned int n) {
-  if (this->runs.size() == 0 || n == 0)
-    return nullopt;
+  if (this->runs.size() == 0 || n == 0) return nullopt;
   vector<Card> run_cards = this->runs.back().cards;
   if (run_cards.size() < n) {
     return run_cards;
@@ -134,9 +131,7 @@ int Pile::reveal_top() {
   return 0;
 }
 
-bool Pile::isEmpty() {
-  return (this->runs.size() == 0);
-}
+bool Pile::isEmpty() { return (this->runs.size() == 0); }
 
 string Pile::toString() {
   string runs_str;

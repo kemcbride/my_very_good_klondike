@@ -9,7 +9,7 @@
 
 // The foundation is a ordered stack of Cards of the same suit
 class Foundation {
-public:
+ public:
   std::optional<Suit> suit;
   std::vector<Card> cards;
 
@@ -28,4 +28,4 @@ public:
   std::string toString();
 };
 
-#endif // FOUNDATION_H
+#endif  // FOUNDATION_H

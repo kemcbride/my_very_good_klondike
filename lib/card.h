@@ -16,7 +16,7 @@ enum suits {
   hearts,
   diamonds,
 };
-const std::vector<suits> SuitEnumList = { clubs, spades, hearts, diamonds };
+const std::vector<suits> SuitEnumList = {clubs, spades, hearts, diamonds};
 
 enum colors {
   red,
@@ -24,10 +24,10 @@ enum colors {
 };
 
 class Suit {
-private:
+ private:
   suits s;
 
-public:
+ public:
   Suit();
   Suit(suits);
   Suit(unsigned int);
@@ -39,10 +39,10 @@ std::ostream &operator<<(std::ostream &os, Suit &obj);
 bool operator==(Suit a, Suit b);
 
 class Rank {
-protected:
+ protected:
   int value;
 
-public:
+ public:
   Rank();
   Rank(int);
   int getValue();
@@ -53,11 +53,11 @@ std::ostream &operator<<(std::ostream &os, Rank &obj);
 bool operator==(Rank a, Rank b);
 
 class Card {
-private:
+ private:
   Rank rank;
   Suit suit;
 
-public:
+ public:
   Card();
   Card(Rank, Suit);
   Card(int, int);
@@ -70,4 +70,4 @@ std::ostream &operator<<(std::ostream &os, Card &obj);
 bool operator==(Card a, Card b);
 bool operator!=(Card a, Card b);
 
-#endif // CARD_H
+#endif  // CARD_H

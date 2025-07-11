@@ -16,7 +16,8 @@ std::string Location::toString() {
   if (this->type == 's') {
     return string(1, this->type);
   }
-  // We add 1 here since location objects are 0-indexed, but players use 1-indexed
+  // We add 1 here since location objects are 0-indexed, but players use
+  // 1-indexed
   return this->type + to_string(this->idx + 1);
 }
 

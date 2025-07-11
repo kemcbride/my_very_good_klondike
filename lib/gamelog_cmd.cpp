@@ -10,4 +10,3 @@ using namespace std;
 GameLogCmd::HintCmd(string str) : cmd(str) {}
 
 const string GameLogCmd::toString() const { return this->cmd; }
-

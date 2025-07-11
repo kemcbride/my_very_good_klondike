@@ -1,18 +1,18 @@
 #ifndef DECK_H
 #define DECK_H
 
-#include <algorithm> // random_shuffle
-#include <random> // random_device / mt19937
+#include <algorithm>  // random_shuffle
+#include <random>     // random_device / mt19937
 #include <vector>
 
 #include "card.h"
 
 class Deck {
-private:
+ private:
   int current_idx;
   std::mt19937 generator;
 
-public:
+ public:
   std::vector<Card> cards;
 
   Deck(std::mt19937 generator);
@@ -25,4 +25,4 @@ public:
   void reset_index();
 };
 
-#endif // DECK_H
+#endif  // DECK_H

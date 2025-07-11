@@ -45,22 +45,20 @@ Run::Run(Run r, unsigned int i) {
 bool Run::isRevealed() { return this->revealed; }
 
 vector<Card> Run::view() {
-  if (this->isRevealed())
-    return this->cards;
+  if (this->isRevealed()) return this->cards;
 
   vector<Card> empty_none_revealed;
   return empty_none_revealed;
 }
 
 optional<Card> Run::peek() {
-  if (this->cards.size() == 0)
-    return nullopt;
+  if (this->cards.size() == 0) return nullopt;
   return this->cards.back();
 }
 
 Run Run::take(unsigned int n) {
   if (n > this->cards.size())
-    n = this->cards.size(); // I'll only give you up to what I can
+    n = this->cards.size();  // I'll only give you up to what I can
 
   auto start = this->cards.cend() - n;
   auto end = this->cards.cend();
@@ -88,8 +86,7 @@ void Run::put(vector<Card> cards) {
 }
 
 void Run::put(Card c) {
-  if (!this->canAdd(c))
-    throw runtime_error("doesnt satisfy run constraints");
+  if (!this->canAdd(c)) throw runtime_error("doesnt satisfy run constraints");
 
   this->cards.push_back(c);
 }
@@ -135,8 +132,7 @@ string Run::toString() {
   if (this->isRevealed()) {
     for (unsigned int i = 0; i < this->cards.size(); ++i) {
       card_str += cards.at(i).toString();
-      if (!(i == this->cards.size() - 1))
-        card_str += ",";
+      if (!(i == this->cards.size() - 1)) card_str += ",";
     }
   } else {
     card_str = GREENSTR + "X" + RESETSTR;

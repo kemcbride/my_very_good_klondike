@@ -2,18 +2,18 @@
 #define BOARD_H
 
 #include <chrono>
+#include <iomanip>
+#include <numeric>
 #include <optional>
 #include <set>
-#include <vector>
-#include <numeric>
-#include <iomanip>
 #include <sstream>
+#include <vector>
 
+#include "command.h"
 #include "deck.h"
 #include "foundation.h"
 #include "location.h"
 #include "move.h"
-#include "command.h"
 #include "move_cmd.h"
 #include "pile.h"
 #include "run.h"
@@ -30,12 +30,13 @@
 using namespace solitaire;
 
 class Board {
-private:
+ private:
   bool is_solved = false;
   bool is_stuck = false;
   bool is_cleared = false;
   bool show_labels = false;
-  bool auto_solve; // for defaults of these, see the gflag definitions in solitaire.cpp
+  bool auto_solve;  // for defaults of these, see the gflag definitions in
+                    // solitaire.cpp
   bool auto_reveal;
   bool recycle_penalty;
 
@@ -48,23 +49,23 @@ private:
   std::chrono::time_point<std::chrono::system_clock> game_start;
   std::chrono::time_point<std::chrono::system_clock> game_end;
 
-  bool foundationsFull(); // check if all foundations are "full" ie. size 13
-  bool isSolved(); // check if the game is "Solved"/"Won"
-  bool isStuck();  // check if the game is "Stuck"/"Lost"
-  bool isCleared();  // check if the game is "Cleared"/"Finished"
+  bool foundationsFull();  // check if all foundations are "full" ie. size 13
+  bool isSolved();         // check if the game is "Solved"/"Won"
+  bool isStuck();          // check if the game is "Stuck"/"Lost"
+  bool isCleared();        // check if the game is "Cleared"/"Finished"
   std::vector<Source> getAllSourcesButStock();
   std::vector<Dest> getAllDests();
-  std::vector<int> getAllCounts(Run); // return list of possible move sizes
+  std::vector<int> getAllCounts(Run);  // return list of possible move sizes
   std::vector<Move> allPossibleMoves();
   std::vector<Move> allLegalMoves();
   std::vector<std::string> allLegalCommands();
 
-  bool _move(Move); // private move execution logic
-  void _move_post_processing(); // check game state, etc.
+  bool _move(Move);              // private move execution logic
+  void _move_post_processing();  // check game state, etc.
   void reveal_top_runs();
-  void solve(); // if is_solved, run all moves to clear the board.
+  void solve();  // if is_solved, run all moves to clear the board.
 
-public:
+ public:
   Tableau tableau;
   Stock stock;
   std::vector<Foundation> foundations;
@@ -87,10 +88,10 @@ public:
   bool isMeaningful(Move);
   void move(Move);
   void move(MoveCmd);
-  bool trySolve(); // true if it has solved the game, false if it cannot
+  bool trySolve();  // true if it has solved the game, false if it cannot
 
-  Run getSourceRun(Source, unsigned int); // returns count-sized run (or less)
-  Run getDestRun(Dest);                   // returns empty or 1-card run
+  Run getSourceRun(Source, unsigned int);  // returns count-sized run (or less)
+  Run getDestRun(Dest);                    // returns empty or 1-card run
 };
 
-#endif // BOARD_H
+#endif  // BOARD_H

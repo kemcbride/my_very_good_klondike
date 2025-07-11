@@ -4,14 +4,11 @@
  * @kemcbride/ke2mcbri 2020 :o
  */
 
-
 #include "command.h"
 
 using namespace std;
 
-Command::Command(string cmd) : cmd(cmd) {};
-Command::~Command() {};
+Command::Command(string cmd) : cmd(cmd){};
+Command::~Command(){};
 
-const string Command::toString() const {
-  return this->cmd;
-}
+const string Command::toString() const { return this->cmd; }

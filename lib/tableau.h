@@ -8,10 +8,10 @@
 
 // The Tableau consists of 7 piles
 class Tableau {
-private:
+ private:
   bool show_labels = false;
 
-public:
+ public:
   Tableau() = delete;
   std::vector<Pile> piles;
 
@@ -24,4 +24,4 @@ public:
   bool isEmpty();
 };
 
-#endif // TABLEAU_H
+#endif  // TABLEAU_H

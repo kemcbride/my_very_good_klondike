@@ -4,30 +4,30 @@
 #include <string>
 
 class Location {
-private:
+ private:
   Location() = delete;
 
-public:
-  int idx = 0; // 0-offset index into list of piles or foundations
+ public:
+  int idx = 0;  // 0-offset index into list of piles or foundations
   char type = 'p';
   Location(char, int);
   std::string toString();
 };
 
 class Source : public Location {
-private:
+ private:
   Source() = delete;
 
-public:
+ public:
   Source(char, int);
 };
 
 class Dest : public Location {
-private:
+ private:
   Dest() = delete;
 
-public:
+ public:
   Dest(char, int);
 };
 
-#endif // LOCATION_H
+#endif  // LOCATION_H

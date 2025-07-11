@@ -1,3 +1,5 @@
+#include "lib/card.h"
+
 #include <gtest/gtest.h>
 
 #include <cstdlib>
@@ -7,12 +9,10 @@
 #include <ranges>
 #include <string>
 
-#include "lib/card.h"
-
 using namespace std;
 
 TEST(CardTest, Suit) {
-  // Because suits is an enum, you can technically just pass in ints - 
+  // Because suits is an enum, you can technically just pass in ints -
   // but ints outside of 0-3 are all invalid.
   EXPECT_THROW(Suit(-1), std::exception);
   EXPECT_THROW(Suit(4), std::exception);

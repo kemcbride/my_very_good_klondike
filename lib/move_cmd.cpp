@@ -25,7 +25,9 @@ MoveCmd MoveCmd::create() {
 }
 
 MoveCmd::MoveCmd(string str)
-    : cmd(str), source(this->parseSource(str)), dest(this->parseDest(str)),
+    : cmd(str),
+      source(this->parseSource(str)),
+      dest(this->parseDest(str)),
       count(this->parseCount(str)) {}
 
 MoveCmd::MoveCmd(char s, int s_idx, char d, int d_idx, int count)
@@ -46,19 +48,19 @@ Source MoveCmd::parseSource(string str) {
   char type = 's';
   int idx = 0;
 
-  if (source[0] == 'p') { // pile
+  if (source[0] == 'p') {  // pile
     if (!(validatePile(source))) {
       throw runtime_error("Invalid source: " + source);
     }
     type = 'p';
     idx = char_to_int(source[1]) - 1;
-  } else if (source[0] == 'f') { // foundation
+  } else if (source[0] == 'f') {  // foundation
     if (!validateFdn(source)) {
       throw runtime_error("Invalid source: " + source);
     }
     type = 'f';
     idx = char_to_int(source[1]) - 1;
-  } else { // stock
+  } else {  // stock
     type = 's';
   }
   return Source(type, idx);
@@ -95,12 +97,10 @@ int MoveCmd::parseCount(string str) {
   string second_half = string(str, str.find(" ") + 1, str.size());
   string count_part = string(second_half, 0, str.find(" "));
   // if we call this in initializer list; must support non-p answeers
-  if (str[0] != 'p')
-    return 1;
+  if (str[0] != 'p') return 1;
 
   int c = stoi(count_part);
-  if (c < 0 || c > 13)
-    throw runtime_error("Invalid count: " + count_part);
+  if (c < 0 || c > 13) throw runtime_error("Invalid count: " + count_part);
 
   return c;
 }

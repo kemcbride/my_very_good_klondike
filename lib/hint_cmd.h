@@ -7,14 +7,14 @@
 #include "move.h"
 
 class HintCmd : public Command {
-private:
+ private:
   HintCmd() = delete;
   std::string cmd;
 
-public:
+ public:
   HintCmd(std::string);
   HintCmd(Move);
   const std::string toString() const;
 };
 
-#endif // HINT_CMD_H
+#endif  // HINT_CMD_H

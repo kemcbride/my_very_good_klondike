@@ -12,21 +12,21 @@ using namespace std;
 
 std::ostream &operator<<(std::ostream &os, suits s) {
   switch (s) {
-    // ♠  ♥  ♣  ♢  ♦
-  case clubs:
-    os << "♣";
-    break;
-  case spades:
-    os << "♠";
-    break;
-  case hearts:
-    os << "♥";
-    break;
-  case diamonds:
-    os << "♦";
-    break;
-  default:
-    os.setstate(std::ios_base::failbit);
+      // ♠  ♥  ♣  ♢  ♦
+    case clubs:
+      os << "♣";
+      break;
+    case spades:
+      os << "♠";
+      break;
+    case hearts:
+      os << "♥";
+      break;
+    case diamonds:
+      os << "♦";
+      break;
+    default:
+      os.setstate(std::ios_base::failbit);
   }
   return os;
 };
@@ -34,13 +34,12 @@ static const char *EnumStrings[] = {"♣", "♠", "♥", "♦"};
 const char *suitStr(int enumVal) { return EnumStrings[enumVal]; }
 
 // Suit
-Suit::Suit() : s(spades) {};
-Suit::Suit(unsigned int i) : s(SuitEnumList.at(i)) {};
-Suit::Suit(suits su) : s(su) {};
+Suit::Suit() : s(spades){};
+Suit::Suit(unsigned int i) : s(SuitEnumList.at(i)){};
+Suit::Suit(suits su) : s(su){};
 
 colors Suit::getColor() {
-  if (this->s == spades || this->s == clubs)
-    return black;
+  if (this->s == spades || this->s == clubs) return black;
   return red;
 };
 suits Suit::getSuit() { return this->s; };
@@ -74,21 +73,21 @@ string Rank::toString() {
   int val = this->getValue();
   string str;
   switch (val) {
-  case 1:
-    str = "A";
-    break;
-  case 11:
-    str = "J";
-    break;
-  case 12:
-    str = "Q";
-    break;
-  case 13:
-    str = "K";
-    break;
-  default:
-    str = to_string(val);
-    break;
+    case 1:
+      str = "A";
+      break;
+    case 11:
+      str = "J";
+      break;
+    case 12:
+      str = "Q";
+      break;
+    case 13:
+      str = "K";
+      break;
+    default:
+      str = to_string(val);
+      break;
   }
   return str;
 }
@@ -121,9 +120,7 @@ string Card::toString() {
 ostream &operator<<(ostream &os, Card &obj) { return os << obj.toString(); };
 bool operator==(Card a, Card b) {
   return (a.getRank().getValue() == b.getRank().getValue() &&
-      a.getSuit().getSuit() == b.getSuit().getSuit());
+          a.getSuit().getSuit() == b.getSuit().getSuit());
 }
 
-bool operator!=(Card a, Card b) {
-  return !(a == b);
-}
+bool operator!=(Card a, Card b) { return !(a == b); }

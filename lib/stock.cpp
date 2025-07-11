@@ -49,7 +49,7 @@ optional<Card> Stock::pop() {
 
 bool Stock::next() {
   ++(this->index);
-  return this->update_index(); // reset it to 0 if necessary
+  return this->update_index();  // reset it to 0 if necessary
 }
 
 string Stock::toString() {

@@ -17,9 +17,12 @@ MAKEFLAGS += --jobs=$(CPUS)
 objects = card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o \
 	  command.o move_cmd.o hint_cmd.o move.o location.o
 
-.PHONY: all clean test
+.PHONY: all clean test tidy
 
 all: solitaire test_solitaire run
+
+clean:
+	rm -f *.o *.a solitaire
 
 run: solitaire
 	./solitaire play
@@ -27,8 +30,9 @@ run: solitaire
 test: test_gtest solitaire
 	./full_solve_tests.sh
 
-clean:
-	rm -f *.o *.a solitaire
+tidy:
+	clang-format -i bin/*.cpp lib/*.h lib/*.cpp test/*.cpp --style=google
+
 
 %.o: lib/%.cpp lib/%.h
 	$(CC) -o $@ -c $< $(CC_FLAGS)

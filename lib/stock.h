@@ -9,11 +9,11 @@
 
 // The stock in my world is a circular buffer that can pop elements
 class Stock {
-private:
+ private:
   unsigned int index;
-  bool update_index(); // did we have to reset to 0?
+  bool update_index();  // did we have to reset to 0?
 
-public:
+ public:
   Stock() = delete;
   std::vector<Card> cards;
 
@@ -21,7 +21,7 @@ public:
 
   std::optional<Card> peek();
   std::optional<Card> pop();
-  bool next(); // returns: did this move recycle the stock?
+  bool next();  // returns: did this move recycle the stock?
 
   std::string toString();
 };

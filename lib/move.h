@@ -11,11 +11,18 @@
 using namespace solitaire;
 
 enum MoveType {
-  STK2FDN, STK2TBL, TBL2FDN, FDN2TBL, TBL2TBL, REVEAL, RECYCLE, UNKNOWN
+  STK2FDN,
+  STK2TBL,
+  TBL2FDN,
+  FDN2TBL,
+  TBL2TBL,
+  REVEAL,
+  RECYCLE,
+  UNKNOWN
 };
 
 class Move {
-private:
+ private:
   Move() = delete;
   Run srcRun;
   Source srcLoc;
@@ -24,7 +31,7 @@ private:
   MoveType moveType;
   unsigned int count = 0;
 
-public:
+ public:
   Move(Run, Source, Run, Dest, unsigned int);
   MoveCmd toMoveCmd();
 
@@ -40,4 +47,4 @@ public:
 
 // To support set<Move>
 bool operator<(Move, Move);
-#endif // MOVE_H
+#endif  // MOVE_H

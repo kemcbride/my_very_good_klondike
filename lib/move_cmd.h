@@ -2,8 +2,8 @@
 #define MOVE_CMD_H
 
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #include "command.h"
 #include "location.h"
@@ -12,7 +12,7 @@
 int char_to_int(char);
 
 class MoveCmd : public Command {
-private:
+ private:
   MoveCmd() = delete;
   std::string cmd;
   Source source;
@@ -26,7 +26,7 @@ private:
   static bool validateFdn(std::string);
   static bool validatePile(std::string);
 
-public:
+ public:
   MoveCmd(std::string);
   MoveCmd(char, int, char, int, int);
   MoveCmd(Source, Dest, int);
@@ -40,4 +40,4 @@ public:
   const std::string toString() const;
 };
 
-#endif // MOVE_CMD_H
+#endif  // MOVE_CMD_H

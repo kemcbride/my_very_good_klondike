@@ -7,14 +7,13 @@
 #include "move.h"
 
 class GameLogCmd : public Command {
-private:
+ private:
   GameLogCmd() = delete;
   std::string cmd;
 
-public:
+ public:
   GameLogCmd(std::string);
   const std::string toString() const;
 };
 
-#endif // GAMELOG_CMD_H
-
+#endif  // GAMELOG_CMD_H

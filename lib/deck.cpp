@@ -9,7 +9,7 @@
 using namespace std;
 
 Deck::Deck(mt19937 g) {
-  this->sort(); // sets up the ->cards
+  this->sort();  // sets up the ->cards
   this->current_idx = 0;
   this->generator = g;
 }
@@ -21,8 +21,8 @@ void Deck::shuffle() {
 void Deck::sort() {
   // Assuming that the deck always contains the same 52 cards...
   vector<Card> sorted_deck;
-  for (int i = 0; i < 4; ++i) {    // suit
-    for (int j = 1; j < 14; ++j) { // rank
+  for (int i = 0; i < 4; ++i) {     // suit
+    for (int j = 1; j < 14; ++j) {  // rank
       sorted_deck.push_back(Card(j, i));
     }
   }

@@ -5,24 +5,29 @@
  * blahblahblah
  */
 
-#include "lib/board.h"
-#include "lib/deck.h"
-#include "lib/move_cmd.h"
+#include <gflags/gflags.h>
 
 #include <chrono>
 #include <iostream>
 #include <random>
 #include <ranges>
-#include <string>
 #include <sstream>
+#include <string>
 
-#include <gflags/gflags.h>
+#include "lib/board.h"
+#include "lib/deck.h"
+#include "lib/move_cmd.h"
 
 using namespace std;
 
-DEFINE_bool(autoreveal, true, "Newly revealed cards will be flipped for the player automatically");
-DEFINE_bool(autosolve, true, "Once all cards are revealed, the game will auto-solve itself for the player");
-DEFINE_bool(recycle_penalty, false, "-100 pts for each full cycle through the stock");
+DEFINE_bool(
+    autoreveal, true,
+    "Newly revealed cards will be flipped for the player automatically");
+DEFINE_bool(autosolve, true,
+            "Once all cards are revealed, the game will auto-solve itself for "
+            "the player");
+DEFINE_bool(recycle_penalty, false,
+            "-100 pts for each full cycle through the stock");
 
 vector<string> game_log;
 
@@ -45,9 +50,11 @@ string game_help() {
   helpstr += "* t, toggle: toggle board labels\n";
   helpstr += "* b, board: print the board\n";
   helpstr += "* n, next: go to next card in stock\n";
-  helpstr += "* i, hint: print a possible move. cycles through possible moves\n";
+  helpstr +=
+      "* i, hint: print a possible move. cycles through possible moves\n";
   helpstr += "* score: print current score\n";
-  helpstr += "* solve: solve the current game, if all cards have been revealed\n";
+  helpstr +=
+      "* solve: solve the current game, if all cards have been revealed\n";
   helpstr +=
       "* m, move: move <s><#> <d> - attempt to move # cards from s to d\n";
   helpstr +=
@@ -151,7 +158,6 @@ int main(int argc, char **argv) {
   if (argc == 1) {
     cout << program_help() << endl;
   } else if (argc > 1) {
-
     string cmd = argv[1];
     if (cmd == "help") {
       cout << program_help() << endl;

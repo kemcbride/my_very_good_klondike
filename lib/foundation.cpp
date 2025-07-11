@@ -29,8 +29,7 @@ optional<Card> Foundation::pop() {
   this->cards.pop_back();
 
   // Reset the suit of the fdn if it becomes empty!
-  if (this->cards.empty())
-    this->suit = nullopt;
+  if (this->cards.empty()) this->suit = nullopt;
   return c;
 }
 
@@ -47,8 +46,7 @@ bool Foundation::canPush(Card c) {
     return true;
   } else if (this->hasSuit() && c.getSuit() == this->getSuit()) {
     Card top = this->peek().value();
-    if (c.getRank().getValue() == top.getRank() + 1)
-      return true;
+    if (c.getRank().getValue() == top.getRank() + 1) return true;
   }
   return false;
 }
@@ -68,9 +66,7 @@ void Foundation::push(Card c) {
   }
 }
 
-bool Foundation::isFull() {
-  return (this->cards.size() == 13);
-}
+bool Foundation::isFull() { return (this->cards.size() == 13); }
 
 string Foundation::toString() {
   string card_str;

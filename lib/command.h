@@ -4,10 +4,10 @@
 #include <string>
 
 class Command {
-private:
+ private:
   std::string cmd;
 
-public:
+ public:
   Command() = default;
   Command(std::string);
   virtual ~Command() = 0;
@@ -15,4 +15,4 @@ public:
   const std::string virtual toString() const;
 };
 
-#endif // CMD_H
+#endif  // CMD_H
