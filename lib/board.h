@@ -42,7 +42,7 @@ private:
   std::vector<Move> legal_moves;
   std::vector<std::string> legal_commands;
 
-  int hint_idx = 0;
+  size_t hint_idx = 0;
   int score = 0;
 
   std::chrono::time_point<std::chrono::system_clock> game_start;
