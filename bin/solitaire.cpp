@@ -13,6 +13,7 @@
 #include <iostream>
 #include <random>
 #include <string>
+#include <sstream>
 
 #include <gflags/gflags.h>
 
@@ -163,8 +164,13 @@ int main(int argc, char **argv) {
       cout << program_help() << endl;
     } else if (cmd == "play") {
       if (argc >= 3) {
-        // if extra arg provided, use as seed. single character only.. -_-
-        int seed = char_to_int(argv[2][0]);
+        int seed;
+        istringstream ss(argv[2]);
+        if (!(ss >> seed)) {
+          cerr << "Invalid seed: " << argv[2] << endl;
+        } else if (!ss.eof()) {
+          cerr << "Trailing characters after seed: " << argv[2] << endl;
+        }
         g = std::mt19937(seed);
       }
       play(g);
