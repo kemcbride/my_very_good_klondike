@@ -14,8 +14,10 @@ GTEST_SRCS_ = $(GTEST_SRCDIR)/src/*.cc $(GTEST_SRCDIR)/src/*.h $(GTEST_HEADERS)
 CPUS ?= $(shell (nproc --all || sysctl -n hw.ncpu) 2>/dev/null || echo 1)
 MAKEFLAGS += --jobs=$(CPUS)
 
-objects = card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o \
-	  command.o move_cmd.o hint_cmd.o move.o location.o
+objects = objects/dbg/card.o objects/dbg/deck.o objects/dbg/pile.o objects/dbg/run.o \
+	  objects/dbg/foundation.o objects/dbg/stock.o objects/dbg/tableau.o objects/dbg/board.o \
+	  objects/dbg/command.o objects/dbg/move_cmd.o objects/dbg/hint_cmd.o \
+	  objects/dbg/move.o objects/dbg/location.o
 
 prof_objects = objects/prof/card.o objects/prof/deck.o objects/prof/pile.o \
 	  objects/prof/run.o objects/prof/foundation.o objects/prof/stock.o \
@@ -35,20 +37,20 @@ opt_objects = objects/opt/card.o objects/opt/deck.o objects/opt/pile.o \
 all: solitaire test_solitaire run
 
 clean:
-	rm -f *.o *.a objects/**/*.o solitaire gtest opt_solitaire prof_solitaire \
+	rm -f *.o *.a objects/**/*.o solitaire gtest dbg_solitaire prof_solitaire \
 		gprof.out gmon.out
 
 run: solitaire
 	./solitaire play
 
-test: test_gtest solitaire opt_solitaire
+test: test_gtest dbg_solitaire solitaire
 	./full_solve_tests.sh
 
 tidy:
 	clang-format -i bin/*.cpp lib/*.h lib/*.cpp test/*.cpp --style=google
 
 
-%.o: lib/%.cpp lib/%.h
+objects/dbg/%.o: lib/%.cpp lib/%.h
 	$(CC) -o $@ -c $< $(CC_FLAGS)
 
 objects/prof/%.o: lib/%.cpp lib/%.h
@@ -57,11 +59,11 @@ objects/prof/%.o: lib/%.cpp lib/%.h
 objects/opt/%.o: lib/%.cpp lib/%.h
 	$(CC) -o $@ -c $< $(CC_FLAGS) -O3
 
-solitaire: bin/solitaire.cpp $(objects)
-	$(CC) $(objects) -g -lgflags $(CC_FLAGS) -o solitaire bin/solitaire.cpp
+dbg_solitaire: bin/solitaire.cpp $(objects)
+	$(CC) $(objects) -g -lgflags $(CC_FLAGS) -o dbg_solitaire bin/solitaire.cpp
 
-opt_solitaire: bin/solitaire.cpp $(opt_objects)
-	$(CC) $(opt_objects) -O3 -lgflags $(CC_FLAGS) -o opt_solitaire bin/solitaire.cpp
+solitaire: bin/solitaire.cpp $(opt_objects)
+	$(CC) $(opt_objects) -O3 -lgflags $(CC_FLAGS) -o solitaire bin/solitaire.cpp
 
 prof_solitaire: bin/solitaire.cpp $(prof_objects)
 	$(CC) $(prof_objects) -g -pg -lgflags $(CC_FLAGS) -o prof_solitaire bin/solitaire.cpp

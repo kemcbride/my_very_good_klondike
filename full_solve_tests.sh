@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # kill the process if it doesn't finish within 1 s - usually i see ~0.4s
 # Above is no longer true since the implementation of the hint command.
-NONOPT_TIMEOUT_LIMIT=120
+DBG_TIMEOUT_LIMIT=120
 OPT_TIMEOUT_LIMIT=10
 
 function e2e_test () {
@@ -22,10 +22,10 @@ function e2e_test () {
   return $TIMEOUT_RESULT
 }
 
-e2e_test ./solitaire $NONOPT_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
+e2e_test ./dbg_solitaire $DBG_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
 
-e2e_test ./solitaire $NONOPT_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
+e2e_test ./dbg_solitaire $DBG_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
 
-e2e_test ./opt_solitaire $OPT_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
+e2e_test ./solitaire $OPT_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
 
-e2e_test ./opt_solitaire $OPT_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
+e2e_test ./solitaire $OPT_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
