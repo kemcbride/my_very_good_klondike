@@ -46,7 +46,8 @@ string game_help() {
   helpstr += "* x, exit: quit the game\n";
   helpstr += "* h, help: print this help\n";
   helpstr += "* l, log: print out all commands you've given so far\n";
-  helpstr += "* r, restart: restart and deal a new game\n";
+  helpstr += "* r, restart: restart and re-deal the game\n";
+  helpstr += "* g, newgame: deal a new game\n";
   helpstr += "* t, toggle: toggle board labels\n";
   helpstr += "* b, board: print the board\n";
   helpstr += "* n, next: go to next card in stock\n";
@@ -71,6 +72,8 @@ bool is_gamelog(string str) { return (str == "log" || str == "l"); }
 
 bool is_restart(string str) { return (str == "restart" || str == "r"); }
 
+bool is_newgame(string str) { return (str == "newgame" || str == "g"); }
+
 bool is_toggle(string str) { return (str == "toggle" || str == "t"); }
 
 bool is_next(string str) { return (str == "next" || str == "n"); }
@@ -86,17 +89,12 @@ bool is_move(string str) {
   return (first_bit == "move" || first_bit == "m");
 }
 
-Board new_game(mt19937 generator) {
-  Deck d(generator);
-  d.shuffle();
-  Board b(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
-  return b;
-}
-
 int play(mt19937 generator) {
   cout << "Welcome to the game! (h=help, x=exit, b=show board)" << endl;
 
-  Board b = new_game(generator);
+  Deck d(generator);
+  d.shuffle();
+  Board b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
 
   cout << "cmd: ";
   string cmd;
@@ -110,8 +108,15 @@ int play(mt19937 generator) {
         cout << line << "\n";
       }
     } else if (is_restart(cmd)) {
+      // Note - the intent here is to preserve the last shuffle, so you can replay the game you just played.
       cout << "Restarting the game." << endl;
-      b = new_game(generator);
+      d.reset_index();
+      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
+    } else if (is_newgame(cmd)) {
+      cout << "Dealing a new game" << endl;
+      d.shuffle();
+      d.reset_index();
+      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
     } else if (is_toggle(cmd)) {
       b.toggleLabels();
     } else if (is_next(cmd)) {

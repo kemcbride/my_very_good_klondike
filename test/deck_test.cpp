@@ -40,3 +40,22 @@ TEST(DeckTest, Basics) {
   // vector with negative size.
   EXPECT_THROW(d.draw(-1), std::exception);
 }
+
+TEST(DeckTest, ShuffleConsistency) {
+  // This test is aimed particularly at showing
+  // that shuffle is actually yielding a different
+  // order of cards.
+  std::random_device rd;
+  std::mt19937 g(rd());
+
+  Deck d(g);
+  d.shuffle();
+
+  vector<Card> d1 = d.draw(1);
+
+  d.shuffle();
+  d.reset_index();
+  vector<Card> d2 = d.draw(1);
+
+  EXPECT_NE(d1.at(0), d2.at(0));
+}
