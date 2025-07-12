@@ -41,7 +41,7 @@ clean:
 run: solitaire
 	./solitaire play
 
-test: test_gtest solitaire
+test: test_gtest solitaire opt_solitaire
 	./full_solve_tests.sh
 
 tidy:
