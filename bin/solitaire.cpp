@@ -26,7 +26,7 @@ DEFINE_bool(
 DEFINE_bool(autosolve, true,
             "Once all cards are revealed, the game will auto-solve itself for "
             "the player");
-DEFINE_bool(recycle_penalty, false,
+DEFINE_bool(recycle_penalty_enabled, true,
             "-100 pts for each full cycle through the stock");
 
 vector<string> game_log;
@@ -94,7 +94,7 @@ int play(mt19937 generator) {
 
   Deck d(generator);
   d.shuffle();
-  Board b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
+  Board b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty_enabled);
 
   cout << "cmd: ";
   string cmd;
@@ -112,12 +112,12 @@ int play(mt19937 generator) {
       // replay the game you just played.
       cout << "Restarting the game." << endl;
       d.reset_index();
-      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
+      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty_enabled);
     } else if (is_newgame(cmd)) {
       cout << "Dealing a new game" << endl;
       d.shuffle();
       d.reset_index();
-      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
+      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty_enabled);
     } else if (is_toggle(cmd)) {
       b.toggleLabels();
     } else if (is_next(cmd)) {

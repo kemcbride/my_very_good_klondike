@@ -61,10 +61,10 @@ string prettyprint_duration(chrono::milliseconds dur) {
   return ss.str();
 }
 
-Board::Board(Deck &d, bool auto_solve, bool auto_reveal, bool recycle_penalty)
+Board::Board(Deck &d, bool auto_solve, bool auto_reveal, bool recycle_penalty_enabled)
     : auto_solve(auto_solve),
       auto_reveal(auto_reveal),
-      recycle_penalty(recycle_penalty),
+      recycle_penalty_enabled(recycle_penalty_enabled),
       game_start(chrono::system_clock::now()),
       tableau(d),
       stock(d) {
@@ -123,8 +123,8 @@ void Board::next() {
   // Note: we call isStuck after updating the stock to ensure that
   // we are populating with moves for the new stock, not the previous stock
   bool recycled = this->stock.next();
-  if (this->recycle_penalty && recycled)
-    this->score = std::max(0, this->score - 100);
+  if (this->recycle_penalty_enabled && recycled)
+    this->score = std::max(0, this->score + RECYCLE_STOCK_VALUE);
   this->is_stuck = this->isStuck();
 }
 

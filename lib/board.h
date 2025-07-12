@@ -38,7 +38,7 @@ class Board {
   bool auto_solve;  // for defaults of these, see the gflag definitions in
                     // solitaire.cpp
   bool auto_reveal;
-  bool recycle_penalty;
+  bool recycle_penalty_enabled;
 
   std::vector<Move> legal_moves;
   std::vector<std::string> legal_commands;
