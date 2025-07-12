@@ -137,7 +137,7 @@ int play(mt19937 generator) {
       try {
         MoveCmd m_cmd = MoveCmd::create();
         b.move(m_cmd);
-	cmd = cmd + " " + m_cmd.toString();
+        cmd = cmd + " " + m_cmd.toString();
       } catch (runtime_error &e) {
         cerr << e.what() << endl;
       } catch (invalid_argument &e) {

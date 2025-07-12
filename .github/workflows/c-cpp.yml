@@ -17,10 +17,10 @@ jobs:
         submodules: recursive
     - name: install deps
       run: sudo apt install libgflags-dev libgtest-dev libc++-dev
+    - name: prep dirs
+      run: mkdir -p objects/dbg objects/opt
     - name: make solitaire
       run: make solitaire
-    - name: prep test
-      run: mkdir -p objects/dbg
     - name: make test
       run: make test
 
