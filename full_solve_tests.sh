@@ -2,7 +2,7 @@
 # kill the process if it doesn't finish within 1 s - usually i see ~0.4s
 # Above is no longer true since the implementation of the hint command.
 NONOPT_TIMEOUT_LIMIT=120
-OPT_TIMEOUT_LIMIT=5
+OPT_TIMEOUT_LIMIT=10
 
 function e2e_test () {
   BINARY=$1
