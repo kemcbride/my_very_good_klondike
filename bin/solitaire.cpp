@@ -108,7 +108,8 @@ int play(mt19937 generator) {
         cout << line << "\n";
       }
     } else if (is_restart(cmd)) {
-      // Note - the intent here is to preserve the last shuffle, so you can replay the game you just played.
+      // Note - the intent here is to preserve the last shuffle, so you can
+      // replay the game you just played.
       cout << "Restarting the game." << endl;
       d.reset_index();
       b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty);
