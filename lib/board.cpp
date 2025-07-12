@@ -364,15 +364,15 @@ vector<Move> Board::allPossibleMoves() {
   vector<Source> all_sources = this->getAllSourcesButStock();
   vector<Dest> all_dests = this->getAllDests();
 
-  for (auto s : all_sources) {
-    for (auto d : all_dests) {
+  for (auto const & s : all_sources) {
+    for (auto const & d : all_dests) {
       // In order to figure out how many different moves we can do from this
       // source, to this dest, we need to know how many cards there are in the
       // run
       if (s.type == 'p') {
-        Pile p = this->tableau.piles.at(s.idx);
+        const Pile& p = this->tableau.piles.at(s.idx);
         if (!p.runs.empty()) {
-          Run r = p.runs.back();
+          const Run& r = p.runs.back();
           if (!r.cards.empty()) {
             for (auto i : this->getAllCounts(r)) {
               Run srcRun = this->getSourceRun(s, i);
@@ -382,19 +382,19 @@ vector<Move> Board::allPossibleMoves() {
           }
         }
       } else if (s.type == 'f') {
-        Foundation f = this->foundations.at(s.idx);
+        Foundation& f = this->foundations.at(s.idx);
         if (!f.cards.empty()) {
-          Run srcRun = f.peek().value();
-          Run dstRun = this->getDestRun(d);
+          const Run& srcRun = f.peek().value();
+          const Run& dstRun = this->getDestRun(d);
           moves.push_back(Move(srcRun, s, dstRun, d, 1));
         }
       }
     }
   }
-  for (auto c : this->stock.cards) {
-    Run srcRun = Run(c);
-    for (auto d : all_dests) {
-      Run dstRun = this->getDestRun(d);
+  for (auto& c : this->stock.cards) {
+    const Run& srcRun = Run(c);
+    for (auto& d : all_dests) {
+      const Run& dstRun = this->getDestRun(d);
       moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
     }
   }

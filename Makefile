@@ -16,11 +16,18 @@ MAKEFLAGS += --jobs=$(CPUS)
 
 objects = card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o \
 	  command.o move_cmd.o hint_cmd.o move.o location.o
+
 prof_objects = objects/prof/card.o objects/prof/deck.o objects/prof/pile.o \
 	  objects/prof/run.o objects/prof/foundation.o objects/prof/stock.o \
 		objects/prof/tableau.o objects/prof/board.o objects/prof/command.o \
 		objects/prof/move_cmd.o objects/prof/hint_cmd.o objects/prof/move.o \
 		objects/prof/location.o
+
+opt_objects = objects/opt/card.o objects/opt/deck.o objects/opt/pile.o \
+	  objects/opt/run.o objects/opt/foundation.o objects/opt/stock.o \
+		objects/opt/tableau.o objects/opt/board.o objects/opt/command.o \
+		objects/opt/move_cmd.o objects/opt/hint_cmd.o objects/opt/move.o \
+		objects/opt/location.o
 
 
 .PHONY: all clean test tidy profile
@@ -47,11 +54,14 @@ tidy:
 objects/prof/%.o: lib/%.cpp lib/%.h
 	$(CC) -o $@ -c $< $(CC_FLAGS) -pg
 
+objects/opt/%.o: lib/%.cpp lib/%.h
+	$(CC) -o $@ -c $< $(CC_FLAGS) -O3
+
 solitaire: bin/solitaire.cpp $(objects)
 	$(CC) $(objects) -g -lgflags $(CC_FLAGS) -o solitaire bin/solitaire.cpp
 
-opt_solitaire: bin/solitaire.cpp $(objects)
-	$(CC) $(objects) -O3 -lgflags $(CC_FLAGS) -o opt_solitaire bin/solitaire.cpp
+opt_solitaire: bin/solitaire.cpp $(opt_objects)
+	$(CC) $(opt_objects) -O3 -lgflags $(CC_FLAGS) -o opt_solitaire bin/solitaire.cpp
 
 prof_solitaire: bin/solitaire.cpp $(prof_objects)
 	$(CC) $(prof_objects) -g -pg -lgflags $(CC_FLAGS) -o prof_solitaire bin/solitaire.cpp
