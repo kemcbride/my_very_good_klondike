@@ -57,5 +57,6 @@ TEST(DeckTest, ShuffleConsistency) {
   d.reset_index();
   vector<Card> d2 = d.draw(1);
 
+  cerr << d1.at(0) << ", " << d2.at(0) << endl;
   EXPECT_NE(d1.at(0), d2.at(0));
 }
