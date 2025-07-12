@@ -1,6 +1,6 @@
 CC=clang++
 CXX=clang++
-CC_FLAGS=-Wall -Wextra -pthread -g -I. --std=c++20 -stdlib=libc++
+CC_FLAGS=-Wall -Wextra -pthread -I. --std=c++20 -stdlib=libc++
 # On osx using homebrew, may need to add to CC_FLAGS:
 # -I$(shell (brew --prefix))/include -L$(shell (brew --prefix))/lib
 
@@ -16,13 +16,20 @@ MAKEFLAGS += --jobs=$(CPUS)
 
 objects = card.o deck.o pile.o run.o foundation.o stock.o tableau.o board.o \
 	  command.o move_cmd.o hint_cmd.o move.o location.o
+prof_objects = objects/prof/card.o objects/prof/deck.o objects/prof/pile.o \
+	  objects/prof/run.o objects/prof/foundation.o objects/prof/stock.o \
+		objects/prof/tableau.o objects/prof/board.o objects/prof/command.o \
+		objects/prof/move_cmd.o objects/prof/hint_cmd.o objects/prof/move.o \
+		objects/prof/location.o
 
-.PHONY: all clean test tidy
+
+.PHONY: all clean test tidy profile
 
 all: solitaire test_solitaire run
 
 clean:
-	rm -f *.o *.a solitaire
+	rm -f *.o *.a objects/**/*.o solitaire gtest opt_solitaire prof_solitaire \
+		gprof.out gmon.out
 
 run: solitaire
 	./solitaire play
@@ -37,8 +44,17 @@ tidy:
 %.o: lib/%.cpp lib/%.h
 	$(CC) -o $@ -c $< $(CC_FLAGS)
 
+objects/prof/%.o: lib/%.cpp lib/%.h
+	$(CC) -o $@ -c $< $(CC_FLAGS) -pg
+
 solitaire: bin/solitaire.cpp $(objects)
-	$(CC) $(objects) -lgflags $(CC_FLAGS) -o solitaire bin/solitaire.cpp
+	$(CC) $(objects) -g -lgflags $(CC_FLAGS) -o solitaire bin/solitaire.cpp
+
+opt_solitaire: bin/solitaire.cpp $(objects)
+	$(CC) $(objects) -O3 -lgflags $(CC_FLAGS) -o opt_solitaire bin/solitaire.cpp
+
+prof_solitaire: bin/solitaire.cpp $(prof_objects)
+	$(CC) $(prof_objects) -g -pg -lgflags $(CC_FLAGS) -o prof_solitaire bin/solitaire.cpp
 
 test_gtest: gtest
 	./gtest
@@ -54,6 +70,10 @@ test/deck_test.o: test/deck_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
 
 gtest: test/card_test.o test/deck_test.o test/gtest_solitaire_test.o gtest_main.a $(objects)
 	$(CC) $(CC_FLAGS) -lpthread $^ -o gtest
+
+profile: prof_solitaire
+	./prof_solitaire play 4 < inputs/seed4_another_input.txt
+	gprof ./prof_solitaire > gprof.out
 
 
 
