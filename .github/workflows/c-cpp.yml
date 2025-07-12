@@ -19,6 +19,8 @@ jobs:
       run: sudo apt install libgflags-dev libgtest-dev libc++-dev
     - name: make solitaire
       run: make solitaire
+    - name: prep test
+      run: mkdir -p objects/opt
     - name: make test
       run: make test
 
