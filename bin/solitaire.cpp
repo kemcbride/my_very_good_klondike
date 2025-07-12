@@ -94,7 +94,8 @@ int play(mt19937 generator) {
 
   Deck d(generator);
   d.shuffle();
-  Board b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty_enabled);
+  Board b = Board(d, FLAGS_autosolve, FLAGS_autoreveal,
+                  FLAGS_recycle_penalty_enabled);
 
   cout << "cmd: ";
   string cmd;
@@ -112,12 +113,14 @@ int play(mt19937 generator) {
       // replay the game you just played.
       cout << "Restarting the game." << endl;
       d.reset_index();
-      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty_enabled);
+      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal,
+                FLAGS_recycle_penalty_enabled);
     } else if (is_newgame(cmd)) {
       cout << "Dealing a new game" << endl;
       d.shuffle();
       d.reset_index();
-      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal, FLAGS_recycle_penalty_enabled);
+      b = Board(d, FLAGS_autosolve, FLAGS_autoreveal,
+                FLAGS_recycle_penalty_enabled);
     } else if (is_toggle(cmd)) {
       b.toggleLabels();
     } else if (is_next(cmd)) {

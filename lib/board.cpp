@@ -61,7 +61,8 @@ string prettyprint_duration(chrono::milliseconds dur) {
   return ss.str();
 }
 
-Board::Board(Deck &d, bool auto_solve, bool auto_reveal, bool recycle_penalty_enabled)
+Board::Board(Deck &d, bool auto_solve, bool auto_reveal,
+             bool recycle_penalty_enabled)
     : auto_solve(auto_solve),
       auto_reveal(auto_reveal),
       recycle_penalty_enabled(recycle_penalty_enabled),
