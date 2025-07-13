@@ -1,6 +1,8 @@
 # My Very Good Solitaire Project
 
 
+[![C/C++ CI](https://github.com/kemcbride/my_very_good_klondike/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/kemcbride/my_very_good_klondike/actions/workflows/c-cpp.yml)
+
 ## How to build & run
 
 This project uses Make and clang++ with C++17 standards (I use std::optional).
