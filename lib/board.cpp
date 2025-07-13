@@ -326,30 +326,35 @@ void Board::_move_post_processing() {
   }
 }
 
-vector<Source> Board::getAllSourcesButStock() {
-  vector<Source> all_sources;
+set<Source> Board::getAllSourcesButStock() {
+  set<Source> all_sources;
   for (unsigned int i = 0; i < this->foundations.size(); ++i) {
     // It's only a valid source if there are some cards there.
     Foundation f = this->foundations.at(i);
-    if (!f.cards.empty()) all_sources.push_back(Source('f', i));
+    if (!f.cards.empty()) all_sources.insert(Source('f', i));
   }
   for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
     // It's only a valid source if there are some cards there.
     Pile p = this->tableau.piles.at(i);
-    if (!p.runs.empty()) all_sources.push_back(Source('p', i));
+    if (!p.runs.empty()) all_sources.insert(Source('p', i));
   }
   return all_sources;
 }
 
-vector<Dest> Board::getAllDests() {
-  vector<Dest> all_dests;
-  for (unsigned int i = 0; i < this->foundations.size(); ++i) {
-    all_dests.push_back(Dest('f', i));
+set<Dest> Board::getAllDests() {
+  // Because this just always returns every possible dest,
+  // just memoize it and save the cycles.
+  if (allDests.empty()) {
+    set<Dest> all_dests;
+    for (unsigned int i = 0; i < this->foundations.size(); ++i) {
+      all_dests.insert(Dest('f', i));
+    }
+    for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
+      all_dests.insert(Dest('p', i));
+    }
+    allDests = all_dests;
   }
-  for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
-    all_dests.push_back(Dest('p', i));
-  }
-  return all_dests;
+  return allDests;
 }
 
 vector<int> Board::getAllCounts(Run r) {
@@ -362,11 +367,11 @@ vector<Move> Board::allPossibleMoves() {
   vector<Move> moves;
 
   Source stock_source('s', 0);
-  vector<Source> all_sources = this->getAllSourcesButStock();
-  vector<Dest> all_dests = this->getAllDests();
+  set<Source> all_sources = this->getAllSourcesButStock();
+  set<Dest> all_dests = this->getAllDests();
 
-  for (auto const &s : all_sources) {
-    for (auto const &d : all_dests) {
+  for (auto s : all_sources) {
+    for (auto d : all_dests) {
       // In order to figure out how many different moves we can do from this
       // source, to this dest, we need to know how many cards there are in the
       // run

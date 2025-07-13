@@ -49,12 +49,15 @@ class Board {
   std::chrono::time_point<std::chrono::system_clock> game_start;
   std::chrono::time_point<std::chrono::system_clock> game_end;
 
+  std::set<Source> allSourcesButStock;
+  std::set<Dest> allDests;
+
   bool foundationsFull();  // check if all foundations are "full" ie. size 13
   bool isSolved();         // check if the game is "Solved"/"Won"
   bool isStuck();          // check if the game is "Stuck"/"Lost"
   bool isCleared();        // check if the game is "Cleared"/"Finished"
-  std::vector<Source> getAllSourcesButStock();
-  std::vector<Dest> getAllDests();
+  std::set<Source> getAllSourcesButStock();
+  std::set<Dest> getAllDests();
   std::vector<int> getAllCounts(Run);  // return list of possible move sizes
   std::vector<Move> allPossibleMoves();
   std::vector<Move> allLegalMoves();
