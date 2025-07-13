@@ -64,7 +64,9 @@ string game_help() {
   return helpstr;
 }
 
-bool is_not_exit(string str) { return (str != "exit" && str != "x"); }
+bool is_not_exit(string str) {
+  return (str != "exit" && str != "x" && str != "quit" && str != "q");
+}
 
 bool is_help(string str) { return (str == "help" || str == "h"); }
 
