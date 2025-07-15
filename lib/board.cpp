@@ -343,15 +343,15 @@ set<Source> Board::getAllSourcesButStock() {
 }
 
 set<Dest> Board::getAllDests() {
-  if (!allDests.empty()) return allDests;
+  if (!all_dests.empty()) return all_dests;
 
   for (unsigned int i = 0; i < this->foundations.size(); ++i) {
-    allDests.insert(Dest('f', i));
+    all_dests.insert(Dest('f', i));
   }
   for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
-    allDests.insert(Dest('p', i));
+    all_dests.insert(Dest('p', i));
   }
-  return allDests;
+  return all_dests;
 }
 
 vector<int> Board::getAllCounts(Run r) {
@@ -368,7 +368,7 @@ vector<Move> Board::allPossibleMoves() {
   set<Source> all_sources = this->getAllSourcesButStock();
 
   for (auto const &s : all_sources) {
-    for (auto const &d : allDests) {
+    for (auto const &d : all_dests) {
       // In order to figure out how many different moves we can do from this
       // source, to this dest, we need to know how many cards there are in the
       // run
@@ -396,7 +396,7 @@ vector<Move> Board::allPossibleMoves() {
   }
   for (auto &c : this->stock.cards) {
     const Run &srcRun = Run(c);
-    for (auto &d : allDests) {
+    for (auto &d : all_dests) {
       const Run &dstRun = this->getDestRun(d);
       moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
     }

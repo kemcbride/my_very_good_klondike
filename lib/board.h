@@ -40,7 +40,7 @@ class Board {
   bool auto_reveal;
   bool recycle_penalty_enabled;
 
-  std::set<Dest> allDests;
+  std::set<Dest> all_dests;
   std::vector<Move> legal_moves;
   std::vector<std::string> legal_commands;
 
