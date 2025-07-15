@@ -9,14 +9,12 @@
 using namespace std;
 
 Deck::Deck(mt19937 g) {
-  this->sort();  // sets up the ->cards
-  this->current_idx = 0;
-  this->generator = g;
+  sort();  // sets up the ->cards
+  current_idx = 0;
+  generator = g;
 }
 
-void Deck::shuffle() {
-  ::shuffle(this->cards.begin(), this->cards.end(), generator);
-}
+void Deck::shuffle() { ::shuffle(cards.begin(), cards.end(), generator); }
 
 void Deck::sort() {
   // Assuming that the deck always contains the same 52 cards...
@@ -26,20 +24,20 @@ void Deck::sort() {
       sorted_deck.push_back(Card(j, i));
     }
   }
-  this->cards = sorted_deck;
+  cards = sorted_deck;
 }
 
 vector<Card> Deck::draw(int n) {
-  int whats_left = this->cards.size() - this->current_idx;
+  int whats_left = cards.size() - current_idx;
   int deal_size = min(whats_left, n);
 
-  auto first = this->cards.cbegin() + this->current_idx;
-  auto last = this->cards.cbegin() + this->current_idx + deal_size;
+  auto first = cards.cbegin() + current_idx;
+  auto last = cards.cbegin() + current_idx + deal_size;
 
   vector<Card> your_draw(first, last);
 
-  this->current_idx += deal_size;
+  current_idx += deal_size;
   return your_draw;
 }
 
-void Deck::reset_index() { this->current_idx = 0; }
+void Deck::reset_index() { current_idx = 0; }

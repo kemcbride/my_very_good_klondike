@@ -60,3 +60,36 @@ TEST(DeckTest, ShuffleConsistency) {
   cerr << d1.at(0) << ", " << d2.at(0) << endl;
   EXPECT_NE(d1.at(0), d2.at(0));
 }
+
+TEST(DeckTest, ImplicitBehavior) {
+  // This test is aimed at showing how draw behaves -
+  // notably how you can draw when there's nothing left,
+  // and how resets or shuffles interact with draws.
+  // Additionally - none of the Deck's methods are intended to throw!
+
+  // Mostly, how the deck has actually very little in the way
+  // of guarantees.
+  std::random_device rd;
+  std::mt19937 g(rd());
+  Deck d(g);
+
+  // Because sort() is called in its constructor, a Deck gets the
+  // standard 52 cards in some order.
+  EXPECT_EQ(d.cards.size(), 52);
+  vector<Card> d1 = d.draw(1);
+  EXPECT_EQ(d1.at(0), Card(1, clubs));
+
+  // The index is the only way we manage "how many cards have been taken"
+  d.reset_index();
+
+  vector<Card> fullDraw = d.draw(100);
+  EXPECT_EQ(fullDraw.size(), 52);
+
+  vector<Card> moreDraw = d.draw(10);
+  EXPECT_EQ(moreDraw.size(), 0);
+
+  // Shuffling doesn't affect the index!
+  d.shuffle();
+  moreDraw = d.draw(10);
+  EXPECT_EQ(moreDraw.size(), 0);
+}
