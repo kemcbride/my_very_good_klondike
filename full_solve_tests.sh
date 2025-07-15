@@ -16,11 +16,12 @@ function e2e_test () {
 
   # Used when updating the diff correctness check outputs
   # timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT} | tee outputs/${BINARY}_${SEED}.out"
-  timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT}"
+  timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT} | tee ${BINARY}_${SEED}.out"
   TIMEOUT_RESULT=$?
 
   diff "${BINARY}_${SEED}.out" "outputs/${BINARY}_${SEED}.out"
   DIFF_RESULT=$?
+  rm "${BINARY}_${SEED}.out"
 
   [[ "$DIFF_RESULT" = "0" && "$TOTAL_CORRECTNESS_RESULT" = "0" ]]
   TOTAL_CORRECTNESS_RESULT=$?
