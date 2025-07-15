@@ -103,6 +103,10 @@ TEST(RunTest, BasicAssertions) {
   v.push_back(c);
   r = solitaire::Run(v);
   EXPECT_TRUE(!r.isRevealed());
+}
+
+TEST(RunTest, InvalidConstruction) {
+  Card c(1, 3);  // red ace
 
   // Invalid run(vector): order-wise
   vector<Card> invalid_run;
@@ -115,7 +119,9 @@ TEST(RunTest, BasicAssertions) {
   invalid_run.push_back(Card(2, 2));  // red 2
   invalid_run.push_back(c);           // red ace
   EXPECT_THROW(solitaire::Run badrun(invalid_run), std::exception);
+}
 
+TEST(RunTest, EmptyPushAddTests) {
   // "Empty Run push/add tests"  {
   // TODO: Is this desirable behavior?
   vector<Card> all_kings;
@@ -134,7 +140,9 @@ TEST(RunTest, BasicAssertions) {
     EXPECT_TRUE(r.canAdd(c));
     r.put(c);
   }
+}
 
+TEST(RunTest, PutTestsCard) {
   // SECTION( "Populated (single-card) Run push/add tests" ) {
   Card red_2(2, 2);
   Card red_ace = Card(1, 2);
@@ -146,9 +154,9 @@ TEST(RunTest, BasicAssertions) {
 
   EXPECT_TRUE(has_red_2.canAdd(black_ace));
   has_red_2.put(black_ace);
+}
 
-  // TODO: could also similarly test put with vector of card and put with run,
-  // same cases SECTION( "Run put tests" ) {
+TEST(RunTest, PutTestsRun) {
   vector<Card> red_cards;
   vector<Card> black_cards;
   for (int i = 1; i < 14; ++i) {
