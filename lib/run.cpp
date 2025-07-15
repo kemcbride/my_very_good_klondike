@@ -15,7 +15,9 @@ using namespace solitaire;
 Run::Run() {}
 
 Run::Run(Card c) {
+  // A run can never be larger than 13, so let's pre-emptively resize it.
   vector<Card> my_cards;
+  // my_cards.reserve(13);
   my_cards.push_back(c);
   this->cards = my_cards;
 }
@@ -26,11 +28,23 @@ Run::Run(std::vector<Card> cards) {
     for (auto it = cards.begin() + 1; it != cards.end(); ++it) {
       vector<Card> first_part(cards.begin(), it);
       vector<Card> second_part(it, cards.end());
+      Run fp(first_part);
+      Run sp(second_part);
 
-      if (!Run(first_part).canAdd(Run(second_part)))
-        // TODO - make this exception more detailed, list the first/second parts
+      if (!fp.canAdd(sp)) {
+        string fp_raw;
+        for (auto c : first_part) {
+          fp_raw += c.toString() + ", ";
+        }
+        string sp_raw;
+        for (auto c : second_part) {
+          sp_raw += c.toString() + ", ";
+        }
         throw runtime_error(
-            "run from vec<card> - doesnt satisfy run constraints");
+            "run from vec<card> - doesnt satisfy run constraints - " +
+            fp.toString() + " (" + fp_raw + "), " + sp.toString() + " (" +
+            sp_raw + ")");
+      }
     }
   }
   this->cards = cards;
@@ -72,7 +86,8 @@ void Run::put(Run r) {
   // If we're adding a run, we know it already internally satsfies run
   // constraints so we only need to check that we can add it. (or its top card)
   if (!this->canAdd(r))
-    throw runtime_error("run.cpp: doesn't satisfy run constraints");
+    throw runtime_error("run.cpp: doesn't satisfy run constraints - " +
+                        this->toString() + ", " + r.toString());
 
   for (auto c : r.cards) {
     this->cards.push_back(c);
@@ -86,8 +101,9 @@ void Run::put(vector<Card> cards) {
 }
 
 void Run::put(Card c) {
-  if (!this->canAdd(c)) throw runtime_error("doesnt satisfy run constraints");
-
+  if (!this->canAdd(c))
+    throw runtime_error("doesnt satisfy run constraints - " + this->toString() +
+                        ", " + c.toString());
   this->cards.push_back(c);
 }
 

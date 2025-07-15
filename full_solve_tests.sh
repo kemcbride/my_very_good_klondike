@@ -22,10 +22,10 @@ function e2e_test () {
   return $TIMEOUT_RESULT
 }
 
-e2e_test ./dbg_solitaire $DBG_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
-
-e2e_test ./dbg_solitaire $DBG_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
-
 e2e_test ./solitaire $OPT_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
 
 e2e_test ./solitaire $OPT_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
+
+e2e_test ./dbg_solitaire $DBG_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
+
+e2e_test ./dbg_solitaire $DBG_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
