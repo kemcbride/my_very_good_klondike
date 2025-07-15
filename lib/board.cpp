@@ -414,7 +414,7 @@ bool Board::isLegal(Move m) {
   if (m.getSrc().type == 'f' && d.type == 'f') return false;
 
   if (d.type == 'p') {
-      return dstRun.canAdd(srcRun);
+    return dstRun.canAdd(srcRun);
   } else if (d.type == 'f') {
     if (srcRun.cards.size() != 1) return false;
     Foundation f = this->foundations.at(d.idx);
