@@ -2,8 +2,8 @@
 # kill the process if it doesn't finish within 1 s - usually i see ~0.4s
 # Above is no longer true since the implementation of the hint command.
 # set -x
-DBG_TIMEOUT_LIMIT=120
-OPT_TIMEOUT_LIMIT=10
+DBG_TIMEOUT_LIMIT=60
+OPT_TIMEOUT_LIMIT=5
 
 TOTAL_CORRECTNESS_RESULT=0
 TOTAL_TIMEOUT_RESULT=0
