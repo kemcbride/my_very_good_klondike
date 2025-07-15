@@ -142,6 +142,8 @@ string Board::hint() {
   Move m = legal_moves.at(hint_idx);
   hint_idx++;
   // TODO - figure out how to dedupe these at the allPossibleMoves stage
+  // NOTE - If we do dedupe them at the allPossibleMoves stage, then we MAY
+  // need to put back the isStuck() call in next() . So bear that in mind.
   Source s = m.getSrc();
   Card src_top = m.getSrcRun().peek().value();
   // Translate source hints for hidden sources into "next"
@@ -387,6 +389,7 @@ vector<Move> Board::allPossibleMoves() {
           const Run &r = p.runs.back();
           if (!r.cards.empty()) {
             for (auto i : getAllCounts(r)) {
+              if (i > 1 && d.type == 'f') continue;
               Run srcRun = getSourceRun(s, i);
               Run dstRun = getDestRun(d);
               moves.push_back(Move(srcRun, s, dstRun, d, i));
@@ -394,6 +397,8 @@ vector<Move> Board::allPossibleMoves() {
           }
         }
       } else if (s.type == 'f') {
+        if (d.type == 'f') continue;
+
         Foundation &f = foundations.at(s.idx);
         if (!f.cards.empty()) {
           const Run &srcRun = f.peek().value();
