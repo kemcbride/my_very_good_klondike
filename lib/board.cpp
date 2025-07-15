@@ -127,7 +127,9 @@ void Board::next() {
   bool recycled = this->stock.next();
   if (this->recycle_penalty_enabled && recycled)
     this->score = std::max(0, this->score + RECYCLE_STOCK_VALUE);
-  this->is_stuck = this->isStuck();
+  // Don't need to evaluate this per next() actually, because we calculate
+  // possibleMoves() using all stock values, rather than just the top.
+  // this->is_stuck = this->isStuck();
 }
 
 string Board::hint() {
@@ -137,7 +139,7 @@ string Board::hint() {
     hint_idx = 0;
   }
 
-  Move& m = legal_moves.at(hint_idx);
+  Move m = legal_moves.at(hint_idx);
   hint_idx++;
   // TODO - figure out how to dedupe these at the allPossibleMoves stage
   Source s = m.getSrc();
