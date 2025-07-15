@@ -42,7 +42,7 @@ class Board {
 
   std::set<Dest> all_dests;
   std::vector<Move> legal_moves;
-  std::vector<std::string> legal_commands;
+  std::set<std::string> legal_commands;
 
   size_t hint_idx = 0;
   int score = 0;
@@ -59,7 +59,7 @@ class Board {
   std::vector<int> getAllCounts(Run);  // return list of possible move sizes
   std::vector<Move> allPossibleMoves();
   std::vector<Move> allLegalMoves();
-  std::vector<std::string> allLegalCommands();
+  std::set<std::string> allLegalCommands();
 
   bool _move(Move);              // private move execution logic
   void _move_post_processing();  // check game state, etc.

@@ -98,7 +98,7 @@ string Board::toString() {
 
   if (this->show_labels == true) {
     string extra_help = " f1    f2    f3    f4      s";
-    extra_help += "  |moves: " + to_string(this->legal_commands.size()) + "|\n";
+    extra_help += "  |moves: " + to_string(this->legal_moves.size()) + "|\n";
     board_str += extra_help;
   }
 
@@ -131,13 +131,20 @@ void Board::next() {
 }
 
 string Board::hint() {
-  if (this->is_stuck) return "No moves are possible. Please start a new game.";
+  if (is_stuck) return "No moves are possible. Please start a new game.";
 
-  if (this->hint_idx >= this->legal_commands.size()) this->hint_idx = 0;
+  if (hint_idx >= legal_moves.size()) {
+    hint_idx = 0;
+  }
 
-  string cmd = this->legal_commands.at(this->hint_idx);
-  this->hint_idx++;
-  return cmd;
+  Move& m = legal_moves.at(hint_idx);
+  hint_idx++;
+  // TODO - figure out how to dedupe these at the allPossibleMoves stage
+  Source s = m.getSrc();
+  Card src_top = m.getSrcRun().peek().value();
+  // Translate source hints for hidden sources into "next"
+  if (s.type == 's' && (src_top != stock.peek().value())) return "next";
+  return m.toString();
 }
 
 bool Board::foundationsFull() {
@@ -443,10 +450,6 @@ vector<Move> Board::allLegalMoves() {
   set<Move> all_legal_moves;
   vector<Move> all_possible_moves = this->allPossibleMoves();
 
-  Source stock_source('s', 0);
-  set<Source> all_sources = this->getAllSourcesButStock();
-  set<Dest> all_dests = this->getAllDests();
-
   for (auto m : all_possible_moves) {
     if (this->isLegal(m) && this->isMeaningful(m)) all_legal_moves.insert(m);
   }
@@ -454,7 +457,7 @@ vector<Move> Board::allLegalMoves() {
   return legal_moves;
 }
 
-vector<string> Board::allLegalCommands() {
+set<string> Board::allLegalCommands() {
   set<string> cmds;
   for (auto m : this->legal_moves) {
     // Moves from the stock should be translated to 'next' if curr stock != that
@@ -467,23 +470,23 @@ vector<string> Board::allLegalCommands() {
       cmds.insert(m.toString());
     }
   }  // for
-  vector<string> legal_cmds(cmds.begin(), cmds.end());
-  return legal_cmds;
+  legal_commands = cmds;
+  return legal_commands;
 }
 
 bool Board::isStuck() {
-  this->legal_moves = this->allLegalMoves();
-  this->legal_commands = this->allLegalCommands();
-  if (this->legal_commands.size() == 0) {
+  legal_moves = allLegalMoves();
+  legal_commands = allLegalCommands();
+  if (legal_commands.size() == 0) {
     return true;
   }
   return false;
 }
 
 bool Board::trySolve() {
-  if (this->is_solved) {
-    this->solve();
-    this->_move_post_processing();
+  if (is_solved) {
+    solve();
+    _move_post_processing();
     return true;
   }
   return false;
