@@ -59,7 +59,6 @@ class Board {
   std::set<Source> getAllSourcesButStock();
   std::set<Dest> getAllDests();
   std::vector<int> getAllCounts(Run);  // return list of possible move sizes
-  std::vector<Move> allPossibleMoves();
   std::vector<Move> allLegalMoves();
   std::vector<std::string> allLegalCommands();
 
