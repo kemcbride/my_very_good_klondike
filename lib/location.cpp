@@ -21,19 +21,6 @@ std::string Location::toString() {
   return this->type + to_string(this->idx + 1);
 }
 
-bool operator==(Location a, Location b) {
-  return a.idx == b.idx && a.type == b.type;
-};
-
-template <>
-struct std::hash<Location> {
-  std::size_t operator()(Location const& l) const noexcept {
-    std::size_t idxh = std::hash<int>{}(l.idx);
-    std::size_t typeh = std::hash<char>{}(l.type);
-    return idxh ^ (typeh << 1);
-  }
-};
-
 Source::Source(char c, int i) : Location(c, i) {}
 
 Dest::Dest(char c, int i) : Location(c, i) {}

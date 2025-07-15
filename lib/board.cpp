@@ -78,6 +78,7 @@ Board::Board(Deck &d, bool auto_solve, bool auto_reveal,
     my_fdns.push_back(Foundation());
   }
   this->foundations = my_fdns;
+  this->getAllDests();
   this->is_stuck = this->isStuck();  // also initializes this->legal_moves
 }
 
@@ -342,17 +343,13 @@ set<Source> Board::getAllSourcesButStock() {
 }
 
 set<Dest> Board::getAllDests() {
-  // Because this just always returns every possible dest,
-  // just memoize it and save the cycles.
-  if (allDests.empty()) {
-    set<Dest> all_dests;
-    for (unsigned int i = 0; i < this->foundations.size(); ++i) {
-      all_dests.insert(Dest('f', i));
-    }
-    for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
-      all_dests.insert(Dest('p', i));
-    }
-    allDests = all_dests;
+  if (!allDests.empty()) return allDests;
+
+  for (unsigned int i = 0; i < this->foundations.size(); ++i) {
+    allDests.insert(Dest('f', i));
+  }
+  for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
+    allDests.insert(Dest('p', i));
   }
   return allDests;
 }
@@ -364,6 +361,49 @@ vector<int> Board::getAllCounts(Run r) {
   return v;
 }
 
+vector<Move> Board::allPossibleMoves() {
+  vector<Move> moves;
+
+  Source stock_source('s', 0);
+  set<Source> all_sources = this->getAllSourcesButStock();
+
+  for (auto const &s : all_sources) {
+    for (auto const &d : allDests) {
+      // In order to figure out how many different moves we can do from this
+      // source, to this dest, we need to know how many cards there are in the
+      // run
+      if (s.type == 'p') {
+        const Pile &p = this->tableau.piles.at(s.idx);
+        if (!p.runs.empty()) {
+          const Run &r = p.runs.back();
+          if (!r.cards.empty()) {
+            for (auto i : this->getAllCounts(r)) {
+              Run srcRun = this->getSourceRun(s, i);
+              Run dstRun = this->getDestRun(d);
+              moves.push_back(Move(srcRun, s, dstRun, d, i));
+            }
+          }
+        }
+      } else if (s.type == 'f') {
+        Foundation &f = this->foundations.at(s.idx);
+        if (!f.cards.empty()) {
+          const Run &srcRun = f.peek().value();
+          const Run &dstRun = this->getDestRun(d);
+          moves.push_back(Move(srcRun, s, dstRun, d, 1));
+        }
+      }
+    }
+  }
+  for (auto &c : this->stock.cards) {
+    const Run &srcRun = Run(c);
+    for (auto &d : allDests) {
+      const Run &dstRun = this->getDestRun(d);
+      moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
+    }
+  }
+  return moves;
+}
+
 int Board::getScore() { return this->score; }
 
 bool Board::isLegal(Move m) {
@@ -371,7 +411,11 @@ bool Board::isLegal(Move m) {
   Run dstRun = m.getDstRun();
   Run srcRun = m.getSrcRun();
 
-  if (d.type == 'f') {
+  if (m.getSrc().type == 'f' && d.type == 'f') return false;
+
+  if (d.type == 'p') {
+      return dstRun.canAdd(srcRun);
+  } else if (d.type == 'f') {
     if (srcRun.cards.size() != 1) return false;
     Foundation f = this->foundations.at(d.idx);
     Card c = srcRun.cards.front();
@@ -397,53 +441,11 @@ bool Board::isMeaningful(Move m) {
 
 vector<Move> Board::allLegalMoves() {
   set<Move> all_legal_moves;
-  vector<Move> all_possible_moves;
+  vector<Move> all_possible_moves = this->allPossibleMoves();
 
   Source stock_source('s', 0);
   set<Source> all_sources = this->getAllSourcesButStock();
   set<Dest> all_dests = this->getAllDests();
-
-  for (auto const &s : all_sources) {
-    for (auto const &d : all_dests) {
-      // In order to figure out how many different moves we can do from this
-      // source, to this dest, we need to know how many cards there are in the
-      // run
-      if (s.type == 'p') {
-        const Pile &p = this->tableau.piles.at(s.idx);
-        if (!p.runs.empty()) {
-          const Run &r = p.runs.back();
-          if (!r.cards.empty()) {
-            for (auto i : this->getAllCounts(r)) {
-              // Foundation moves can only be size 1
-              if (d.type == 'f' && i > 1) continue;
-
-              Run srcRun = this->getSourceRun(s, i);
-              Run dstRun = this->getDestRun(d);
-              if (d.type == 'p' && !dstRun.canAdd(srcRun)) continue;
-              all_possible_moves.push_back(Move(srcRun, s, dstRun, d, i));
-            }
-          }
-        }
-      } else if (s.type == 'f') {
-        // moves from one foundation to another are NOT legal
-        if (d.type == 'f') continue;
-
-        Foundation &f = this->foundations.at(s.idx);
-        if (!f.cards.empty()) {
-          const Run &srcRun = f.peek().value();
-          const Run &dstRun = this->getDestRun(d);
-          all_possible_moves.push_back(Move(srcRun, s, dstRun, d, 1));
-        }
-      }
-    }
-  }
-  for (auto &c : this->stock.cards) {
-    const Run &srcRun = Run(c);
-    for (auto &d : all_dests) {
-      const Run &dstRun = this->getDestRun(d);
-      all_possible_moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
-    }
-  }
 
   for (auto m : all_possible_moves) {
     if (this->isLegal(m) && this->isMeaningful(m)) all_legal_moves.insert(m);

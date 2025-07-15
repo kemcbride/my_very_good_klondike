@@ -14,8 +14,6 @@ class Location {
   std::string toString();
 };
 
-bool operator==(Location a, Location b);
-
 inline bool operator<(const Location& lhs, const Location& rhs) {
   if (lhs.type == rhs.type) {
     return lhs.idx < rhs.idx;
