@@ -77,59 +77,59 @@ Board::Board(Deck &d, bool auto_solve, bool auto_reveal,
   for (int i = 0; i < 4; ++i) {
     my_fdns.push_back(Foundation());
   }
-  this->foundations = my_fdns;
-  this->getAllDests();
-  this->is_stuck = this->isStuck();  // also initializes this->legal_moves
+  foundations = my_fdns;
+  getAllDests();
+  is_stuck = isStuck();  // also initializes legal_moves
 }
 
 string Board::toString() {
   string board_str;
 
   string fdns_str;
-  for (unsigned int i = 0; i < this->foundations.size(); ++i) {
-    fdns_str += this->foundations.at(i).toString();
-    if (i != this->foundations.size() - 1) {
+  for (unsigned int i = 0; i < foundations.size(); ++i) {
+    fdns_str += foundations.at(i).toString();
+    if (i != foundations.size() - 1) {
       fdns_str += " ";
     }
   }
 
-  string stock_str = this->stock.toString();
-  string tbl_str = this->tableau.toString();
+  string stock_str = stock.toString();
+  string tbl_str = tableau.toString();
 
-  if (this->show_labels == true) {
+  if (show_labels == true) {
     string extra_help = " f1    f2    f3    f4      s";
-    extra_help += "  |moves: " + to_string(this->legal_moves.size()) + "|\n";
+    extra_help += "  |moves: " + to_string(legal_moves.size()) + "|\n";
     board_str += extra_help;
   }
 
-  string score_str = "|Score: " + to_string(this->getScore()) + "|";
+  string score_str = "|Score: " + to_string(getScore()) + "|";
   board_str += fdns_str + "   " + stock_str + "  " + score_str + '\n' + tbl_str;
   return board_str;
 }
 
-void Board::enableAutoSolve() { this->auto_solve = true; }
+void Board::enableAutoSolve() { auto_solve = true; }
 
-void Board::disableAutoSolve() { this->auto_solve = false; }
+void Board::disableAutoSolve() { auto_solve = false; }
 
-void Board::enableAutoReveal() { this->auto_reveal = true; }
+void Board::enableAutoReveal() { auto_reveal = true; }
 
-void Board::disableAutoReveal() { this->auto_reveal = false; }
+void Board::disableAutoReveal() { auto_reveal = false; }
 
 void Board::toggleLabels() {
-  this->show_labels = !(this->show_labels);
-  this->tableau.toggleLabels();
+  show_labels = !(show_labels);
+  tableau.toggleLabels();
 }
 
 void Board::next() {
   // Update hints & possible moves
   // Note: we call isStuck after updating the stock to ensure that
   // we are populating with moves for the new stock, not the previous stock
-  bool recycled = this->stock.next();
-  if (this->recycle_penalty_enabled && recycled)
-    this->score = std::max(0, this->score + RECYCLE_STOCK_VALUE);
+  bool recycled = stock.next();
+  if (recycle_penalty_enabled && recycled)
+    score = std::max(0, score + RECYCLE_STOCK_VALUE);
   // Don't need to evaluate this per next() actually, because we calculate
   // possibleMoves() using all stock values, rather than just the top.
-  // this->is_stuck = this->isStuck();
+  // is_stuck = isStuck();
 }
 
 string Board::hint() {
@@ -150,18 +150,18 @@ string Board::hint() {
 }
 
 bool Board::foundationsFull() {
-  for (auto f : this->foundations) {
+  for (auto f : foundations) {
     if (!f.isFull()) return false;
   }
   return true;
 }
 
 bool Board::isSolved() {
-  if (!(this->stock.cards.size() == 0)) {
+  if (!(stock.cards.size() == 0)) {
     return false;
   }
 
-  for (auto p : this->tableau.piles) {
+  for (auto p : tableau.piles) {
     for (auto r : p.runs) {
       if (!(r.isRevealed())) {
         return false;
@@ -172,31 +172,31 @@ bool Board::isSolved() {
 }
 
 bool Board::isCleared() {
-  bool tableauEmpty = this->tableau.isEmpty();
+  bool tableauEmpty = tableau.isEmpty();
   if (!tableauEmpty) return false;
-  bool fdnsFull = this->foundationsFull();
+  bool fdnsFull = foundationsFull();
   if (!fdnsFull) return false;
 
-  if (this->is_solved) this->game_end = chrono::system_clock::now();
-  return this->is_solved;
+  if (is_solved) game_end = chrono::system_clock::now();
+  return is_solved;
 }
 
 void Board::reveal_top_runs() {
-  int num_reveals = this->tableau.reveal_top_runs();
-  this->score += num_reveals * REVEAL_VALUE;
+  int num_reveals = tableau.reveal_top_runs();
+  score += num_reveals * REVEAL_VALUE;
 }
 
 void Board::solve() {
   // Don't do anything if the game isn't solved, as a backstop here.
-  if (!this->is_solved) {
+  if (!is_solved) {
     cout << "Board is not solved; can't just finish it off from here" << endl;
     return;
   }
 
-  while (!this->isCleared()) {
-    for (auto m : this->allLegalMoves()) {
+  while (!isCleared()) {
+    for (auto m : allLegalMoves()) {
       if (m.getMoveType() == TBL2FDN) {
-        this->_move(m);
+        _move(m);
         break;
       }
     }
@@ -204,15 +204,15 @@ void Board::solve() {
 }
 
 void Board::move(MoveCmd mcmd) {
-  Run srcRun = this->getSourceRun(mcmd.getSource(), mcmd.getCount());
-  Run dstRun = this->getDestRun(mcmd.getDest());
+  Run srcRun = getSourceRun(mcmd.getSource(), mcmd.getCount());
+  Run dstRun = getDestRun(mcmd.getDest());
   Move m(srcRun, mcmd.getSource(), dstRun, mcmd.getDest(), mcmd.getCount());
-  this->move(m);
+  move(m);
 }
 
 void Board::move(Move m) {
-  this->_move(m);
-  this->_move_post_processing();
+  _move(m);
+  _move_post_processing();
 }
 
 bool Board::_move(Move m) {
@@ -223,31 +223,31 @@ bool Board::_move(Move m) {
   unsigned int count = m.getCount();
 
   if (srcLoc.type == 's') {  // source: stock
-    optional<Card> stock_card = this->stock.peek();
+    optional<Card> stock_card = stock.peek();
     if (!stock_card.has_value())
       throw runtime_error("Invalid move: No cards remaining in stock");
 
     Card c = stock_card.value();
 
     if (dstLoc.type == 'f') {  // stock -> foundation
-      Foundation &f = this->foundations.at(dstLoc.idx);
+      Foundation &f = foundations.at(dstLoc.idx);
       if (f.canPush(c)) {
         f.push(c);
-        (void)this->stock.pop();
+        (void)stock.pop();
         // success! update score.
-        this->score += STK_2_FDN_VALUE;
+        score += STK_2_FDN_VALUE;
       } else {
         throw runtime_error("Invalid move: cannot move " + c.toString() +
                             " to foundation");
       }
     } else {  // stock -> pile
-      Pile &target_pile = this->tableau.piles.at(dstLoc.idx);
-      optional<Card> c = this->stock.peek();
+      Pile &target_pile = tableau.piles.at(dstLoc.idx);
+      optional<Card> c = stock.peek();
       if (c.has_value()) {
         target_pile.put(c.value());
-        this->stock.pop();
+        stock.pop();
         // success! update score.
-        this->score += STK_2_TBL_VALUE;
+        score += STK_2_TBL_VALUE;
       }
     }
   } else if (srcLoc.type == 'f') {  // source: foundation
@@ -257,7 +257,7 @@ bool Board::_move(Move m) {
           "Invalid move: from foundation, only pile is valid dest.");
 
     unsigned int i = srcLoc.idx;
-    Foundation &f = this->foundations.at(i);
+    Foundation &f = foundations.at(i);
     optional<Card> fdn_card = f.peek();
     if (!fdn_card.has_value())
       throw runtime_error("Invalid move: No cards in foundation ");
@@ -265,31 +265,31 @@ bool Board::_move(Move m) {
     //   how do we know if the pile can actually receive the fdn card?
     //   (for scoring)
     Card c = fdn_card.value();
-    Pile &p = this->tableau.piles.at(dstLoc.idx);
+    Pile &p = tableau.piles.at(dstLoc.idx);
     p.put(c);
     (void)f.pop();
     // success! update score.
-    this->score += FDN_2_TBL_VALUE;
+    score += FDN_2_TBL_VALUE;
   } else {                     // source: pile
     if (dstLoc.type == 'f') {  // pile -> foundation
       // move from pile to fdn
-      Pile &target_pile = this->tableau.piles.at(srcLoc.idx);
+      Pile &target_pile = tableau.piles.at(srcLoc.idx);
       optional<Card> c = target_pile.peek();
       if (c.has_value()) {
-        Foundation &fdn = this->foundations.at(dstLoc.idx);
+        Foundation &fdn = foundations.at(dstLoc.idx);
         if (fdn.canPush(c.value())) {
           fdn.push(c.value());
           optional<Run> _ = target_pile.pop();
           // successf! update score.
-          this->score += TBL_2_FDN_VALUE;
+          score += TBL_2_FDN_VALUE;
         } else {
           throw runtime_error("Invalid move: Cannot move " + c->toString() +
                               " to foundation");
         }
       }
     } else {  // pile -> pile
-      Pile &src_pile = this->tableau.piles.at(srcLoc.idx);
-      Pile &dst_pile = this->tableau.piles.at(dstLoc.idx);
+      Pile &src_pile = tableau.piles.at(srcLoc.idx);
+      Pile &dst_pile = tableau.piles.at(dstLoc.idx);
       optional<Run> maybe_run = src_pile.peek(count);
       if (maybe_run.has_value()) {
         Run r = maybe_run.value();
@@ -302,8 +302,8 @@ bool Board::_move(Move m) {
       }
     }
 
-    if (this->auto_reveal) {
-      this->reveal_top_runs();
+    if (auto_reveal) {
+      reveal_top_runs();
     }
   }
 
@@ -312,40 +312,40 @@ bool Board::_move(Move m) {
 
 void Board::_move_post_processing() {
   // Update isSolved(), isStuck(), isCleared() state - have you won?
-  this->is_solved = this->isSolved();
-  this->is_stuck = this->isStuck();
-  this->is_cleared = this->isCleared();
+  is_solved = isSolved();
+  is_stuck = isStuck();
+  is_cleared = isCleared();
 
-  if (this->auto_solve && this->is_solved && !this->is_cleared) {
-    this->trySolve();
+  if (auto_solve && is_solved && !is_cleared) {
+    trySolve();
     return;  // return early to prevent double messages/double calls to this fn
   }
 
-  auto game_duration = chrono::duration_cast<chrono::milliseconds>(
-      this->game_end - this->game_start);
-  if (this->is_cleared) {
+  auto game_duration =
+      chrono::duration_cast<chrono::milliseconds>(game_end - game_start);
+  if (is_cleared) {
     cerr << "Game has been won! Good job, good job." << endl;
     cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
-    cerr << "Game score: " << this->getScore() << endl;
+    cerr << "Game score: " << getScore() << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
-  } else if (this->is_stuck) {
+  } else if (is_stuck) {
     cerr << "You're out of legal moves!" << endl;
     cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
-    cerr << "Game score: " << this->getScore() << endl;
+    cerr << "Game score: " << getScore() << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
   }
 }
 
 set<Source> Board::getAllSourcesButStock() {
   set<Source> all_sources;
-  for (unsigned int i = 0; i < this->foundations.size(); ++i) {
+  for (unsigned int i = 0; i < foundations.size(); ++i) {
     // It's only a valid source if there are some cards there.
-    Foundation f = this->foundations.at(i);
+    Foundation f = foundations.at(i);
     if (!f.cards.empty()) all_sources.insert(Source('f', i));
   }
-  for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
+  for (unsigned int i = 0; i < tableau.piles.size(); ++i) {
     // It's only a valid source if there are some cards there.
-    Pile p = this->tableau.piles.at(i);
+    Pile p = tableau.piles.at(i);
     if (!p.runs.empty()) all_sources.insert(Source('p', i));
   }
   return all_sources;
@@ -354,10 +354,10 @@ set<Source> Board::getAllSourcesButStock() {
 set<Dest> Board::getAllDests() {
   if (!all_dests.empty()) return all_dests;
 
-  for (unsigned int i = 0; i < this->foundations.size(); ++i) {
+  for (unsigned int i = 0; i < foundations.size(); ++i) {
     all_dests.insert(Dest('f', i));
   }
-  for (unsigned int i = 0; i < this->tableau.piles.size(); ++i) {
+  for (unsigned int i = 0; i < tableau.piles.size(); ++i) {
     all_dests.insert(Dest('p', i));
   }
   return all_dests;
@@ -374,7 +374,7 @@ vector<Move> Board::allPossibleMoves() {
   vector<Move> moves;
 
   Source stock_source('s', 0);
-  set<Source> all_sources = this->getAllSourcesButStock();
+  set<Source> all_sources = getAllSourcesButStock();
 
   for (auto const &s : all_sources) {
     for (auto const &d : all_dests) {
@@ -382,38 +382,38 @@ vector<Move> Board::allPossibleMoves() {
       // source, to this dest, we need to know how many cards there are in the
       // run
       if (s.type == 'p') {
-        const Pile &p = this->tableau.piles.at(s.idx);
+        const Pile &p = tableau.piles.at(s.idx);
         if (!p.runs.empty()) {
           const Run &r = p.runs.back();
           if (!r.cards.empty()) {
-            for (auto i : this->getAllCounts(r)) {
-              Run srcRun = this->getSourceRun(s, i);
-              Run dstRun = this->getDestRun(d);
+            for (auto i : getAllCounts(r)) {
+              Run srcRun = getSourceRun(s, i);
+              Run dstRun = getDestRun(d);
               moves.push_back(Move(srcRun, s, dstRun, d, i));
             }
           }
         }
       } else if (s.type == 'f') {
-        Foundation &f = this->foundations.at(s.idx);
+        Foundation &f = foundations.at(s.idx);
         if (!f.cards.empty()) {
           const Run &srcRun = f.peek().value();
-          const Run &dstRun = this->getDestRun(d);
+          const Run &dstRun = getDestRun(d);
           moves.push_back(Move(srcRun, s, dstRun, d, 1));
         }
       }
     }
   }
-  for (auto &c : this->stock.cards) {
+  for (auto &c : stock.cards) {
     const Run &srcRun = Run(c);
     for (auto &d : all_dests) {
-      const Run &dstRun = this->getDestRun(d);
+      const Run &dstRun = getDestRun(d);
       moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
     }
   }
   return moves;
 }
 
-int Board::getScore() { return this->score; }
+int Board::getScore() { return score; }
 
 bool Board::isLegal(Move m) {
   Dest d = m.getDst();
@@ -426,7 +426,7 @@ bool Board::isLegal(Move m) {
     return dstRun.canAdd(srcRun);
   } else if (d.type == 'f') {
     if (srcRun.cards.size() != 1) return false;
-    Foundation f = this->foundations.at(d.idx);
+    Foundation f = foundations.at(d.idx);
     Card c = srcRun.cards.front();
     return f.canPush(c);
   }
@@ -437,8 +437,8 @@ bool Board::isMeaningful(Move m) {
   // moves of a pile with 1 run starting with K to an empty pile are NOT
   // meaningful
   if (m.getSrc().type == 'p' && m.getDst().type == 'p') {
-    Pile &srcPile = this->tableau.piles.at(m.getSrc().idx);
-    Pile &dstPile = this->tableau.piles.at(m.getDst().idx);
+    Pile &srcPile = tableau.piles.at(m.getSrc().idx);
+    Pile &dstPile = tableau.piles.at(m.getDst().idx);
     if (srcPile.runs.size() == 1 && dstPile.runs.size() == 0) {
       auto srcRun = srcPile.runs.front();  // there's only one /shrug
       auto backCard = srcRun.cards.front();
@@ -450,10 +450,10 @@ bool Board::isMeaningful(Move m) {
 
 vector<Move> Board::allLegalMoves() {
   set<Move> all_legal_moves;
-  vector<Move> all_possible_moves = this->allPossibleMoves();
+  vector<Move> all_possible_moves = allPossibleMoves();
 
   for (auto m : all_possible_moves) {
-    if (this->isLegal(m) && this->isMeaningful(m)) all_legal_moves.insert(m);
+    if (isLegal(m) && isMeaningful(m)) all_legal_moves.insert(m);
   }
   vector<Move> legal_moves(all_legal_moves.begin(), all_legal_moves.end());
   return legal_moves;
@@ -461,12 +461,12 @@ vector<Move> Board::allLegalMoves() {
 
 set<string> Board::allLegalCommands() {
   set<string> cmds;
-  for (auto m : this->legal_moves) {
+  for (auto m : legal_moves) {
     // Moves from the stock should be translated to 'next' if curr stock != that
     // source
     Source s = m.getSrc();
     Card src_top = m.getSrcRun().peek().value();
-    if (s.type == 's' && (src_top != this->stock.peek().value())) {
+    if (s.type == 's' && (src_top != stock.peek().value())) {
       cmds.insert("next");
     } else {
       cmds.insert(m.toString());
@@ -497,7 +497,7 @@ bool Board::trySolve() {
 Run Board::getSourceRun(Source s, unsigned int count) {
   Run srcRun;
   if (s.type == 's') {  // source: stock
-    optional<Card> stock_card = this->stock.peek();
+    optional<Card> stock_card = stock.peek();
     if (!stock_card.has_value())
       throw runtime_error(
           "B:getSourceRun:Invalid move: No cards remaining in stock");
@@ -506,7 +506,7 @@ Run Board::getSourceRun(Source s, unsigned int count) {
 
   } else if (s.type == 'f') {  // source: foundation
     unsigned int i = s.idx;
-    Foundation &f = this->foundations.at(i);
+    Foundation &f = foundations.at(i);
     optional<Card> fdn_card = f.peek();
     if (!fdn_card.has_value())
       throw runtime_error(
@@ -515,7 +515,7 @@ Run Board::getSourceRun(Source s, unsigned int count) {
     srcRun = Run(c);
 
   } else {  // source: pile
-    Pile &src_pile = this->tableau.piles.at(s.idx);
+    Pile &src_pile = tableau.piles.at(s.idx);
     optional<Run> opt_src_run = src_pile.peek(count);
     if (opt_src_run.has_value())
       srcRun = Run(opt_src_run.value());
@@ -530,12 +530,12 @@ Run Board::getDestRun(Dest d) {
   Run dstRun;  // default is empty run
   // Now set up the dest run for this move (expected: 1 or 0 cards)
   if (d.type == 'f') {
-    Foundation f = this->foundations.at(d.idx);
+    Foundation f = foundations.at(d.idx);
     optional<Card> c = f.peek();
     if (c.has_value()) dstRun = Run(c.value());
 
   } else if (d.type == 'p') {
-    Pile p = this->tableau.piles.at(d.idx);
+    Pile p = tableau.piles.at(d.idx);
     optional<Card> c = p.peek();
     if (c.has_value()) dstRun = Run(c.value());
 
