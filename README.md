@@ -10,8 +10,10 @@ This project uses Make and clang++ with C++17 standards (I use std::optional).
 The project also uses:
 - gflags (https://github.com/gflags/gflags/blob/master/INSTALL.md)
 - gtest (https://github.com/google/googletest)
+- benchmark (https://google.github.io/benchmark/user_guide.html)
 - clang-format (https://clang.llvm.org/docs/ClangFormat.html)
 
+For how to install those - not too detailed, but I recommend doing something similar to what's in the [CI workflow](https://github.com/kemcbride/my_very_good_klondike/blob/main/.github/workflows/c-cpp.yml).
 You should be able to clone this repo to your computer using `git clone`,
 and then run `make solitaire` inside the repo's directory to build the binary.
 
@@ -30,19 +32,10 @@ varying difficulty...
 
 * Right now you can play (and win) games.
 * The game can tell if you're stuck, and can tell if you've won.
-* You can ask for hints, like in microsoft solitaire! The hints are mostly useful!
+* You can ask for hints, like in microsoft solitaire!
 
 There are probably still some bugs floating around though...
 
------
-
-## TODO
-
-* refactor commands? that could clean up solitaire.cpp (ehhhhhhh idk) (or clean up unused command stuff)
-* implement undo? (implementing undo stack wouldn't be hard, but implementing the undo itself)
-* implement draw-3 mode
-* integrate with some third party libraries (ncurses?) to practice using third party libraries
-* add meaningful tests
 
 -----
 
