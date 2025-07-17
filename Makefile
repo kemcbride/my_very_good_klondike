@@ -10,6 +10,7 @@ GTEST_SRCDIR = /usr/src/gtest
 GTEST_HEADERS = $(GTEST_IDIR)/*.h \
 				$(GTEST_IDIR)/internal/*.h
 GTEST_SRCS_ = $(GTEST_SRCDIR)/src/*.cc $(GTEST_SRCDIR)/src/*.h $(GTEST_HEADERS)
+BENCHMARK_IDIR = /usr/include/benchmark
 
 CPUS ?= $(shell (nproc --all || sysctl -n hw.ncpu) 2>/dev/null || echo 1)
 MAKEFLAGS += --jobs=$(CPUS)
@@ -79,6 +80,9 @@ test/card_test.o: test/card_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
 
 test/deck_test.o: test/deck_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
 	$(CC) -o $@ -c $< $(CC_FLAGS)
+
+isstuck_benchmark: benchmark/isstuck_benchmark.cpp $(objects)
+	$(CC) -v $< $(objects) -lbenchmark $(CC_FLAGS) -o $@ 
 
 gtest: test/card_test.o test/deck_test.o test/gtest_solitaire_test.o gtest_main.a $(objects)
 	$(CC) $(CC_FLAGS) -lpthread $^ -o gtest

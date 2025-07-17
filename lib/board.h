@@ -52,7 +52,6 @@ class Board {
 
   bool foundationsFull();  // check if all foundations are "full" ie. size 13
   bool isSolved();         // check if the game is "Solved"/"Won"
-  bool isStuck();          // check if the game is "Stuck"/"Lost"
   bool isCleared();        // check if the game is "Cleared"/"Finished"
   std::set<Source> getAllSourcesButStock();
   std::set<Dest> getAllDests();
@@ -90,6 +89,9 @@ class Board {
   void move(Move);
   void move(MoveCmd);
   bool trySolve();  // true if it has solved the game, false if it cannot
+
+  // Made public for testing - TODO - make it protected or sth, friend classes.
+  bool isStuck();          // check if the game is "Stuck"/"Lost"
 
   Run getSourceRun(Source, unsigned int);  // returns count-sized run (or less)
   Run getDestRun(Dest);                    // returns empty or 1-card run
