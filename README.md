@@ -5,13 +5,13 @@
 
 ## How to build & run
 
-This project uses Make and clang++ with C++17 standards (I use std::optional).
+This project uses Make and clang++ with C++20 standards.
 
 The project also uses:
 - gflags (https://github.com/gflags/gflags/blob/master/INSTALL.md)
 - gtest (https://github.com/google/googletest)
-- benchmark (https://google.github.io/benchmark/user_guide.html)
 - clang-format (https://clang.llvm.org/docs/ClangFormat.html)
+- benchmark (https://google.github.io/benchmark/user_guide.html)
 
 For how to install those - not too detailed, but I recommend doing something similar to what's in the [CI workflow](https://github.com/kemcbride/my_very_good_klondike/blob/main/.github/workflows/c-cpp.yml).
 You should be able to clone this repo to your computer using `git clone`,
