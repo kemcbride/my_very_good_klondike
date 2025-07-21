@@ -63,6 +63,9 @@ string Move::toString() {
   string src = this->getSrc().toString();
   string dst = this->getDst().toString();
   string cnt = to_string(this->getCount());
+  if (src == "s") {
+    return src + " " + dst;
+  }
   return src + " " + cnt + " " + dst;
 }
 

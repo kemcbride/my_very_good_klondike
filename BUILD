@@ -1,5 +1,5 @@
 cc_binary(
-    name = "bz_solitaire",
+    name = "solitaire",
     srcs = [
 	    "bin/solitaire.cpp",
 	    "lib/board.h",

@@ -10,18 +10,19 @@ TOTAL_TIMEOUT_RESULT=0
 
 function e2e_test () {
   BINARY=$1
-  TIMEOUT_LIMIT=$2
-  SEED=$3
-  INPUT_SCRIPT=$4
+  MODE=$2
+  TIMEOUT_LIMIT=$3
+  SEED=$4
+  INPUT_SCRIPT=$5
 
   # Used when updating the diff correctness check outputs
-  # timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT} | tee outputs/${BINARY}_${SEED}.out"
-  timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT} | tee ${BINARY}_${SEED}.out"
+  # timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT} | tee outputs/${SEED}.out"
+  timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT} | tee ${MODE}_${SEED}.out"
   TIMEOUT_RESULT=$?
 
-  diff "${BINARY}_${SEED}.out" "outputs/${BINARY}_${SEED}.out"
+  diff "${MODE}_${SEED}.out" "outputs/${SEED}.out"
   DIFF_RESULT=$?
-  rm "${BINARY}_${SEED}.out"
+  rm "${MODE}_${SEED}.out"
 
   [[ "$DIFF_RESULT" = "0" && "$TOTAL_CORRECTNESS_RESULT" = "0" ]]
   TOTAL_CORRECTNESS_RESULT=$?
@@ -44,14 +45,20 @@ function e2e_test () {
   return $TIMEOUT_RESULT
 }
 
-e2e_test ./solitaire $OPT_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
+e2e_test ./bazel-out/k8-fastbuild-clang-opt/bin/solitaire opt $OPT_TIMEOUT_LIMIT 0 inputs/log_bazel_0_again.txt
 
-e2e_test ./solitaire $OPT_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
+e2e_test ./bazel-out/k8-fastbuild-clang-opt/bin/solitaire opt $OPT_TIMEOUT_LIMIT 1 inputs/log_bazel_1_again.txt
 
-e2e_test ./dbg_solitaire $DBG_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
+e2e_test ./bazel-out/k8-dbg-clang-dbg/bin/solitaire dbg $DBG_TIMEOUT_LIMIT 0 inputs/log_bazel_0_again.txt
 
-e2e_test ./dbg_solitaire $DBG_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
+# e2e_test ./bazel-out/k8-fastbuild-clang-opt/bin/solitaire opt $OPT_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
+#
+# e2e_test ./bazel-out/k8-fastbuild-clang-opt/bin/solitaire opt $OPT_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
 
+# e2e_test ./bazel-out/dbg-clang/bin/solitaire dbg $DBG_TIMEOUT_LIMIT 4 inputs/seed4_another_input.txt
+#
+# e2e_test ./bazel-out/dbg-clang/bin/solitaire dbg $DBG_TIMEOUT_LIMIT 7 inputs/seed7_input.txt
+#
 echo "Correctness: ${TOTAL_CORRECTNESS_RESULT}; Timeout: ${TOTAL_TIMEOUT_RESULT}";
 
 [[ "$TOTAL_CORRECTNESS_RESULT" = "0" && "$TOTAL_TIMEOUT_RESULT" = "0" ]]

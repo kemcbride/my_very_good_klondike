@@ -33,7 +33,7 @@ opt_objects = objects/opt/card.o objects/opt/deck.o objects/opt/pile.o \
 		objects/opt/location.o
 
 
-.PHONY: all clean test tidy profile
+.PHONY: all clean test tidy profile bz_solitaire bz_dbg_solitaire bz_prof_solitaire test_gtest test_e2e
 
 all: solitaire test_solitaire run
 
@@ -66,11 +66,23 @@ dbg_solitaire: bin/solitaire.cpp $(objects)
 solitaire: bin/solitaire.cpp $(opt_objects)
 	$(CC) $(opt_objects) -O3 -lgflags $(CC_FLAGS) -o solitaire bin/solitaire.cpp
 
+bz_solitaire:
+	CC=clang++ bazel build --platform_suffix=clang-opt --copt -O3 :solitaire
+
+bz_dbg_solitaire:
+	CC=clang++ bazel build -c dbg --platform_suffix=clang-dbg :solitaire
+
+bz_prof_solitaire:
+	CC=clang++ bazel build -c dbg --platform_suffix=clang-prof --copt -pg :solitaire
+
 prof_solitaire: bin/solitaire.cpp $(prof_objects)
 	$(CC) $(prof_objects) -g -pg -lgflags $(CC_FLAGS) -o prof_solitaire bin/solitaire.cpp
 
 test_gtest: gtest
 	./gtest
+
+test_e2e: bz_solitaire bz_dbg_solitaire
+	./full_solve_tests.sh
 
 test/gtest_solitaire_test.o: test/gtest_solitaire_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
 	$(CC) -o $@ -c $< $(CC_FLAGS) -lgtest
