@@ -3,6 +3,10 @@ solitaire
 test_solitaire
 dbg_solitaire
 gtest
+MODULE.bazel.lock
+bazel-bin/**
+bazel-out/**
+bazel-testlogs/**
 *.d
 **.o
 *.a

@@ -27,19 +27,58 @@ cc_binary(
 	    "lib/tableau.h",
 	    "lib/tableau.cpp",
     ],
+    copts = [
+        "--std=c++20",
+    ],
     deps = [
         "@gflags//:gflags",
     ]
 )
 
-cc_binary(
-    name = "bz_solitaire_gtest",
+cc_test(
+    name = "gtest_card",
     srcs = [
         "test/card_test.cpp",
         "lib/card.h",
         "lib/card.cpp",
         ],
+    copts = [
+        "--std=c++20",
+    ],
     deps = [
+        ":card",
         "@googletest//:gtest",
+        "@googletest//:gtest_main",
     ]
+)
+
+cc_test(
+    name = "gtest_deck",
+    srcs = [
+        "test/deck_test.cpp",
+        ],
+    copts = [
+        "--std=c++20",
+    ],
+    deps = [
+        ":deck",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ]
+)
+
+cc_library(
+    name = "card",
+    srcs = ["lib/card.h", "lib/card.cpp"],
+)
+
+cc_library(
+    name = "location",
+    srcs = ["lib/location.h", "lib/location.cpp"],
+)
+
+cc_library(
+    name = "deck",
+    srcs = ["lib/deck.h", "lib/deck.cpp"],
+    deps = [":card"],
 )
