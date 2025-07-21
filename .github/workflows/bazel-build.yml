@@ -23,8 +23,8 @@ jobs:
       run: echo "deb [arch=amd64 signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
     - name: install & update bazel
       run: sudo apt update && sudo apt install bazel
-    - name: build bz_solitaire
-      run: bazel build :bz_solitaire
+    - name: make bz_solitaire
+      run: make bz_solitaire
     - name: test card
       run: bazel test :gtest_card
     - name: test deck

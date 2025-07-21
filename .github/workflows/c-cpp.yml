@@ -28,7 +28,9 @@ jobs:
     - name: prep dirs
       run: mkdir -p objects/dbg objects/opt
     - name: make solitaire
-      run: make solitaire
+      run: make bz_solitaire
+    - name: make dbg solitaire
+      run: make bz_dbg_solitaire
     - name: make test
       run: make test
 
