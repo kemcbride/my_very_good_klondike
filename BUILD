@@ -1,33 +1,10 @@
 cc_binary(
     name = "solitaire",
     srcs = [
-	    "bin/solitaire.cpp",
-	    "lib/board.h",
-	    "lib/board.cpp",
-	    "lib/card.h",
-	    "lib/card.cpp",
-	    "lib/command.h",
-	    "lib/command.cpp",
-	    "lib/deck.h",
-	    "lib/deck.cpp",
-	    "lib/foundation.h",
-	    "lib/foundation.cpp",
-	    "lib/location.h",
-	    "lib/location.cpp",
-	    "lib/move.h",
-	    "lib/move.cpp",
-	    "lib/move_cmd.h",
-	    "lib/move_cmd.cpp",
-	    "lib/pile.h",
-	    "lib/pile.cpp",
-	    "lib/run.h",
-	    "lib/run.cpp",
-	    "lib/stock.h",
-	    "lib/stock.cpp",
-	    "lib/tableau.h",
-	    "lib/tableau.cpp",
+        "bin/solitaire.cpp",
     ],
     deps = [
+        ":board",
         "@gflags//:gflags",
     ]
 )
@@ -35,6 +12,23 @@ cc_binary(
 #############################################
 ### Libraries
 #############################################
+
+cc_library(
+    name = "board",
+    srcs = ["lib/board.h", "lib/board.cpp"],
+    deps = [
+        ":card",
+        ":command",
+        ":deck",
+        ":foundation",
+        ":move",
+        ":move_cmd",
+        ":pile",
+        ":run",
+        ":stock",
+        ":tableau",
+    ],
+)
 
 cc_library(
     name = "card",
@@ -96,7 +90,7 @@ cc_library(
 cc_library(
     name = "tableau",
     srcs = ["lib/tableau.h", "lib/tableau.cpp"],
-    deps = [":deck", ":run"],
+    deps = [":deck", ":pile", ":run"],
 )
 
 #############################################
