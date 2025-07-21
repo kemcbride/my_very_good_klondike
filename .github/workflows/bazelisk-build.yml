@@ -9,15 +9,15 @@ on:
 jobs:
   build:
 
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  steps:
-  - uses: actions/checkout@v2
-  - name: setup gpg
-    run: sudo apt install apt-transport-https curl gnupg -y;
-  - name: gpg bazel
-    run: curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel-archive-keyring.gpg;
-  - name: setup keyring for bazel
-    run: sudo mv bazel-archive-keyring.gpg /usr/share/keyrings;
-  - name: add apt repo for bazel
-      echo "deb [arch=amd64 signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup gpg
+      run: sudo apt install apt-transport-https curl gnupg -y;
+    - name: gpg bazel
+      run: curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel-archive-keyring.gpg;
+    - name: setup keyring for bazel
+      run: sudo mv bazel-archive-keyring.gpg /usr/share/keyrings;
+    - name: add apt repo for bazel
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
