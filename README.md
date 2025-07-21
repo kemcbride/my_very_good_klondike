@@ -1,7 +1,7 @@
 # My Very Good Solitaire Project
 
 
-[![C/C++ CI](https://github.com/kemcbride/my_very_good_klondike/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/kemcbride/my_very_good_klondike/actions/workflows/c-cpp.yml)
+[![C/C++ CI](https://github.com/kemcbride/my_very_good_klondike/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/kemcbride/my_very_good_klondike/actions/workflows/c-cpp.yml) [![Bazelisk Build CI](https://github.com/kemcbride/my_very_good_klondike/actions/workflows/bazelisk-build.yml/badge.svg)](https://github.com/kemcbride/my_very_good_klondike/actions/workflows/bazelisk-build.yml)
 
 ## How to build & run
 
