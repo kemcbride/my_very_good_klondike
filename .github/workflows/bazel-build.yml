@@ -1,4 +1,4 @@
-name: Bazelisk Build CI
+name: Bazel Build
 
 on:
   push:
