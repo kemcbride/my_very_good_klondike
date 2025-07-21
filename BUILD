@@ -32,6 +32,10 @@ cc_binary(
     ]
 )
 
+#############################################
+### Libraries
+#############################################
+
 cc_library(
     name = "card",
     srcs = ["lib/card.h", "lib/card.cpp"],
@@ -94,6 +98,10 @@ cc_library(
     srcs = ["lib/tableau.h", "lib/tableau.cpp"],
     deps = [":deck", ":run"],
 )
+
+#############################################
+### Test Targets
+#############################################
 
 cc_test(
     name = "gtest_card",
