@@ -5,7 +5,7 @@
 
 ## How to build & run
 
-This project uses Make and clang++ with C++20 standards.
+This project uses Make, bazel, and clang++ with C++20 standards.
 
 The project also uses:
 - gflags (https://github.com/gflags/gflags/blob/master/INSTALL.md)
@@ -13,11 +13,11 @@ The project also uses:
 - clang-format (https://clang.llvm.org/docs/ClangFormat.html)
 - benchmark (https://google.github.io/benchmark/user_guide.html)
 
-For how to install those - not too detailed, but I recommend doing something similar to what's in the [CI workflow](https://github.com/kemcbride/my_very_good_klondike/blob/main/.github/workflows/c-cpp.yml).
-You should be able to clone this repo to your computer using `git clone`,
-and then run `make solitaire` inside the repo's directory to build the binary.
+You'll need to install bazel, but once you've got that set up, all you need is:
 
-Then, to run the program, just do: `./solitaire play` from that same directory!
+```
+bazel run :solitaire play
+```
 
 ----
 
