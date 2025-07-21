@@ -13,8 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        submodules: recursive
     - name: install deps
       run: sudo apt install libgflags-dev libgtest-dev libc++-dev
     - name: prep dirs
