@@ -33,4 +33,3 @@ jobs:
       run: make bz_dbg_solitaire
     - name: make test
       run: make test
-

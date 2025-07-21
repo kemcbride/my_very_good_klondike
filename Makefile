@@ -78,8 +78,9 @@ bz_prof_solitaire:
 prof_solitaire: bin/solitaire.cpp $(prof_objects)
 	$(CC) $(prof_objects) -g -pg -lgflags $(CC_FLAGS) -o prof_solitaire bin/solitaire.cpp
 
-test_gtest: gtest
-	./gtest
+test_gtest:
+	bazel test gtest
+	bazel run gtest
 
 test_e2e: bz_solitaire bz_dbg_solitaire
 	./full_solve_tests.sh
@@ -95,9 +96,6 @@ test/deck_test.o: test/deck_test.cpp lib/*.cpp lib/*.h $(GTEST_HEADERS)
 
 isstuck_benchmark: benchmark/isstuck_benchmark.cpp $(objects)
 	$(CC) -v $< $(objects) -lbenchmark $(CC_FLAGS) -o $@ 
-
-gtest: test/card_test.o test/deck_test.o test/gtest_solitaire_test.o gtest_main.a $(objects)
-	$(CC) $(CC_FLAGS) -lpthread $^ -o gtest
 
 profile: prof_solitaire
 	./prof_solitaire play 4 < inputs/seed4_another_input.txt

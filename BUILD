@@ -27,12 +27,72 @@ cc_binary(
 	    "lib/tableau.h",
 	    "lib/tableau.cpp",
     ],
-    copts = [
-        "--std=c++20",
-    ],
     deps = [
         "@gflags//:gflags",
     ]
+)
+
+cc_library(
+    name = "card",
+    srcs = ["lib/card.h", "lib/card.cpp"],
+)
+
+cc_library(
+    name = "command",
+    srcs = ["lib/command.h", "lib/command.cpp"],
+)
+
+cc_library(
+    name = "deck",
+    srcs = ["lib/deck.h", "lib/deck.cpp"],
+    deps = [":card"],
+)
+
+cc_library(
+    name = "foundation",
+    srcs = ["lib/foundation.h", "lib/foundation.cpp"],
+    deps = [":card"],
+)
+
+cc_library(
+    name = "location",
+    srcs = ["lib/location.h", "lib/location.cpp"],
+)
+
+cc_library(
+    name = "move",
+    srcs = ["lib/move.h", "lib/move.cpp"],
+    deps = [":move_cmd", ":run"],
+)
+
+cc_library(
+    name = "move_cmd",
+    srcs = ["lib/move_cmd.h", "lib/move_cmd.cpp"],
+    deps = [":command", ":location"],
+)
+
+cc_library(
+    name = "pile",
+    srcs = ["lib/pile.h", "lib/pile.cpp"],
+    deps = [":deck", ":run"],
+)
+
+cc_library(
+    name = "run",
+    srcs = ["lib/run.h", "lib/run.cpp"],
+    deps = [":card"],
+)
+
+cc_library(
+    name = "stock",
+    srcs = ["lib/stock.h", "lib/stock.cpp"],
+    deps = [":card", ":deck"],
+)
+
+cc_library(
+    name = "tableau",
+    srcs = ["lib/tableau.h", "lib/tableau.cpp"],
+    deps = [":deck", ":run"],
 )
 
 cc_test(
@@ -42,9 +102,6 @@ cc_test(
         "lib/card.h",
         "lib/card.cpp",
         ],
-    copts = [
-        "--std=c++20",
-    ],
     deps = [
         ":card",
         "@googletest//:gtest",
@@ -57,9 +114,6 @@ cc_test(
     srcs = [
         "test/deck_test.cpp",
         ],
-    copts = [
-        "--std=c++20",
-    ],
     deps = [
         ":deck",
         "@googletest//:gtest",
@@ -67,18 +121,17 @@ cc_test(
     ]
 )
 
-cc_library(
-    name = "card",
-    srcs = ["lib/card.h", "lib/card.cpp"],
-)
-
-cc_library(
-    name = "location",
-    srcs = ["lib/location.h", "lib/location.cpp"],
-)
-
-cc_library(
-    name = "deck",
-    srcs = ["lib/deck.h", "lib/deck.cpp"],
-    deps = [":card"],
+cc_test(
+    name = "gtest",
+    srcs = [
+        "test/gtest_solitaire_test.cpp",
+    ],
+    deps = [
+        ":card",
+        ":foundation",
+        ":pile",
+        ":run",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ]
 )
