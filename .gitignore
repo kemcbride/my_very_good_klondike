@@ -4,10 +4,10 @@ test_solitaire
 dbg_solitaire
 gtest
 MODULE.bazel.lock
-bazel-bin/**
-bazel-out/**
-bazel-testlogs/**
-bazel-my_very_good_klondike/**
+bazel-bin
+bazel-out
+bazel-testlogs
+bazel-my_very_good_klondike
 *.d
 **.o
 *.a
