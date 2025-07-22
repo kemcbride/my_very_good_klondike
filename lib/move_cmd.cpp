@@ -131,5 +131,8 @@ const string MoveCmd::toString() const {
   string src = this->getSource().toString();
   string dst = this->getDest().toString();
   string cnt = to_string(this->getCount());
+  if (src == "s") {
+    return src + " " + dst;
+  }
   return src + " " + cnt + " " + dst;
 }
