@@ -12,7 +12,7 @@ Location::Location(char c, int i) {
   this->idx = i;
 }
 
-std::string Location::toString() {
+const std::string Location::toString() const {
   if (this->type == 's') {
     return string(1, this->type);
   }

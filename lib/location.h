@@ -11,7 +11,7 @@ class Location {
   int idx = 0;  // 0-offset index into list of piles or foundations
   char type = 'p';
   Location(char, int);
-  std::string toString();
+  const std::string toString() const;
 };
 
 inline bool operator<(const Location& lhs, const Location& rhs) {

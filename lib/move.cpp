@@ -49,17 +49,17 @@ MoveCmd Move::toMoveCmd() {
   return MoveCmd(this->srcLoc, this->dstLoc, this->count);
 }
 
-Source Move::getSrc() { return this->srcLoc; }
+const Source Move::getSrc() const { return this->srcLoc; }
 
-Run Move::getSrcRun() { return this->srcRun; }
+const Run Move::getSrcRun() const { return this->srcRun; }
 
-Dest Move::getDst() { return this->dstLoc; }
-Run Move::getDstRun() { return this->dstRun; }
+const Dest Move::getDst() const { return this->dstLoc; }
+const Run Move::getDstRun() const { return this->dstRun; }
 
-unsigned int Move::getCount() { return this->count; }
-MoveType Move::getMoveType() { return this->moveType; }
+const unsigned int Move::getCount() const { return this->count; }
+const MoveType Move::getMoveType() const { return this->moveType; }
 
-string Move::toString() {
+const string Move::toString() const {
   string src = this->getSrc().toString();
   string dst = this->getDst().toString();
   string cnt = to_string(this->getCount());

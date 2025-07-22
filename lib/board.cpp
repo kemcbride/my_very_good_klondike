@@ -139,7 +139,7 @@ string Board::hint() {
     hint_idx = 0;
   }
 
-  Move m = legal_moves.at(hint_idx);
+  Move &m = legal_moves.at(hint_idx);
   hint_idx++;
   // TODO - figure out how to dedupe these at the allPossibleMoves stage
   // NOTE - If we do dedupe them at the allPossibleMoves stage, then we MAY
@@ -196,7 +196,7 @@ void Board::solve() {
   }
 
   while (!isCleared()) {
-    for (auto m : allLegalMoves()) {
+    for (auto &m : allLegalMoves()) {
       if (m.getMoveType() == TBL2FDN) {
         _move(m);
         break;
@@ -212,12 +212,12 @@ void Board::move(MoveCmd mcmd) {
   move(m);
 }
 
-void Board::move(Move m) {
+void Board::move(const Move &m) {
   _move(m);
   _move_post_processing();
 }
 
-bool Board::_move(Move m) {
+bool Board::_move(const Move &m) {
   Source srcLoc = m.getSrc();
   Dest dstLoc = m.getDst();
   Run srcRun = m.getSrcRun();
@@ -420,7 +420,7 @@ vector<Move> Board::allPossibleMoves() {
 
 int Board::getScore() { return score; }
 
-bool Board::isLegal(Move m) {
+bool Board::isLegal(const Move &m) {
   Dest d = m.getDst();
   Run dstRun = m.getDstRun();
   Run srcRun = m.getSrcRun();
@@ -438,7 +438,7 @@ bool Board::isLegal(Move m) {
   return false;
 }
 
-bool Board::isMeaningful(Move m) {
+bool Board::isMeaningful(const Move &m) {
   // moves of a pile with 1 run starting with K to an empty pile are NOT
   // meaningful
   if (m.getSrc().type == 'p' && m.getDst().type == 'p') {
@@ -457,7 +457,7 @@ vector<Move> Board::allLegalMoves() {
   set<Move> all_legal_moves;
   vector<Move> all_possible_moves = allPossibleMoves();
 
-  for (auto m : all_possible_moves) {
+  for (auto &m : all_possible_moves) {
     if (isLegal(m) && isMeaningful(m)) all_legal_moves.insert(m);
   }
   vector<Move> legal_moves(all_legal_moves.begin(), all_legal_moves.end());
@@ -466,7 +466,7 @@ vector<Move> Board::allLegalMoves() {
 
 set<string> Board::allLegalCommands() {
   set<string> cmds;
-  for (auto m : legal_moves) {
+  for (auto &m : legal_moves) {
     // Moves from the stock should be translated to 'next' if curr stock != that
     // source
     Source s = m.getSrc();
