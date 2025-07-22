@@ -33,8 +33,18 @@ class Move {
 
  public:
   Move(Run, Source, Run, Dest, unsigned int);
-  Move(const Move& m) : srcRun(m.getSrcRun()), srcLoc(m.getSrc()), dstRun(m.getDstRun()), dstLoc(m.getDst()), count(m.getCount()) {};
-  Move(Move&& m) noexcept : srcRun(m.getSrcRun()), srcLoc(m.getSrc()), dstRun(m.getDstRun()), dstLoc(m.getDst()), count(m.getCount()) {};
+  Move(const Move& m)
+      : srcRun(m.getSrcRun()),
+        srcLoc(m.getSrc()),
+        dstRun(m.getDstRun()),
+        dstLoc(m.getDst()),
+        count(m.getCount()){};
+  Move(Move&& m) noexcept
+      : srcRun(m.getSrcRun()),
+        srcLoc(m.getSrc()),
+        dstRun(m.getDstRun()),
+        dstLoc(m.getDst()),
+        count(m.getCount()){};
   MoveCmd toMoveCmd();
 
   const Source getSrc() const;

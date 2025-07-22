@@ -60,7 +60,7 @@ class Board {
   std::vector<Move> allLegalMoves();
   std::set<std::string> allLegalCommands();
 
-  bool _move(const Move& m);              // private move execution logic
+  bool _move(const Move& m);     // private move execution logic
   void _move_post_processing();  // check game state, etc.
   void reveal_top_runs();
   void solve();  // if is_solved, run all moves to clear the board.
@@ -70,7 +70,7 @@ class Board {
   Stock stock;
   std::vector<Foundation> foundations;
 
-  Board(Deck &, bool, bool, bool);
+  Board(Deck&, bool, bool, bool);
   std::string toString();
 
   void enableAutoSolve();
