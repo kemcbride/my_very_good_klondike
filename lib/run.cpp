@@ -65,7 +65,7 @@ vector<Card> Run::view() {
   return empty_none_revealed;
 }
 
-optional<Card> Run::peek() {
+const optional<Card> Run::peek() const {
   if (this->cards.size() == 0) return nullopt;
   return this->cards.back();
 }

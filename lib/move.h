@@ -33,16 +33,18 @@ class Move {
 
  public:
   Move(Run, Source, Run, Dest, unsigned int);
+  Move(const Move& m) : srcRun(m.getSrcRun()), srcLoc(m.getSrc()), dstRun(m.getDstRun()), dstLoc(m.getDst()), count(m.getCount()) {};
+  Move(Move&& m) noexcept : srcRun(m.getSrcRun()), srcLoc(m.getSrc()), dstRun(m.getDstRun()), dstLoc(m.getDst()), count(m.getCount()) {};
   MoveCmd toMoveCmd();
 
-  Source getSrc();
-  Dest getDst();
-  unsigned int getCount();
-  MoveType getMoveType();
-  Run getSrcRun();
-  Run getDstRun();
+  const Source getSrc() const;
+  const Dest getDst() const;
+  const unsigned int getCount() const;
+  const MoveType getMoveType() const;
+  const Run getSrcRun() const;
+  const Run getDstRun() const;
 
-  std::string toString();
+  const std::string toString() const;
 };
 
 // To support set<Move>
