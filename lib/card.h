@@ -35,12 +35,11 @@ class Suit {
   suits getSuit();
   std::string toString();
 
- friend bool operator<=>(Suit const& a, Suit const& b) = default;
- friend bool operator==(Suit const& a, Suit const& b) = default;
+  friend bool operator<=>(Suit const& a, Suit const& b) = default;
+  friend bool operator==(Suit const& a, Suit const& b) = default;
 };
 
-std::ostream &operator<<(std::ostream &os, Suit &obj);
-
+std::ostream& operator<<(std::ostream& os, Suit& obj);
 
 class Rank {
  protected:
@@ -53,10 +52,10 @@ class Rank {
   std::string toString();
   operator int();
 
- friend bool operator<=>(Rank const& a, Rank const& b) = default;
- friend bool operator==(Rank const& a, Rank const& b) = default;
+  friend bool operator<=>(Rank const& a, Rank const& b) = default;
+  friend bool operator==(Rank const& a, Rank const& b) = default;
 };
-std::ostream &operator<<(std::ostream &os, Rank &obj);
+std::ostream& operator<<(std::ostream& os, Rank& obj);
 
 class Card {
  private:
@@ -72,9 +71,9 @@ class Card {
   colors getColor();
   std::string toString();
 
- friend bool operator<=>(Card const& a, Card const& b) = default;
- friend bool operator==(Card const& a, Card const& b) = default;
+  friend bool operator<=>(Card const& a, Card const& b) = default;
+  friend bool operator==(Card const& a, Card const& b) = default;
 };
-std::ostream &operator<<(std::ostream &os, Card &obj);
+std::ostream& operator<<(std::ostream& os, Card& obj);
 
 #endif  // CARD_H

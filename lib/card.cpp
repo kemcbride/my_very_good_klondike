@@ -53,7 +53,6 @@ string Suit::toString() {
   return suitStr(this->getSuit());
 }
 
-
 // Rank
 Rank::Rank() { this->value = 1; };
 Rank::Rank(int val) {
