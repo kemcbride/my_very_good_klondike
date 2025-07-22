@@ -20,9 +20,9 @@ class Pile {
   std::vector<solitaire::Run> runs;
 
   // TODO: Not sure which I want to use...
-  Pile(std::vector<Card>);
-  Pile(std::vector<solitaire::Run>);
-  Pile(Deck &, int);
+  Pile(std::vector<Card>&);
+  Pile(std::vector<solitaire::Run>&);
+  Pile(Deck&, int);
 
   std::optional<Card> peek();
   std::optional<solitaire::Run> peek(

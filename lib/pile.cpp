@@ -8,8 +8,9 @@
 using namespace std;
 using namespace solitaire;
 
-Pile::Pile(vector<Card> deal) {
+Pile::Pile(vector<Card>& deal) {
   vector<Run> myruns;
+  myruns.reserve(8);
   // Initialize 1-card runs
   for (auto c : deal) {
     myruns.push_back(Run(c));
@@ -18,7 +19,7 @@ Pile::Pile(vector<Card> deal) {
   this->runs.back().reveal();
 }
 
-Pile::Pile(vector<Run> runs) {
+Pile::Pile(vector<Run>& runs) {
   this->runs = runs;
   for (auto r : runs) {
     r.hide();
@@ -26,8 +27,9 @@ Pile::Pile(vector<Run> runs) {
   this->runs.back().reveal();
 }
 
-Pile::Pile(Deck &d, int n) {
+Pile::Pile(Deck& d, int n) {
   vector<Run> myruns;
+  myruns.reserve(8);
 
   // Initialize 1-card hidden runs
   for (auto c : d.draw(n)) {
