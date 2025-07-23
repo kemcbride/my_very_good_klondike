@@ -392,6 +392,14 @@ vector<Move> Board::allPossibleMoves() {
               if (i > 1 && d.type == 'f') continue;
               Run srcRun = getSourceRun(s, i);
               Run dstRun = getDestRun(d);
+
+              if (d.type == 'p' && !dstRun.canAdd(srcRun)) continue;
+              if (d.type == 'f') {
+                Foundation f = foundations.at(d.idx);
+                Card c = srcRun.cards.front();
+                if (!f.canPush(c)) continue;
+              }
+
               moves.push_back(Move(srcRun, s, dstRun, d, i));
             }
           }
