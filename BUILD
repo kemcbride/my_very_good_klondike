@@ -137,3 +137,17 @@ cc_test(
         "@googletest//:gtest_main",
     ]
 )
+
+
+#############################################
+### Benchmark Targets
+#############################################
+
+cc_binary(
+    name = "isstuck_benchmark",
+    srcs = ["benchmark/isstuck_benchmark.cpp"],
+    deps = [
+        "@google_benchmark//:benchmark_main",
+        ":board",
+    ],
+)
