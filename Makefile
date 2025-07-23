@@ -15,7 +15,7 @@ test: test_gtest dbg_solitaire solitaire
 	./full_solve_tests.sh
 
 tidy:
-	clang-format -i bin/*.cpp lib/*.h lib/*.cpp test/*.cpp --style=google
+	clang-format -i bin/*.cpp lib/*.h lib/*.cpp test/*.cpp benchmark/*.cpp --style=google
 
 solitaire:
 	CC=clang++ bazel build --platform_suffix=clang-opt --copt -O3 :solitaire
