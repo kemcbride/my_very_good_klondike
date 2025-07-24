@@ -24,3 +24,9 @@ std::string Location::toString() {
 Source::Source(char c, int i) : Location(c, i) {}
 
 Dest::Dest(char c, int i) : Location(c, i) {}
+
+LocPair::LocPair(Source s, Dest d) : src(s), dst(d) {}
+
+std::string LocPair::toString() {
+  return "Src:" + src.toString() + "-Dst:" + dst.toString();
+}

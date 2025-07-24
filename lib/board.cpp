@@ -79,7 +79,10 @@ Board::Board(Deck &d, bool auto_solve, bool auto_reveal,
   }
   foundations = my_fdns;
   getAllDests();
-  is_stuck = isStuck();  // also initializes legal_moves
+  _setupLocPairMoveMap();
+  legal_moves = allLegalMoves();
+  // also initializes legal_moves, all_possible_moves, possibleMovesPerLocPair
+  is_stuck = isStuck();
 }
 
 string Board::toString() {
@@ -195,10 +198,14 @@ void Board::solve() {
     return;
   }
 
-  while (!isCleared()) {
+  while (!(is_cleared = isCleared())) {
     for (auto m : allLegalMoves()) {
       if (m.getMoveType() == TBL2FDN) {
-        _move(m);
+        try {
+          _move(m);
+        } catch (std::runtime_error e) {
+          continue;
+        }
         break;
       }
     }
@@ -214,7 +221,7 @@ void Board::move(MoveCmd mcmd) {
 
 void Board::move(Move m) {
   _move(m);
-  _move_post_processing();
+  _move_post_processing(m);
 }
 
 bool Board::_move(Move m) {
@@ -312,7 +319,7 @@ bool Board::_move(Move m) {
   return true;
 }
 
-void Board::_move_post_processing() {
+void Board::_move_post_processing(Move &m) {
   // Update isSolved(), isStuck(), isCleared() state - have you won?
   is_solved = isSolved();
   is_stuck = isStuck();
@@ -320,22 +327,37 @@ void Board::_move_post_processing() {
 
   if (auto_solve && is_solved && !is_cleared) {
     trySolve();
-    return;  // return early to prevent double messages/double calls to this fn
+    game_duration =
+        chrono::duration_cast<chrono::milliseconds>(game_end - game_start);
   }
 
-  auto game_duration =
-      chrono::duration_cast<chrono::milliseconds>(game_end - game_start);
-  if (is_cleared) {
-    cerr << "Game has been won! Good job, good job." << endl;
-    cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
-    cerr << "Game score: " << getScore() << endl;
-    cerr << "Deal a new game using the 'restart' command" << endl;
-  } else if (is_stuck) {
+  if (is_stuck) {
     cerr << "You're out of legal moves!" << endl;
     cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
     cerr << "Game score: " << getScore() << endl;
     cerr << "Deal a new game using the 'restart' command" << endl;
   }
+}
+
+void Board::_setupLocPairMoveMap() {
+  for (auto const &s : getAllSourcesButStock()) {
+    for (auto const &d : getAllDests()) {
+      LocPair lp(s, d);
+      set<Move> moveset;
+      _possibleMovesPerLocPair.insert({lp, moveset});
+    }
+  }
+  Source stock('s', 0);
+  for (auto const &d : getAllDests()) {
+    LocPair lp(stock, d);
+    set<Move> moveset;
+    _possibleMovesPerLocPair.insert({lp, moveset});
+  }
+}
+
+void Board::_addMoveToPossibleMoves(LocPair lp, Move m) {
+  set<Move> moveset = _possibleMovesPerLocPair[lp];
+  moveset.insert(m);
 }
 
 set<Source> Board::getAllSourcesButStock() {
@@ -400,7 +422,10 @@ vector<Move> Board::allPossibleMoves() {
                 if (!f.canPush(c)) continue;
               }
 
-              moves.push_back(Move(srcRun, s, dstRun, d, i));
+              Move m(srcRun, s, dstRun, d, i);
+              LocPair lp(s, d);
+              _addMoveToPossibleMoves(lp, m);
+              moves.push_back(m);
             }
           }
         }
@@ -411,7 +436,10 @@ vector<Move> Board::allPossibleMoves() {
         if (!f.cards.empty()) {
           const Run &srcRun = f.peek().value();
           const Run &dstRun = getDestRun(d);
-          moves.push_back(Move(srcRun, s, dstRun, d, 1));
+          Move m(srcRun, s, dstRun, d, 1);
+          LocPair lp(s, d);
+          _addMoveToPossibleMoves(lp, m);
+          moves.push_back(m);
         }
       }
     }
@@ -420,7 +448,10 @@ vector<Move> Board::allPossibleMoves() {
     const Run &srcRun = Run(c);
     for (auto &d : all_dests) {
       const Run &dstRun = getDestRun(d);
-      moves.push_back(Move(srcRun, stock_source, dstRun, d, 1));
+      Move m(srcRun, stock_source, dstRun, d, 1);
+      LocPair lp(stock_source, d);
+      _addMoveToPossibleMoves(lp, m);
+      moves.push_back(m);
     }
   }
   return moves;
@@ -466,13 +497,20 @@ vector<Move> Board::allLegalMoves() {
   vector<Move> all_possible_moves = allPossibleMoves();
 
   for (auto m : all_possible_moves) {
-    if (isLegal(m) && isMeaningful(m)) all_legal_moves.insert(m);
+    if (isLegal(m) && isMeaningful(m)) {
+      Source s = m.getSrc();
+      Card src_top = m.getSrcRun().peek().value();
+      if (s.type == 's' && src_top != stock.peek().value()) {
+      } else {
+        all_legal_moves.insert(m);
+      }
+    }
   }
   vector<Move> legal_moves(all_legal_moves.begin(), all_legal_moves.end());
   return legal_moves;
 }
 
-set<string> Board::allLegalCommands() {
+vector<string> Board::allLegalCommands() {
   set<string> cmds;
   for (auto m : legal_moves) {
     // Moves from the stock should be translated to 'next' if curr stock != that
@@ -484,8 +522,8 @@ set<string> Board::allLegalCommands() {
     } else {
       cmds.insert(m.toString());
     }
-  }  // for
-  legal_commands = cmds;
+  }
+  legal_commands = vector<string>(cmds.begin(), cmds.end());
   return legal_commands;
 }
 
@@ -501,7 +539,14 @@ bool Board::isStuck() {
 bool Board::trySolve() {
   if (is_solved) {
     solve();
-    _move_post_processing();
+    // _move_post_processing();
+    is_solved = isSolved();
+    is_stuck = isStuck();
+    is_cleared = isCleared();
+    cerr << "Game has been won! Good job, good job." << endl;
+    cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
+    cerr << "Game score: " << getScore() << endl;
+    cerr << "Deal a new game using the 'restart' command" << endl;
     return true;
   }
   return false;

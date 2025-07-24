@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <iomanip>
+#include <map>
 #include <numeric>
 #include <optional>
 #include <set>
@@ -42,10 +43,12 @@ class Board {
 
   std::set<Dest> all_dests;
   std::vector<Move> legal_moves;
-  std::set<std::string> legal_commands;
+  std::vector<std::string> legal_commands;
+  std::map<LocPair, std::set<Move>> _possibleMovesPerLocPair;
 
   size_t hint_idx = 0;
   int score = 0;
+  std::chrono::milliseconds game_duration;
 
   std::chrono::time_point<std::chrono::system_clock> game_start;
   std::chrono::time_point<std::chrono::system_clock> game_end;
@@ -58,10 +61,12 @@ class Board {
   std::vector<int> getAllCounts(Run);  // return list of possible move sizes
   std::vector<Move> allPossibleMoves();
   std::vector<Move> allLegalMoves();
-  std::set<std::string> allLegalCommands();
+  std::vector<std::string> allLegalCommands();
 
-  bool _move(Move);              // private move execution logic
-  void _move_post_processing();  // check game state, etc.
+  void _setupLocPairMoveMap();
+  void _addMoveToPossibleMoves(LocPair lp, Move m);
+  bool _move(Move);                     // private move execution logic
+  void _move_post_processing(Move& m);  // check game state, etc.
   void reveal_top_runs();
   void solve();  // if is_solved, run all moves to clear the board.
 
@@ -70,7 +75,7 @@ class Board {
   Stock stock;
   std::vector<Foundation> foundations;
 
-  Board(Deck &, bool, bool, bool);
+  Board(Deck&, bool, bool, bool);
   std::string toString();
 
   void enableAutoSolve();
