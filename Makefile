@@ -23,9 +23,11 @@ solitaire:
 dbg_solitaire:
 	CC=clang++ bazel build -c dbg --platform_suffix=clang-dbg :solitaire
 
-test_gtest:
+gtest:
 	bazel test gtest
-	bazel run gtest
+	bazel test gtest_card
+	bazel test gtest_deck
+
 
 test_e2e: solitaire dbg_solitaire
 	./full_solve_tests.sh

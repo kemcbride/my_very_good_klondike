@@ -41,3 +41,5 @@ vector<Card> Deck::draw(int n) {
 }
 
 void Deck::reset_index() { current_idx = 0; }
+
+void Deck::update_seed(int seed) { generator = std::mt19937(seed); }

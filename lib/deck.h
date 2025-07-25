@@ -23,6 +23,7 @@ class Deck {
   std::vector<Card> draw(int);
   // Reset the draw index to the "top" of the deck (0)
   void reset_index();
+  void update_seed(int);
 };
 
 #endif  // DECK_H

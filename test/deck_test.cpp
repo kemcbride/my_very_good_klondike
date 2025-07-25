@@ -49,10 +49,12 @@ TEST(DeckTest, ShuffleConsistency) {
   std::mt19937 g(rd());
 
   Deck d(g);
+  d.update_seed(1);
   d.shuffle();
 
   vector<Card> d1 = d.draw(1);
 
+  d.update_seed(2);
   d.shuffle();
   d.reset_index();
   vector<Card> d2 = d.draw(1);
