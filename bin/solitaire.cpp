@@ -91,6 +91,59 @@ bool is_move(string str) {
   return (first_bit == "move" || first_bit == "m");
 }
 
+string prettyprint_duration(chrono::milliseconds dur) {
+  using namespace std::chrono;
+  using days = duration<int, std::ratio<86400>>;
+  auto d = duration_cast<days>(dur);
+  dur -= d;
+  auto h = duration_cast<hours>(dur);
+  dur -= h;
+  auto m = duration_cast<minutes>(dur);
+  dur -= m;
+  auto s = duration_cast<seconds>(dur);
+  dur -= s;
+  auto ms = duration_cast<milliseconds>(dur);
+
+  auto dc = d.count();
+  auto hc = h.count();
+  auto mc = m.count();
+  auto sc = s.count();
+  auto msc = ms.count();
+
+  std::stringstream ss;
+  ss.fill('0');
+  if (dc) {
+    ss << d.count() << "d";
+  }
+  if (dc || hc) {
+    if (dc) {
+      ss << std::setw(2);
+    }  // pad if second set of numbers
+    ss << h.count() << "h";
+  }
+  if (dc || hc || mc) {
+    if (dc || hc) {
+      ss << std::setw(2);
+    }
+    ss << m.count() << "m";
+  }
+  if (dc || hc || mc || sc) {
+    if (dc || hc || mc) {
+      ss << std::setw(2);
+    }
+    ss << s.count() << 's';
+  }
+  if (dc || hc || mc || sc || msc) {
+    if (dc || hc || mc || sc) {
+      ss << std::setw(2);
+    }
+    ss << ms.count() << "ms";
+  }
+
+  return ss.str();
+}
+
+
 int play(mt19937 generator) {
   cout << "Welcome to the game! (h=help, x=exit, b=show board)" << endl;
 
@@ -148,6 +201,18 @@ int play(mt19937 generator) {
       } catch (invalid_argument &e) {
         cerr << e.what() << " error: invalid argument, no count in your p move?"
              << endl;
+      }
+      // After move, let's check once if it's successful or stuck:
+      if (b.isSolved() && b.isCleared()) {
+        cerr << "Game has been won! Good job, good job." << endl;
+        cerr << "Game time: " << prettyprint_duration(b.getGameDuration()) << endl;
+        cerr << "Game score: " << b.getScore() << endl;
+        cerr << "Deal a new game using the 'restart' command" << endl;
+      } else if (b.isStuck()) {
+        cerr << "You're out of legal moves!" << endl;
+        cerr << "Game time: " << prettyprint_duration(b.getGameDuration()) << endl;
+        cerr << "Game score: " << b.getScore() << endl;
+        cerr << "Deal a new game using the 'restart' command" << endl;
       }
       cout << b.toString() << endl;
     } else {

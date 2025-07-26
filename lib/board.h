@@ -56,8 +56,6 @@ class Board {
   std::chrono::time_point<std::chrono::system_clock> game_end;
 
   bool foundationsFull();  // check if all foundations are "full" ie. size 13
-  bool isSolved();         // check if the game is "Solved"/"Won"
-  bool isCleared();        // check if the game is "Cleared"/"Finished"
   std::set<Source> getAllSourcesButStock();
   std::set<Dest> getAllDests();
   std::vector<int> getAllCounts(Run);  // return list of possible move sizes
@@ -93,6 +91,7 @@ class Board {
   std::string hint();
 
   int getScore();
+  std::chrono::milliseconds getGameDuration();
 
   bool isLegal(Move) const;
   bool isMeaningful(Move) const;
@@ -102,6 +101,8 @@ class Board {
 
   // Made public for testing - TODO - make it protected or sth, friend classes.
   bool isStuck();  // check if the game is "Stuck"/"Lost"
+  bool isCleared();        // check if the game is "Cleared"/"Finished"
+  bool isSolved();         // check if the game is "Solved"/"Won"
 
   Run getSourceRun(Source, unsigned int);  // returns count-sized run (or less)
   Run getDestRun(Dest);                    // returns empty or 1-card run

@@ -49,13 +49,13 @@ e2e_test ./bazel-out/k8-fastbuild-clang-opt/bin/solitaire opt $OPT_TIMEOUT_LIMIT
 
 e2e_test ./bazel-out/k8-fastbuild-clang-opt/bin/solitaire opt $OPT_TIMEOUT_LIMIT 1 inputs/log_bazel_1_again.txt
 
-# e2e_test ./bazel-out/k8-fastbuild-clang-opt/bin/solitaire opt $OPT_TIMEOUT_LIMIT 5 inputs/5.txt
+e2e_test ./bazel-out/k8-fastbuild-clang-opt/bin/solitaire opt $OPT_TIMEOUT_LIMIT 5 inputs/5.txt
 
-# e2e_test ./bazel-out/k8-dbg-clang-dbg/bin/solitaire dbg $DBG_TIMEOUT_LIMIT 0 inputs/log_bazel_0_again.txt
-#
-# e2e_test ./bazel-out/k8-dbg-clang-dbg/bin/solitaire dbg $DBG_TIMEOUT_LIMIT 1 inputs/log_bazel_1_again.txt
+e2e_test ./bazel-out/k8-dbg-clang-dbg/bin/solitaire dbg $DBG_TIMEOUT_LIMIT 0 inputs/log_bazel_0_again.txt
 
-# e2e_test ./bazel-out/k8-dbg-clang-dbg/bin/solitaire dbg $DBG_TIMEOUT_LIMIT 5 inputs/5.txt
+e2e_test ./bazel-out/k8-dbg-clang-dbg/bin/solitaire dbg $DBG_TIMEOUT_LIMIT 1 inputs/log_bazel_1_again.txt
+
+e2e_test ./bazel-out/k8-dbg-clang-dbg/bin/solitaire dbg $DBG_TIMEOUT_LIMIT 5 inputs/5.txt
 
 echo "Correctness: ${TOTAL_CORRECTNESS_RESULT}; Timeout: ${TOTAL_TIMEOUT_RESULT}";
 

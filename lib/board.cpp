@@ -9,58 +9,6 @@
 using namespace std;
 using namespace solitaire;
 
-string prettyprint_duration(chrono::milliseconds dur) {
-  using namespace std::chrono;
-  using days = duration<int, std::ratio<86400>>;
-  auto d = duration_cast<days>(dur);
-  dur -= d;
-  auto h = duration_cast<hours>(dur);
-  dur -= h;
-  auto m = duration_cast<minutes>(dur);
-  dur -= m;
-  auto s = duration_cast<seconds>(dur);
-  dur -= s;
-  auto ms = duration_cast<milliseconds>(dur);
-
-  auto dc = d.count();
-  auto hc = h.count();
-  auto mc = m.count();
-  auto sc = s.count();
-  auto msc = ms.count();
-
-  std::stringstream ss;
-  ss.fill('0');
-  if (dc) {
-    ss << d.count() << "d";
-  }
-  if (dc || hc) {
-    if (dc) {
-      ss << std::setw(2);
-    }  // pad if second set of numbers
-    ss << h.count() << "h";
-  }
-  if (dc || hc || mc) {
-    if (dc || hc) {
-      ss << std::setw(2);
-    }
-    ss << m.count() << "m";
-  }
-  if (dc || hc || mc || sc) {
-    if (dc || hc || mc) {
-      ss << std::setw(2);
-    }
-    ss << s.count() << 's';
-  }
-  if (dc || hc || mc || sc || msc) {
-    if (dc || hc || mc || sc) {
-      ss << std::setw(2);
-    }
-    ss << ms.count() << "ms";
-  }
-
-  return ss.str();
-}
-
 Board::Board(Deck &d, bool auto_solve, bool auto_reveal,
              bool recycle_penalty_enabled)
     : auto_solve(auto_solve),
@@ -200,7 +148,7 @@ void Board::solve() {
     for (auto m : allLegalMoves()) {
       if (m.getMoveType() == TBL2FDN) {
         try {
-          _move(m);
+          move(m);
         } catch (std::runtime_error &e) {
           continue;
         }
@@ -331,10 +279,6 @@ void Board::_move_post_processing(Move &m) {
   }
 
   if (is_stuck) {
-    cerr << "You're out of legal moves!" << endl;
-    cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
-    cerr << "Game score: " << getScore() << endl;
-    cerr << "Deal a new game using the 'restart' command" << endl;
   }
 }
 
@@ -626,10 +570,6 @@ bool Board::trySolve() {
     is_solved = isSolved();
     is_stuck = isStuck();
     is_cleared = isCleared();
-    cerr << "Game has been won! Good job, good job." << endl;
-    cerr << "Game time: " << prettyprint_duration(game_duration) << endl;
-    cerr << "Game score: " << getScore() << endl;
-    cerr << "Deal a new game using the 'restart' command" << endl;
     return true;
   }
   return false;
@@ -688,3 +628,5 @@ Run Board::getDestRun(Dest d) {
 std::vector<Move> Board::getLegalMoves() { return legal_moves; }
 
 std::vector<std::string> Board::getLegalCommands() { return legal_commands; }
+
+std::chrono::milliseconds Board::getGameDuration() { return game_duration ;}
