@@ -143,7 +143,6 @@ string prettyprint_duration(chrono::milliseconds dur) {
   return ss.str();
 }
 
-
 int play(mt19937 generator) {
   cout << "Welcome to the game! (h=help, x=exit, b=show board)" << endl;
 
@@ -205,12 +204,14 @@ int play(mt19937 generator) {
       // After move, let's check once if it's successful or stuck:
       if (b.isSolved() && b.isCleared()) {
         cerr << "Game has been won! Good job, good job." << endl;
-        cerr << "Game time: " << prettyprint_duration(b.getGameDuration()) << endl;
+        cerr << "Game time: " << prettyprint_duration(b.getGameDuration())
+             << endl;
         cerr << "Game score: " << b.getScore() << endl;
         cerr << "Deal a new game using the 'restart' command" << endl;
       } else if (b.isStuck()) {
         cerr << "You're out of legal moves!" << endl;
-        cerr << "Game time: " << prettyprint_duration(b.getGameDuration()) << endl;
+        cerr << "Game time: " << prettyprint_duration(b.getGameDuration())
+             << endl;
         cerr << "Game score: " << b.getScore() << endl;
         cerr << "Deal a new game using the 'restart' command" << endl;
       }
