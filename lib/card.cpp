@@ -38,15 +38,15 @@ Suit::Suit() : s(spades){};
 Suit::Suit(unsigned int i) : s(SuitEnumList.at(i)){};
 Suit::Suit(suits su) : s(su){};
 
-colors Suit::getColor() {
+const colors Suit::getColor() const {
   if (this->s == spades || this->s == clubs) return black;
   return red;
 };
-suits Suit::getSuit() { return this->s; };
+const suits Suit::getSuit() const { return this->s; };
 
 ostream &operator<<(ostream &os, Suit &obj) { return os << obj.toString(); };
 
-string Suit::toString() {
+string Suit::toString() const {
   if (this->getColor() == red) {
     return string(string(REDSTR) + suitStr(this->getSuit()) + string(RESETSTR));
   }
@@ -62,7 +62,7 @@ Rank::Rank(int val) {
   }
   this->value = val;
 };
-int Rank::getValue() { return this->value; }
+int Rank::getValue() const { return this->value; }
 
 ostream &operator<<(ostream &os, Rank &obj) { return os << obj.toString(); };
 
@@ -100,11 +100,11 @@ Card::Card(int r, int s) {
   this->suit = Suit(su);
 }
 
-Suit Card::getSuit() { return this->suit; }
+const Suit Card::getSuit() const { return this->suit; }
 
-Rank Card::getRank() { return this->rank; }
+Rank Card::getRank() const { return this->rank; }
 
-colors Card::getColor() { return this->suit.getColor(); }
+colors Card::getColor() const { return this->suit.getColor(); }
 
 string Card::toString() {
   string base_str = this->getRank().toString() + this->getSuit().toString();

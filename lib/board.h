@@ -100,9 +100,9 @@ class Board {
   bool trySolve();  // true if it has solved the game, false if it cannot
 
   // Made public for testing - TODO - make it protected or sth, friend classes.
-  bool isStuck();  // check if the game is "Stuck"/"Lost"
-  bool isCleared();        // check if the game is "Cleared"/"Finished"
-  bool isSolved();         // check if the game is "Solved"/"Won"
+  bool isStuck();    // check if the game is "Stuck"/"Lost"
+  bool isCleared();  // check if the game is "Cleared"/"Finished"
+  bool isSolved();   // check if the game is "Solved"/"Won"
 
   Run getSourceRun(Source, unsigned int);  // returns count-sized run (or less)
   Run getDestRun(Dest);                    // returns empty or 1-card run

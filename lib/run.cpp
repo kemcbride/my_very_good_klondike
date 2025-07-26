@@ -117,7 +117,7 @@ int Run::reveal() {
 // NOTE: This function is likely completely unnecessary.
 void Run::hide() { this->revealed = false; }
 
-bool Run::canAdd(Card c) {
+bool Run::canAdd(const Card c) const {
   if (this->cards.empty() && c.getRank().getValue() == 13) {
     // If I'm empty (strange case, but used for programmatically generated
     // moves) During normal game play this is handled via empty pile put, not
@@ -135,7 +135,7 @@ bool Run::canAdd(Card c) {
   return false;
 }
 
-bool Run::canAdd(Run r) {
+bool Run::canAdd(const Run r) const {
   if (!r.cards.empty()) {
     Card your_first_card = r.cards.front();
     return this->canAdd(your_first_card);

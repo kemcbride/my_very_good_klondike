@@ -31,9 +31,9 @@ class Suit {
   Suit();
   Suit(suits);
   Suit(unsigned int);
-  colors getColor();
-  suits getSuit();
-  std::string toString();
+  const colors getColor() const;
+  const suits getSuit() const;
+  std::string toString() const;
 
   friend bool operator<=>(Suit const& a, Suit const& b) = default;
   friend bool operator==(Suit const& a, Suit const& b) = default;
@@ -48,7 +48,7 @@ class Rank {
  public:
   Rank();
   Rank(int);
-  int getValue();
+  int getValue() const;
   std::string toString();
   operator int();
 
@@ -66,9 +66,9 @@ class Card {
   Card();
   Card(Rank, Suit);
   Card(int, int);
-  Suit getSuit();
-  Rank getRank();
-  colors getColor();
+  const Suit getSuit() const;
+  Rank getRank() const;
+  colors getColor() const;
   std::string toString();
 
   friend bool operator<=>(Card const& a, Card const& b) = default;

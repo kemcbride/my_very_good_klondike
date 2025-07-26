@@ -31,8 +31,8 @@ class Run {
   void put(std::vector<Card>);  // you can just try to add cards
   void put(Card);               // you can just try to add a card
 
-  bool canAdd(Card);
-  bool canAdd(Run);
+  bool canAdd(const Card) const;
+  bool canAdd(const Run) const;
 
   int reveal();
   void hide();

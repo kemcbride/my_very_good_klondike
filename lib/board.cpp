@@ -299,56 +299,13 @@ void Board::_setupLocPairMoveMap() {
   }
 
   // Populate the starting moves
-  // TODO - cleanup this copy pasta - merge it into the above loops, probably
-  set<Source> all_sources = getAllSourcesButStock();
+  auto allLocPairs = _possibleMovesPerLocPair |
+                     ranges::views::transform([](pair<LocPair, set<Move>> lpp) {
+                       return lpp.first;
+                     });
 
-  for (auto const &s : all_sources) {
-    for (auto const &d : all_dests) {
-      if (s.type == 'p') {
-        const Pile &p = tableau.piles.at(s.idx);
-        if (!p.runs.empty()) {
-          const Run &r = p.runs.back();
-          if (!r.cards.empty()) {
-            for (auto i : getAllCounts(r)) {
-              if (i > 1 && d.type == 'f') continue;
-              Run srcRun = getSourceRun(s, i);
-              Run dstRun = getDestRun(d);
-
-              if (d.type == 'p' && !dstRun.canAdd(srcRun)) continue;
-              if (d.type == 'f') {
-                Foundation f = foundations.at(d.idx);
-                Card c = srcRun.cards.front();
-                if (!f.canPush(c)) continue;
-              }
-
-              Move m(srcRun, s, dstRun, d, i);
-              LocPair lp(s, d);
-              _addMoveToPossibleMoves(lp, m);
-            }
-          }
-        }
-      } else if (s.type == 'f') {
-        if (d.type == 'f') continue;
-
-        Foundation &f = foundations.at(s.idx);
-        if (!f.cards.empty()) {
-          const Run &srcRun = f.peek().value();
-          const Run &dstRun = getDestRun(d);
-          Move m(srcRun, s, dstRun, d, 1);
-          LocPair lp(s, d);
-          _addMoveToPossibleMoves(lp, m);
-        }
-      }
-    }
-  }
-  for (auto &c : stock.cards) {
-    const Run &srcRun = Run(c);
-    for (auto &d : all_dests) {
-      const Run &dstRun = getDestRun(d);
-      Move m(srcRun, stock_source, dstRun, d, 1);
-      LocPair lp(stock_source, d);
-      _addMoveToPossibleMoves(lp, m);
-    }
+  for (auto lp : allLocPairs) {
+    _updatePossibleMoves(lp);
   }
 }
 
@@ -443,7 +400,9 @@ void Board::_updatePossibleMoves(LocPair lp) {
         const Run &dstRun = getDestRun(d);
         Source stock_source('s', 0);
         Move m(srcRun, stock_source, dstRun, d, 1);
-        lpMoves.insert(m);
+        if (dstRun.canAdd(srcRun)) {
+          lpMoves.insert(m);
+        }
       }
     }
   }
@@ -629,4 +588,4 @@ std::vector<Move> Board::getLegalMoves() { return legal_moves; }
 
 std::vector<std::string> Board::getLegalCommands() { return legal_commands; }
 
-std::chrono::milliseconds Board::getGameDuration() { return game_duration ;}
+std::chrono::milliseconds Board::getGameDuration() { return game_duration; }
