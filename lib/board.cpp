@@ -330,8 +330,9 @@ void Board::_updatePossibleMovesNext() {
       _possibleMovesPerLocPair |
       ranges::views::transform(
           [](pair<LocPair, set<Move>> lpp) { return lpp.first; }) |
-      ranges::views::filter(
-          [stock_source](LocPair lp) { return (lp.src == stock_source); });
+      ranges::views::filter([stock_source](LocPair lp) {
+        return (lp.src == stock_source || lp.dst == stock_source);
+      });
 
   for (auto lp : affectedLocPairs) {
     _updatePossibleMoves(lp);
@@ -385,11 +386,21 @@ void Board::_updatePossibleMoves(LocPair lp) {
     Source stock_source('s', 0);
     for (auto &c : stock.cards) {
       for (auto &d : all_dests) {
-        const Run &dstRun = getDestRun(d);
-        if (dstRun.canAdd(c)) {
-          const Run &srcRun = Run(c);
-          Move m(srcRun, stock_source, dstRun, d, 1);
-          lpMoves.insert(m);
+        if (d.type == 'p') {
+          const Run &dstRun = getDestRun(d);
+          if (dstRun.canAdd(c)) {
+            const Run &srcRun = Run(c);
+            Move m(srcRun, stock_source, dstRun, d, 1);
+            lpMoves.insert(m);
+          }
+        } else if (d.type == 'f') {
+          Foundation &f = foundations.at(d.idx);
+          if (f.canPush(c)) {
+            const Run &srcRun = Run(c);
+            const Run &dstRun = getDestRun(d);
+            Move m(srcRun, stock_source, dstRun, d, 1);
+            lpMoves.insert(m);
+          }
         }
       }
     }
@@ -488,8 +499,6 @@ vector<Move> Board::allLegalMoves() {
 vector<string> Board::allLegalCommands() {
   set<string> cmds;
   for (auto m : legal_moves) {
-    // Moves from the stock should be translated to 'next' if curr stock !=
-    // that source
     Source s = m.getSrc();
     Card src_top = m.getSrcRun().peek().value();
     if (s.type == 's' && (src_top != stock.peek().value())) {
@@ -498,7 +507,8 @@ vector<string> Board::allLegalCommands() {
       cmds.insert(m.toString());
     }
   }
-  return vector<string>(cmds.begin(), cmds.end());
+  auto legal_commands = vector<string>(cmds.begin(), cmds.end());
+  return legal_commands;
 }
 
 bool Board::isStuck() {
