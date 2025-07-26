@@ -140,11 +140,7 @@ void Board::solve() {
   while (!(is_cleared = isCleared())) {
     for (auto m : allLegalMoves()) {
       if (m.getMoveType() == TBL2FDN) {
-        try {
-          move(m);
-        } catch (std::runtime_error &e) {
-          continue;
-        }
+        move(m);
         break;
       }
     }
