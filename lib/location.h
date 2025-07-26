@@ -11,7 +11,7 @@ class Location {
   int idx = 0;  // 0-offset index into list of piles or foundations
   char type = 'p';
   Location(char, int);
-  std::string toString();
+  std::string toString() const;
 
   friend bool operator==(const Location& lhs, const Location& rhs) = default;
 };
@@ -29,6 +29,7 @@ class Source : public Location {
 
  public:
   Source(char, int);
+  Source(Location l);
   friend bool operator==(const Source& lhs, const Source& rhs) = default;
 };
 
@@ -38,6 +39,7 @@ class Dest : public Location {
 
  public:
   Dest(char, int);
+  Dest(Location l);
   friend bool operator==(const Dest& lhs, const Dest& rhs) = default;
 };
 
@@ -46,10 +48,10 @@ class LocPair {
   LocPair() = delete;
 
  public:
-  LocPair(Source, Dest);
-  Source src;
-  Dest dst;
-  std::string toString();
+  LocPair(Location, Location);
+  Location src;
+  Location dst;
+  const std::string toString() const;
   inline friend bool operator<(const LocPair& lhs, const LocPair& rhs) {
     if (lhs.src == rhs.src) {
       return lhs.dst < rhs.dst;

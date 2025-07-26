@@ -22,6 +22,7 @@ class Stock {
   std::optional<Card> peek();
   std::optional<Card> pop();
   bool next();  // returns: did this move recycle the stock?
+  bool empty();
 
   std::string toString();
 };

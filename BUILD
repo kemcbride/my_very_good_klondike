@@ -124,6 +124,18 @@ cc_test(
 )
 
 cc_test(
+    name = "gtest_board",
+    srcs = [
+        "test/board_test.cpp",
+        ],
+    deps = [
+        ":board",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ]
+)
+
+cc_test(
     name = "gtest",
     srcs = [
         "test/gtest_solitaire_test.cpp",

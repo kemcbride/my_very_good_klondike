@@ -11,7 +11,7 @@ clean:
 run: solitaire
 	bazel run :solitaire play
 
-test: test_gtest dbg_solitaire solitaire
+test: gtest dbg_solitaire solitaire
 	./full_solve_tests.sh
 
 tidy:
@@ -27,6 +27,7 @@ gtest:
 	bazel test gtest
 	bazel test gtest_card
 	bazel test gtest_deck
+	bazel test gtest_board
 
 
 test_e2e: solitaire dbg_solitaire

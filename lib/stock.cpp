@@ -61,3 +61,5 @@ string Stock::toString() {
   }
   return "<" + card_str + ">";
 }
+
+bool Stock::empty() { return cards.empty(); }

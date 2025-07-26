@@ -3,9 +3,11 @@
 
 #include <chrono>
 #include <iomanip>
+#include <iostream>
 #include <map>
 #include <numeric>
 #include <optional>
+#include <ranges>
 #include <set>
 #include <sstream>
 #include <vector>
@@ -65,6 +67,9 @@ class Board {
 
   void _setupLocPairMoveMap();
   void _addMoveToPossibleMoves(LocPair lp, Move m);
+  void _updatePossibleMovesMap(Move& m);
+  void _updatePossibleMovesNext();
+  void _updatePossibleMoves(LocPair lp);
   bool _move(Move);                     // private move execution logic
   void _move_post_processing(Move& m);  // check game state, etc.
   void reveal_top_runs();
@@ -89,8 +94,8 @@ class Board {
 
   int getScore();
 
-  bool isLegal(Move);
-  bool isMeaningful(Move);
+  bool isLegal(Move) const;
+  bool isMeaningful(Move) const;
   void move(Move);
   void move(MoveCmd);
   bool trySolve();  // true if it has solved the game, false if it cannot
@@ -100,6 +105,9 @@ class Board {
 
   Run getSourceRun(Source, unsigned int);  // returns count-sized run (or less)
   Run getDestRun(Dest);                    // returns empty or 1-card run
+
+  std::vector<Move> getLegalMoves();
+  std::vector<std::string> getLegalCommands();
 };
 
 #endif  // BOARD_H

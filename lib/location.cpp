@@ -12,7 +12,7 @@ Location::Location(char c, int i) {
   this->idx = i;
 }
 
-std::string Location::toString() {
+std::string Location::toString() const {
   if (this->type == 's') {
     return string(1, this->type);
   }
@@ -22,11 +22,13 @@ std::string Location::toString() {
 }
 
 Source::Source(char c, int i) : Location(c, i) {}
+Source::Source(Location l) : Location(l) {}
 
 Dest::Dest(char c, int i) : Location(c, i) {}
+Dest::Dest(Location l) : Location(l) {}
 
-LocPair::LocPair(Source s, Dest d) : src(s), dst(d) {}
+LocPair::LocPair(Location s, Location d) : src(s), dst(d) {}
 
-std::string LocPair::toString() {
+const std::string LocPair::toString() const {
   return "Src:" + src.toString() + "-Dst:" + dst.toString();
 }

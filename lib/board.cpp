@@ -133,6 +133,7 @@ void Board::next() {
   // Don't need to evaluate this per next() actually, because we calculate
   // possibleMoves() using all stock values, rather than just the top.
   // is_stuck = isStuck();
+  _updatePossibleMovesNext();
 }
 
 string Board::hint() {
@@ -144,9 +145,6 @@ string Board::hint() {
 
   Move m = legal_moves.at(hint_idx);
   hint_idx++;
-  // TODO - figure out how to dedupe these at the allPossibleMoves stage
-  // NOTE - If we do dedupe them at the allPossibleMoves stage, then we MAY
-  // need to put back the isStuck() call in next() . So bear that in mind.
   Source s = m.getSrc();
   Card src_top = m.getSrcRun().peek().value();
   // Translate source hints for hidden sources into "next"
@@ -162,7 +160,7 @@ bool Board::foundationsFull() {
 }
 
 bool Board::isSolved() {
-  if (!(stock.cards.size() == 0)) {
+  if (!stock.empty()) {
     return false;
   }
 
@@ -203,7 +201,7 @@ void Board::solve() {
       if (m.getMoveType() == TBL2FDN) {
         try {
           _move(m);
-        } catch (std::runtime_error e) {
+        } catch (std::runtime_error &e) {
           continue;
         }
         break;
@@ -322,6 +320,7 @@ bool Board::_move(Move m) {
 void Board::_move_post_processing(Move &m) {
   // Update isSolved(), isStuck(), isCleared() state - have you won?
   is_solved = isSolved();
+  _updatePossibleMovesMap(m);
   is_stuck = isStuck();
   is_cleared = isCleared();
 
@@ -340,6 +339,7 @@ void Board::_move_post_processing(Move &m) {
 }
 
 void Board::_setupLocPairMoveMap() {
+  // Populate the keys/values
   for (auto const &s : getAllSourcesButStock()) {
     for (auto const &d : getAllDests()) {
       LocPair lp(s, d);
@@ -347,16 +347,168 @@ void Board::_setupLocPairMoveMap() {
       _possibleMovesPerLocPair.insert({lp, moveset});
     }
   }
-  Source stock('s', 0);
+  Source stock_source('s', 0);
   for (auto const &d : getAllDests()) {
-    LocPair lp(stock, d);
+    LocPair lp(stock_source, d);
     set<Move> moveset;
     _possibleMovesPerLocPair.insert({lp, moveset});
   }
+
+  // Populate the starting moves
+  // TODO - cleanup this copy pasta - merge it into the above loops, probably
+  set<Source> all_sources = getAllSourcesButStock();
+
+  for (auto const &s : all_sources) {
+    for (auto const &d : all_dests) {
+      if (s.type == 'p') {
+        const Pile &p = tableau.piles.at(s.idx);
+        if (!p.runs.empty()) {
+          const Run &r = p.runs.back();
+          if (!r.cards.empty()) {
+            for (auto i : getAllCounts(r)) {
+              if (i > 1 && d.type == 'f') continue;
+              Run srcRun = getSourceRun(s, i);
+              Run dstRun = getDestRun(d);
+
+              if (d.type == 'p' && !dstRun.canAdd(srcRun)) continue;
+              if (d.type == 'f') {
+                Foundation f = foundations.at(d.idx);
+                Card c = srcRun.cards.front();
+                if (!f.canPush(c)) continue;
+              }
+
+              Move m(srcRun, s, dstRun, d, i);
+              LocPair lp(s, d);
+              _addMoveToPossibleMoves(lp, m);
+            }
+          }
+        }
+      } else if (s.type == 'f') {
+        if (d.type == 'f') continue;
+
+        Foundation &f = foundations.at(s.idx);
+        if (!f.cards.empty()) {
+          const Run &srcRun = f.peek().value();
+          const Run &dstRun = getDestRun(d);
+          Move m(srcRun, s, dstRun, d, 1);
+          LocPair lp(s, d);
+          _addMoveToPossibleMoves(lp, m);
+        }
+      }
+    }
+  }
+  for (auto &c : stock.cards) {
+    const Run &srcRun = Run(c);
+    for (auto &d : all_dests) {
+      const Run &dstRun = getDestRun(d);
+      Move m(srcRun, stock_source, dstRun, d, 1);
+      LocPair lp(stock_source, d);
+      _addMoveToPossibleMoves(lp, m);
+    }
+  }
+}
+
+void Board::_updatePossibleMovesMap(Move &m) {
+  Location src = m.getSrc();
+  Location dst = m.getDst();
+
+  auto affectedLocPairs =
+      _possibleMovesPerLocPair |
+      ranges::views::transform(
+          [](pair<LocPair, set<Move>> lpp) { return lpp.first; }) |
+      ranges::views::filter([src, dst](LocPair lp) {
+        return (lp.src == src || lp.dst == src || lp.src == dst ||
+                lp.dst == dst);
+      });
+
+  // Every locPair in the map's keys where the source is the source,
+  // or the source is the dest, OR the dest is the source, or the dest
+  // is the dest
+  // Should be like around 8x4 to 12x4 total - between 32 & 48
+  for (auto lp : affectedLocPairs) {
+    _updatePossibleMoves(lp);
+  }
+}
+
+void Board::_updatePossibleMovesNext() {
+  // OK, we need to update all pairs involving the stock.
+  // You can't use the stock as a destination, either, so...
+  // Only loc pairs where stock is the source.
+  Location stock_source('s', 0);
+
+  auto affectedLocPairs =
+      _possibleMovesPerLocPair |
+      ranges::views::transform(
+          [](pair<LocPair, set<Move>> lpp) { return lpp.first; }) |
+      ranges::views::filter([stock_source](LocPair lp) {
+        return (lp.src == stock_source || lp.dst == stock_source);
+      });
+
+  for (auto lp : affectedLocPairs) {
+    _updatePossibleMoves(lp);
+  }
+}
+
+void Board::_updatePossibleMoves(LocPair lp) {
+  // OK - this is simple mode - for a given LocPair,
+  // completely update the moves for that specific pair based
+  // on current board state.
+  set<Move> lpMoves;
+  Location s = lp.src;
+  Location d = lp.dst;
+
+  if (s.type == 'p') {
+    const Pile &p = tableau.piles.at(s.idx);
+    if (!p.runs.empty()) {
+      const Run &r = p.runs.back();
+      if (!r.cards.empty()) {
+        for (auto i : getAllCounts(r)) {
+          if (i > 1 && d.type == 'f') continue;
+          Run srcRun = getSourceRun(Source(s), i);
+          Run dstRun = getDestRun(Dest(d));
+
+          if (d.type == 'p' && !dstRun.canAdd(srcRun)) continue;
+          if (d.type == 'f') {
+            Foundation f = foundations.at(d.idx);
+            Card c = srcRun.cards.front();
+            if (!f.canPush(c)) continue;
+          }
+
+          Move m(srcRun, s, dstRun, d, i);
+          lpMoves.insert(m);
+        }
+      }
+    }
+  } else if (s.type == 'f') {
+    if (d.type == 'f') {
+      _possibleMovesPerLocPair[lp] = lpMoves;
+      return;
+    };
+
+    Foundation &f = foundations.at(s.idx);
+    if (!f.cards.empty()) {
+      const Run &srcRun = f.peek().value();
+      const Run &dstRun = getDestRun(d);
+      Move m(srcRun, s, dstRun, d, 1);
+      lpMoves.insert(m);
+    }
+  } else if (s.type == 's') {
+    for (auto &c : stock.cards) {
+      const Run &srcRun = Run(c);
+      for (auto &d : all_dests) {
+        const Run &dstRun = getDestRun(d);
+        Source stock_source('s', 0);
+        Move m(srcRun, stock_source, dstRun, d, 1);
+        lpMoves.insert(m);
+      }
+    }
+  }
+
+  _possibleMovesPerLocPair[lp] = lpMoves;
 }
 
 void Board::_addMoveToPossibleMoves(LocPair lp, Move m) {
-  set<Move> moveset = _possibleMovesPerLocPair[lp];
+  set<Move> &moveset = _possibleMovesPerLocPair[lp];
   moveset.insert(m);
 }
 
@@ -394,72 +546,9 @@ vector<int> Board::getAllCounts(Run r) {
   return v;
 }
 
-vector<Move> Board::allPossibleMoves() {
-  vector<Move> moves;
-
-  Source stock_source('s', 0);
-  set<Source> all_sources = getAllSourcesButStock();
-
-  for (auto const &s : all_sources) {
-    for (auto const &d : all_dests) {
-      // In order to figure out how many different moves we can do from this
-      // source, to this dest, we need to know how many cards there are in the
-      // run
-      if (s.type == 'p') {
-        const Pile &p = tableau.piles.at(s.idx);
-        if (!p.runs.empty()) {
-          const Run &r = p.runs.back();
-          if (!r.cards.empty()) {
-            for (auto i : getAllCounts(r)) {
-              if (i > 1 && d.type == 'f') continue;
-              Run srcRun = getSourceRun(s, i);
-              Run dstRun = getDestRun(d);
-
-              if (d.type == 'p' && !dstRun.canAdd(srcRun)) continue;
-              if (d.type == 'f') {
-                Foundation f = foundations.at(d.idx);
-                Card c = srcRun.cards.front();
-                if (!f.canPush(c)) continue;
-              }
-
-              Move m(srcRun, s, dstRun, d, i);
-              LocPair lp(s, d);
-              _addMoveToPossibleMoves(lp, m);
-              moves.push_back(m);
-            }
-          }
-        }
-      } else if (s.type == 'f') {
-        if (d.type == 'f') continue;
-
-        Foundation &f = foundations.at(s.idx);
-        if (!f.cards.empty()) {
-          const Run &srcRun = f.peek().value();
-          const Run &dstRun = getDestRun(d);
-          Move m(srcRun, s, dstRun, d, 1);
-          LocPair lp(s, d);
-          _addMoveToPossibleMoves(lp, m);
-          moves.push_back(m);
-        }
-      }
-    }
-  }
-  for (auto &c : stock.cards) {
-    const Run &srcRun = Run(c);
-    for (auto &d : all_dests) {
-      const Run &dstRun = getDestRun(d);
-      Move m(srcRun, stock_source, dstRun, d, 1);
-      LocPair lp(stock_source, d);
-      _addMoveToPossibleMoves(lp, m);
-      moves.push_back(m);
-    }
-  }
-  return moves;
-}
-
 int Board::getScore() { return score; }
 
-bool Board::isLegal(Move m) {
+bool Board::isLegal(Move m) const {
   Dest d = m.getDst();
   Run dstRun = m.getDstRun();
   Run srcRun = m.getSrcRun();
@@ -477,12 +566,12 @@ bool Board::isLegal(Move m) {
   return false;
 }
 
-bool Board::isMeaningful(Move m) {
+bool Board::isMeaningful(Move m) const {
   // moves of a pile with 1 run starting with K to an empty pile are NOT
   // meaningful
   if (m.getSrc().type == 'p' && m.getDst().type == 'p') {
-    Pile &srcPile = tableau.piles.at(m.getSrc().idx);
-    Pile &dstPile = tableau.piles.at(m.getDst().idx);
+    const Pile &srcPile = tableau.piles.at(m.getSrc().idx);
+    const Pile &dstPile = tableau.piles.at(m.getDst().idx);
     if (srcPile.runs.size() == 1 && dstPile.runs.size() == 0) {
       auto srcRun = srcPile.runs.front();  // there's only one /shrug
       auto backCard = srcRun.cards.front();
@@ -494,27 +583,22 @@ bool Board::isMeaningful(Move m) {
 
 vector<Move> Board::allLegalMoves() {
   set<Move> all_legal_moves;
-  vector<Move> all_possible_moves = allPossibleMoves();
 
-  for (auto m : all_possible_moves) {
-    if (isLegal(m) && isMeaningful(m)) {
-      Source s = m.getSrc();
-      Card src_top = m.getSrcRun().peek().value();
-      if (s.type == 's' && src_top != stock.peek().value()) {
-      } else {
-        all_legal_moves.insert(m);
-      }
-    }
+  for (auto p : _possibleMovesPerLocPair) {
+    all_legal_moves.merge(p.second);
   }
-  vector<Move> legal_moves(all_legal_moves.begin(), all_legal_moves.end());
-  return legal_moves;
+  auto blah = all_legal_moves | std::ranges::views::filter([*this](Move m) {
+                return this->isLegal(m) && this->isMeaningful(m);
+              });
+  vector<Move> bloo(blah.begin(), blah.end());
+  return bloo;
 }
 
 vector<string> Board::allLegalCommands() {
   set<string> cmds;
   for (auto m : legal_moves) {
-    // Moves from the stock should be translated to 'next' if curr stock != that
-    // source
+    // Moves from the stock should be translated to 'next' if curr stock !=
+    // that source
     Source s = m.getSrc();
     Card src_top = m.getSrcRun().peek().value();
     if (s.type == 's' && (src_top != stock.peek().value())) {
@@ -523,8 +607,7 @@ vector<string> Board::allLegalCommands() {
       cmds.insert(m.toString());
     }
   }
-  legal_commands = vector<string>(cmds.begin(), cmds.end());
-  return legal_commands;
+  return vector<string>(cmds.begin(), cmds.end());
 }
 
 bool Board::isStuck() {
@@ -601,3 +684,7 @@ Run Board::getDestRun(Dest d) {
     throw runtime_error("B:getDestRun: stock is not a valid destination");
   return dstRun;
 }
+
+std::vector<Move> Board::getLegalMoves() { return legal_moves; }
+
+std::vector<std::string> Board::getLegalCommands() { return legal_commands; }
