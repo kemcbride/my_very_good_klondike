@@ -17,27 +17,29 @@ TEST(BoardTest, HintCorrectness) {
 
   b.toggleLabels();
 
-  // TODO - add "next" to these command lists once it's a thing.
-  vector<string> expectedStartCmds{"p1 1 f1", "p1 1 f2", "p1 1 f3",
-                                   "p1 1 f4", "p1 1 p7", "p7 1 p2"};
+  // TODO - change hints to use stable sort (& next always at end)
+  set<string> expectedStartCmds{"p1 1 f1", "p1 1 f2", "p1 1 f3", "next",
+                                "p1 1 f4", "p1 1 p7", "p7 1 p2"};
 
-  EXPECT_EQ(b.getLegalCommands(), expectedStartCmds);
+  vector<string> lc = b.getLegalCommands();
+  set<string> lcs(lc.begin(), lc.end());
+  EXPECT_EQ(lcs, expectedStartCmds);
 
   b.move(b.getLegalMoves()[0]);
-  cout << b.toString() << endl;
-  cout << "First moves: " << endl;
-  for (auto m : b.getLegalMoves()) {
-    cout << m.toString() << ", ";
-  }
-  cout << endl;
-  cout << "First cmds: " << endl;
-  for (auto c : b.getLegalCommands()) {
-    cout << c << ", ";
-  }
-  cout << endl;
-  vector<string> expectedSecondCmds{
-      "p7 1 p2",
-  };
+  // cout << b.toString() << endl;
+  // cout << "First moves: " << endl;
+  // for (auto m : b.getLegalMoves()) {
+  //   cout << m.toString() << ", ";
+  // }
+  // cout << endl;
+  // cout << "First cmds: " << endl;
+  // for (auto c : b.getLegalCommands()) {
+  //   cout << c << ", ";
+  // }
+  // cout << endl;
+  set<string> expectedSecondCmds{"p7 1 p2", "next"};
 
-  EXPECT_EQ(b.getLegalCommands(), expectedSecondCmds);
+  lc = b.getLegalCommands();
+  lcs = set<string>(lc.begin(), lc.end());
+  EXPECT_EQ(lcs, expectedSecondCmds);
 }
