@@ -37,8 +37,10 @@ class Move {
 
   Source getSrc();
   Dest getDst();
+
   unsigned int getCount();
   MoveType getMoveType();
+
   Run getSrcRun();
   Run getDstRun();
 

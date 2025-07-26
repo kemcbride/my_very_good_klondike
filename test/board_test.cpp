@@ -18,8 +18,8 @@ TEST(BoardTest, HintCorrectness) {
   b.toggleLabels();
 
   // TODO - change hints to use stable sort (& next always at end)
-  set<string> expectedStartCmds{"p1 1 f1", "p1 1 f2", "p1 1 f3", "next",
-                                "p1 1 f4", "p1 1 p7", "p7 1 p2"};
+  set<string> expectedStartCmds{"m p1 1 f1", "m p1 1 f2", "m p1 1 f3", "next",
+                                "m p1 1 f4", "m p1 1 p7", "m p7 1 p2"};
 
   vector<string> lc = b.getLegalCommands();
   set<string> lcs(lc.begin(), lc.end());
@@ -37,7 +37,7 @@ TEST(BoardTest, HintCorrectness) {
   //   cout << c << ", ";
   // }
   // cout << endl;
-  set<string> expectedSecondCmds{"p7 1 p2", "next"};
+  set<string> expectedSecondCmds{"m p7 1 p2", "next"};
 
   lc = b.getLegalCommands();
   lcs = set<string>(lc.begin(), lc.end());

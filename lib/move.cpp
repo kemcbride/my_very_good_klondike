@@ -50,23 +50,22 @@ MoveCmd Move::toMoveCmd() {
 }
 
 Source Move::getSrc() { return this->srcLoc; }
-
-Run Move::getSrcRun() { return this->srcRun; }
-
 Dest Move::getDst() { return this->dstLoc; }
-Run Move::getDstRun() { return this->dstRun; }
 
 unsigned int Move::getCount() { return this->count; }
 MoveType Move::getMoveType() { return this->moveType; }
+
+Run Move::getSrcRun() { return this->srcRun; }
+Run Move::getDstRun() { return this->dstRun; }
 
 string Move::toString() {
   string src = this->getSrc().toString();
   string dst = this->getDst().toString();
   string cnt = to_string(this->getCount());
   if (src == "s") {
-    return src + " " + dst;
+    return "m " + src + " " + dst;
   }
-  return src + " " + cnt + " " + dst;
+  return "m " + src + " " + cnt + " " + dst;
 }
 
 bool operator<(Move a, Move b) {
