@@ -16,7 +16,7 @@ function e2e_test () {
   INPUT_SCRIPT=$5
 
   # Used when updating the diff correctness check outputs
-  # timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT} | tee outputs/${SEED}.out"
+  timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT} | tee outputs/${SEED}.out"
   timeout $TIMEOUT_LIMIT sh -c "time ${BINARY} play ${SEED} < ${INPUT_SCRIPT} | tee ${MODE}_${SEED}.out"
   TIMEOUT_RESULT=$?
 
