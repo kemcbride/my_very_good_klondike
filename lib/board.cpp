@@ -49,7 +49,7 @@ string Board::toString() {
 
   if (show_labels == true) {
     string extra_help = " f1    f2    f3    f4      s";
-    extra_help += "  |moves: " + to_string(legal_moves.size()) + "|\n";
+    extra_help += "  |moves: " + to_string(legal_commands.size()) + "|\n";
     board_str += extra_help;
   }
 
@@ -72,32 +72,25 @@ void Board::toggleLabels() {
 }
 
 void Board::next() {
-  // Update hints & possible moves
-  // Note: we call isStuck after updating the stock to ensure that
-  // we are populating with moves for the new stock, not the previous stock
   bool recycled = stock.next();
   if (recycle_penalty_enabled && recycled)
     score = std::max(0, score + RECYCLE_STOCK_VALUE);
-  // Don't need to evaluate this per next() actually, because we calculate
-  // possibleMoves() using all stock values, rather than just the top.
-  // is_stuck = isStuck();
+  // Note: we update possible moves after updating the stock to ensure that
+  // we are populating with moves for the new stock, not the previous stock
   _updatePossibleMovesNext();
+  legal_commands = allLegalCommands();
 }
 
 string Board::hint() {
   if (is_stuck) return "No moves are possible. Please start a new game.";
 
-  if (hint_idx >= legal_moves.size()) {
+  if (hint_idx >= legal_commands.size()) {
     hint_idx = 0;
   }
 
-  Move m = legal_moves.at(hint_idx);
+  string command = legal_commands.at(hint_idx);
   hint_idx++;
-  Source s = m.getSrc();
-  Card src_top = m.getSrcRun().peek().value();
-  // Translate source hints for hidden sources into "next"
-  if (s.type == 's' && (src_top != stock.peek().value())) return "next";
-  return m.toString();
+  return command;
 }
 
 bool Board::foundationsFull() {
@@ -341,9 +334,8 @@ void Board::_updatePossibleMovesNext() {
       _possibleMovesPerLocPair |
       ranges::views::transform(
           [](pair<LocPair, set<Move>> lpp) { return lpp.first; }) |
-      ranges::views::filter([stock_source](LocPair lp) {
-        return (lp.src == stock_source || lp.dst == stock_source);
-      });
+      ranges::views::filter(
+          [stock_source](LocPair lp) { return (lp.src == stock_source); });
 
   for (auto lp : affectedLocPairs) {
     _updatePossibleMoves(lp);
@@ -394,13 +386,13 @@ void Board::_updatePossibleMoves(LocPair lp) {
       lpMoves.insert(m);
     }
   } else if (s.type == 's') {
+    Source stock_source('s', 0);
     for (auto &c : stock.cards) {
-      const Run &srcRun = Run(c);
       for (auto &d : all_dests) {
         const Run &dstRun = getDestRun(d);
-        Source stock_source('s', 0);
-        Move m(srcRun, stock_source, dstRun, d, 1);
-        if (dstRun.canAdd(srcRun)) {
+        if (dstRun.canAdd(c)) {
+          const Run &srcRun = Run(c);
+          Move m(srcRun, stock_source, dstRun, d, 1);
           lpMoves.insert(m);
         }
       }
