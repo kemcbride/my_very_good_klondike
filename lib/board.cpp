@@ -479,6 +479,13 @@ bool Board::isMeaningful(Move m) const {
       auto backCard = srcRun.cards.front();
       if (backCard.getRank().getValue() == 13) return false;
     }
+  } else if (m.getSrc().type == 'f' && m.getDst().type == 'p') {
+    // Moving just an ace from a foundation to a pile is NOT meaningful
+    const Foundation &fdn = foundations.at(m.getSrc().idx);
+    Card fdnTopCard = fdn.peek().value();
+    if (fdnTopCard.getRank().getValue() == 1) {
+      return false;
+    }
   }
   return true;
 }

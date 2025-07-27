@@ -14,7 +14,7 @@ Foundation::Foundation() {
   this->cards = cards;
 }
 
-optional<Card> Foundation::peek() {
+optional<Card> Foundation::peek() const {
   if (this->cards.size() == 0) {
     return nullopt;
   }

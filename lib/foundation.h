@@ -15,7 +15,7 @@ class Foundation {
 
   Foundation();
 
-  std::optional<Card> peek();
+  std::optional<Card> peek() const;
   std::optional<Card> pop();
   void push(Card);
   bool canPush(Card);
