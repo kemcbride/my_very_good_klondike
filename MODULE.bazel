@@ -13,3 +13,4 @@ module(
 bazel_dep(name = "googletest", version = "1.17.0")
 bazel_dep(name = "gflags", version = "2.2.2")
 bazel_dep(name = "google_benchmark", version = "1.9.4")
+bazel_dep(name = "readline", version = "8.2.bcr.2")

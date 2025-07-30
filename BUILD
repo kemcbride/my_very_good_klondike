@@ -9,6 +9,18 @@ cc_binary(
     ]
 )
 
+cc_binary(
+    name = "solitaire_rl",
+    srcs = [
+      "bin/solitaire_rl.cpp",
+    ],
+    deps = [
+        ":board",
+        "@gflags//:gflags",
+        "@readline//:readline",
+    ],
+)
+
 #############################################
 ### Libraries
 #############################################
