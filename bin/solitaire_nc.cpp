@@ -6,8 +6,8 @@
 // Part of ensuring ncurses can display unicode characters (for suit)
 #define _XOPEN_SOURCE_EXTENDED
 
-#include <ncursesw/cursesw.h>
 #include <gflags/gflags.h>
+#include <ncursesw/cursesw.h>
 
 #include <chrono>
 #include <clocale>
@@ -280,8 +280,8 @@ int play_nc(mt19937 generator) {
       // printw(b.toString().c_str());
       printw(cmd.c_str());
       printw("\n");
-      // printw("spade = %ls = hello = %ls = %ls\n", L"♠", L"\x2660", L"\xe2\x99\xa0");
-      // printww("♠ = \x2660 = \xE2\x99\xA0\n");
+      // printw("spade = %ls = hello = %ls = %ls\n", L"♠", L"\x2660",
+      // L"\xe2\x99\xa0"); printww("♠ = \x2660 = \xE2\x99\xA0\n");
       refresh();
     }
     cin >> cmd;
