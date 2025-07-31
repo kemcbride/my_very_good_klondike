@@ -6,9 +6,8 @@
  */
 
 #include <gflags/gflags.h>
-#include <readline/readline.h>
 #include <readline/history.h>
-
+#include <readline/readline.h>
 
 #include <chrono>
 #include <iostream>
@@ -70,7 +69,7 @@ string game_help() {
 
 string str_tolower(string s) {
   transform(s.begin(), s.end(), s.begin(),
-      [](unsigned char c){ return tolower(c); });
+            [](unsigned char c) { return tolower(c); });
   return s;
 }
 
@@ -86,14 +85,9 @@ string rtrim(const string &s) {
   return regex_replace(s, regex("\\s+$"), string(""));
 }
 
-string trim(const string &s) {
-  return ltrim(rtrim(s));
-}
+string trim(const string &s) { return ltrim(rtrim(s)); }
 
-string remove_m_prefix(const string &s) {
-  return s.substr(2, s.size()-2);
-}
-
+string remove_m_prefix(const string &s) { return s.substr(2, s.size() - 2); }
 
 bool is_not_exit(string str) {
   return (str != "exit" && str != "x" && str != "quit" && str != "q");
@@ -183,7 +177,7 @@ int play(mt19937 generator) {
                   FLAGS_recycle_penalty_enabled);
 
   // "Readline Buffer" - named buffer rather than string just to be more clear
-  char* rlbuf;
+  char *rlbuf;
   string cmd;
   while ((rlbuf = readline("cmd: ")) != nullptr && is_not_exit(rlbuf)) {
     // Make sure readline's history can work:
@@ -265,7 +259,8 @@ int play(mt19937 generator) {
 
 int main(int argc, char **argv) {
   // Readline configuration for starters:
-  // Disable file-tab-completion. Listing file paths won't be useful in the game.
+  // Disable file-tab-completion. Listing file paths won't be useful in the
+  // game.
   rl_bind_key('\t', rl_insert);
 
   std::random_device rd;
@@ -297,4 +292,3 @@ int main(int argc, char **argv) {
   }
   return 0;
 }
-
