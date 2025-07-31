@@ -21,6 +21,18 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "solitaire_nc",
+    srcs = [
+      "bin/solitaire_nc.cpp",
+    ],
+    deps = [
+      ":board",
+      "@gflags//:gflags",
+      "@ncurses//:ncurses",
+    ],
+)
+
 #############################################
 ### Libraries
 #############################################

@@ -12,7 +12,10 @@ using namespace std;
 
 std::ostream &operator<<(std::ostream &os, suits s) {
   switch (s) {
-      // ♠  ♥  ♣  ♢  ♦
+      // ♠ = 0x2660 = 0xE2 0x99 0xA0
+      // ♥ = 0x2665 = 0xE2 0x99 0xA5
+      // ♦ = 0x2666 = 0xE2 0x99 0xA6
+      // ♣ = 0x2663 = 0xE2 0x99 0xA3
     case clubs:
       os << "♣";
       break;

@@ -1,12 +1,16 @@
-/* solitaire.cpp
- * contains some stuff to define cards and a deck for solitaire play.
- * klondike specfiically, for now.
+/* solitaire_nc.cpp
+ * let's try out a UI on baby mode - ncurses. Surely this will be easy and fun.
  * @kemcbride/@ke2mcbri 2020
  */
 
+// Part of ensuring ncurses can display unicode characters (for suit)
+#define _XOPEN_SOURCE_EXTENDED
+
 #include <gflags/gflags.h>
+#include <ncursesw/cursesw.h>
 
 #include <chrono>
+#include <clocale>
 #include <iostream>
 #include <random>
 #include <ranges>
@@ -226,7 +230,70 @@ int play(mt19937 generator) {
   return b.getScore();
 }
 
+int play_nc(mt19937 generator) {
+  // cout << "Welcome to the game! (h=help, x=exit, b=show board)" << endl;
+  Deck d(generator);
+  d.shuffle();
+  Board b = Board(d, FLAGS_autosolve, FLAGS_autoreveal,
+                  FLAGS_recycle_penalty_enabled);
+
+  initscr();
+
+  printw(b.toString().c_str());
+  refresh();
+
+  string cmd;
+  cin >> cmd;
+  while (!cin.eof() && is_not_exit(cmd)) {
+    if (is_next(cmd)) {
+      clear();
+      b.next();
+      // printw(b.toString().c_str());
+      printw("\n");
+
+      cchar_t katakana[3];
+      cchar_t kana1;
+      cchar_t kana2;
+      cchar_t kana3;
+      setcchar(&kana1, L"\xe2\x99\xa0", WA_NORMAL, 3, NULL);
+      setcchar(&kana2, L"\xe2\x99\xa5", WA_NORMAL, 3, NULL);
+      setcchar(&kana3, L"\u2663", WA_NORMAL, 3, NULL);
+      katakana[0] = kana1;
+      katakana[1] = kana2;
+      katakana[2] = kana3;
+
+      mvadd_wch(0, 0, &katakana[0]);
+      mvadd_wch(0, 4, &katakana[1]);
+      mvaddch(0, 8, 'k');
+      printw("\n");
+      // printw("%lc\n", L'€');
+      // printw("\xe2\x82\xac\n");
+      // printw("spade = %ls = %ls = %ls\n", L"♠", L"\x2660", L"\xe2\x99\xa0");
+      // printw_wch("♠ = \x2660 = \xe2\x99\xa0 \n");
+      // add_wch(my_win, L"\xe2\x99\xa0 \n");
+      // ♥ = 0x2665 = 0xE2 0x99 0xA5
+      // ♦ = 0x2666 = 0xE2 0x99 0xA6
+      // ♣ = 0x2663 = 0xE2 0x99 0xA3"
+      refresh();
+    } else {
+      clear();
+      // printw(b.toString().c_str());
+      printw(cmd.c_str());
+      printw("\n");
+      // printw("spade = %ls = hello = %ls = %ls\n", L"♠", L"\x2660",
+      // L"\xe2\x99\xa0"); printww("♠ = \x2660 = \xE2\x99\xA0\n");
+      refresh();
+    }
+    cin >> cmd;
+  }
+  endwin();
+  return 0;
+}
+
 int main(int argc, char **argv) {
+  string originalLocale = setlocale(LC_ALL, nullptr);
+  setlocale(LC_ALL, "en_US.UTF-8");
+
   std::random_device rd;
   std::mt19937 g(rd());
   // gflags::SetUsageMessage(program_help());
@@ -249,10 +316,13 @@ int main(int argc, char **argv) {
         }
         g = std::mt19937(seed);
       }
-      play(g);
+      // OK, let's start by defining a replacement for just play.
+      play_nc(g);
+      // play(g);
     } else {
       cout << program_help() << endl;
     }
   }
+  setlocale(LC_ALL, originalLocale.c_str());
   return 0;
 }
